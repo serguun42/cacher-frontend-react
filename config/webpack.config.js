@@ -18,15 +18,18 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const paths = require('./paths');
 const modules = require('./modules');
-const getClientEnvironment = require('./env');
+const getClientEnvironment = require('./getClientEnvironment');
 const ForkTsCheckerWebpackPlugin =
   process.env.TSC_COMPILE_ON_ERROR === 'true'
     ? require('react-dev-utils/ForkTsCheckerWarningWebpackPlugin')
     : require('react-dev-utils/ForkTsCheckerWebpackPlugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
-// Source maps are resource heavy and can cause out of memory issue for large source files.
-const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
+/**
+ * Source maps are resource heavy and can cause out of memory issue for large source files.
+ * Changed to disabled by default
+ */
+const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP === 'true'
 
 const reactRefreshRuntimeEntry = require.resolve('react-refresh/runtime');
 const reactRefreshWebpackPluginRuntimeEntry = require.resolve('@pmmmwh/react-refresh-webpack-plugin');
@@ -236,6 +239,8 @@ function configFactory(webpackEnv) {
       minimizer: [
         // This is only used in production mode
         new TerserPlugin({
+          /** Do not create LICENSE.txt files */
+          extractComments: false,
           terserOptions: {
             parse: {
               // We want terser to parse ecma 8 code. However, we don't want it
@@ -565,7 +570,7 @@ function configFactory(webpackEnv) {
       // the requesting resource.
       new ModuleNotFoundPlugin(paths.appPath),
       // Makes some environment variables available to the JS code, for example:
-      // if (process.env.NODE_ENV === 'production') { ... }. See `./env.js`.
+      // if (process.env.NODE_ENV === 'production') { ... }. See `./getClientEnvironment.js`.
       // It is absolutely essential that NODE_ENV is set to production
       // during a production build.
       // Otherwise React will be compiled in the very slow development mode.

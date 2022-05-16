@@ -10,7 +10,7 @@ process.on('unhandledRejection', (err) => {
 });
 
 // Ensure environment variables are read.
-require('../config/env');
+require('../config/getClientEnvironment');
 
 const path = require('path');
 const chalk = require('react-dev-utils/chalk');
@@ -61,6 +61,10 @@ checkBrowsers(paths.appPath, isInteractive)
     fs.emptyDirSync(paths.appBuild);
     // Merge with the public folder
     copyPublicFolder();
+    // Create file with build hash in it
+    saveBuildHashFile();
+    // Copy favicon to site built folder corresp… WHO WROTE THIS?
+    copyFaviconForSite();
     // Start the webpack build
     return build(previousFileSizes);
   })
@@ -69,8 +73,6 @@ checkBrowsers(paths.appPath, isInteractive)
       if (warnings.length) {
         console.log(chalk.yellow('Compiled with warnings.\n'));
         console.log(warnings.join('\n\n'));
-        console.log(`\nSearch for the ${chalk.underline(chalk.yellow('keywords'))} to learn more about each warning.`);
-        console.log(`To ignore, add ${chalk.cyan('// eslint-disable-next-line')} to the line before.\n`);
       } else {
         console.log(chalk.green('Compiled successfully.\n'));
       }
@@ -190,4 +192,15 @@ function copyPublicFolder() {
     dereference: true,
     filter: (file) => file !== paths.appHtml,
   });
+}
+
+function saveBuildHashFile() {
+  fs.writeFileSync(paths.appBuildHashFile, process.env.REACT_APP_BUILD_HASH || 'no_hash', { encoding: 'utf8' });
+}
+
+function copyFaviconForSite() {
+  fs.copyFileSync(
+    path.join(paths.appPublic, 'img', process.env.REACT_APP_SITE_CODE, 'favicon.ico'),
+    paths.appBuildFavicon
+  );
 }

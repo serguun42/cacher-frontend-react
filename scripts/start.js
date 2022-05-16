@@ -6,7 +6,7 @@ process.on('unhandledRejection', (err) => {
 });
 
 // Ensure environment variables are read.
-require('../config/env');
+require('../config/getClientEnvironment');
 
 const fs = require('fs');
 const chalk = require('react-dev-utils/chalk');
@@ -80,7 +80,7 @@ checkBrowsers(paths.appPath, isInteractive)
     devServer
       .start()
       .then(() => {
-        // if (isInteractive) clearConsole();
+        if (isInteractive) clearConsole();
 
         console.log(chalk.cyan('Starting the development server...\n'));
 

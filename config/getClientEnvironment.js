@@ -5,12 +5,21 @@ const paths = require('./paths');
 // Make sure that including paths.js after env.js will read .env variables.
 delete require.cache[require.resolve('./paths')];
 
+const REACT_APP_BUILD_HASH = require('crypto')
+  .createHash('sha256')
+  .update(`${process.env.REACT_APP_VERSION}_${Date.now()}`)
+  .digest('hex');
+
+/** Build hash for client and for builder */
+process.env.REACT_APP_BUILD_HASH = REACT_APP_BUILD_HASH;
+
 const { NODE_ENV } = process.env;
 if (!NODE_ENV) {
-  throw new Error(
-    'The NODE_ENV environment variable is required but was not specified.'
-  );
+  throw new Error('The NODE_ENV environment variable is required but was not specified.');
 }
+
+/** See "build:tj" | "build:dtf" scripts in package.json */
+const SITE_NAME_FLAG = process.argv.find((arg) => /^--site=/.test(arg))?.split('=')?.[1] || '';
 
 // https://github.com/bkeepers/dotenv#what-other-env-files-can-i-use
 const dotenvFiles = [
@@ -19,6 +28,7 @@ const dotenvFiles = [
   // since normally you expect tests to produce the same
   // results for everyone
   NODE_ENV !== 'test' && `${paths.dotenv}.local`,
+  NODE_ENV === 'production' && SITE_NAME_FLAG && `${paths.dotenv}.${SITE_NAME_FLAG}`,
   `${paths.dotenv}.${NODE_ENV}`,
   paths.dotenv,
 ].filter(Boolean);
