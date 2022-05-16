@@ -1,4 +1,4 @@
-export interface Author {
+export interface CommentAuthor {
   id: number;
   name: string;
   avatar_url: string;
@@ -8,32 +8,32 @@ export interface Author {
   online_status_text: string;
 }
 
-export interface Likes {
+export interface CommentLikes {
   is_liked: number;
   count: number;
   summ: number;
 }
 
-export interface AdditionalData {
+export interface CommentAdditionalData {
   type: string;
   url: string;
   hasAudio: boolean;
 }
 
-export interface Size {
+export interface CommentMediaSize {
   width: number;
   height: number;
   ratio: number;
 }
 
-export interface Medium {
+export interface CommentMedium {
   type: number;
   imageUrl: string;
-  additionalData: AdditionalData;
-  size: Size;
+  additionalData: CommentAdditionalData;
+  size: CommentMediaSize;
 }
 
-export interface Data {
+export interface CommentAttachData {
   uuid: string;
   width: number;
   height: number;
@@ -44,33 +44,21 @@ export interface Data {
   external_service: any[];
 }
 
-export interface Attach {
+export interface CommentAttach {
   type: string;
-  data: Data;
-}
-
-export interface LoadMore {
-  count: number;
-  ids: any[];
-  avatars: any[];
-}
-
-export interface EtcControls {
-  pin_comment: boolean;
-  remove: boolean;
-  remove_thread: boolean;
+  data: CommentAttachData;
 }
 
 export interface Comment {
   id: number;
-  author: Author;
+  author: CommentAuthor;
   date: number;
   dateRFC: string;
   isFavorited: boolean;
   date_favorite?: any;
   isEdited: boolean;
-  likes: Likes;
-  media: Medium[];
+  likes: CommentLikes;
+  media: CommentMedium[];
   level: number;
   is_pinned: boolean;
   is_ignored: boolean;
@@ -79,11 +67,9 @@ export interface Comment {
   text: string;
   text_wo_md: string;
   html: string;
-  attaches: Attach[];
+  attaches: CommentAttach[];
   source_id: number;
   entry?: any;
-  load_more: LoadMore;
-  etcControls: EtcControls;
   highlight: string;
   donate?: any;
 }

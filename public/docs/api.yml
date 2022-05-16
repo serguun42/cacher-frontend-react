@@ -1,0 +1,1215 @@
+openapi: 3.0.0
+
+info:
+  description: API used in new Cacher on React
+  version: '1.0.0'
+  contact:
+    name: Cacher TJournal & DTF
+    url: https://cacher.serguun42.ru
+  license:
+    name: 'BSL-1.0'
+    url: 'https://github.com/serguun42/cacher-frontend-react'
+  title: Cacher API
+  x-logo:
+    url: '/img/wide.png'
+
+servers:
+  - description: Cacher Production, API v1, site – TJournal
+    url: https://cacher.serguun42.ru/api/v1/tj/
+  - description: Cacher Production, API v1, site – DTF
+    url: https://cacher.serguun42.ru/api/v1/dtf/
+
+tags:
+  - name: feed
+    description: Start page contents
+  - name: entry
+    description: Get entry
+  - name: search
+    description: Search related methods
+
+paths:
+  /feed/stats:
+    get:
+      description: Get statistics for start page's graph
+      operationId: feedChart
+      tags:
+        - feed
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatsResponse'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+        '403':
+          description: Forbidden. Low account permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+        '429':
+          description: Too many requests
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: '429 Too Many Requests'
+  /feed/last:
+    get:
+      description: Get last posts for start page
+      operationId: feedLast
+      tags:
+        - feed
+      parameters:
+        - in: query
+          name: skip
+          schema:
+            type: number
+          required: false
+          description: How many posts will be skipped
+          example: 20
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IndexDocType'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+        '403':
+          description: Forbidden. Low account permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+        '429':
+          description: Too many requests
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: '429 Too Many Requests'
+
+  /entry:
+    get:
+      description: Get entry/post by its id
+      operationId: entryById
+      tags:
+        - entry
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: number
+          required: true
+          description: Post's id
+          example: 355555
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entry'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+        '403':
+          description: Forbidden. Low account permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+        '404':
+          description: Post not found
+          content:
+            application/json:
+              schema:
+                type: object
+        '406':
+          description: 'Not acceptable: pass ID parameter'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+        '429':
+          description: Too many requests
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: '429 Too Many Requests'
+
+  /search/postId:
+    get:
+      description: Search by post id, exactly
+      operationId: searchByPostId
+      tags:
+        - search
+      parameters:
+        - in: query
+          name: postId
+          schema:
+            type: number
+          required: true
+          description: Post id to search by
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IndexDocType'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+        '403':
+          description: Forbidden. Low account permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+        '404':
+          description: Post not found
+          content:
+            application/json:
+              schema:
+                type: object
+        '406':
+          description: No postId param or wrong format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+        '429':
+          description: Too many requests
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: '429 Too Many Requests'
+  /search/entityId:
+    get:
+      description: Search by entity id (from subsite's or author's urls)
+      operationId: searchByEntityId
+      tags:
+        - search
+      parameters:
+        - in: query
+          name: entityId
+          schema:
+            type: number
+          required: true
+          description: Entity id to search by
+        - in: query
+          name: skip
+          schema:
+            type: number
+          required: false
+          description: How many posts will be skipped
+          example: 20
+        - in: query
+          name: date-start
+          schema:
+            type: string
+            format: date
+            example: '2022-05-10'
+          required: false
+          description: Limit by date, starting with this parameter (inclusively)
+        - in: query
+          name: date-end
+          schema:
+            type: string
+            format: date
+            example: '2022-05-15'
+          required: false
+          description: Limit by date, ending with this parameter (inclusively)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IndexDocType'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+        '403':
+          description: Forbidden. Low account permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+        '404':
+          description: Posts not found
+          content:
+            application/json:
+              schema:
+                type: object
+        '406':
+          description: No entityId param or wrong format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+        '429':
+          description: Too many requests
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: '429 Too Many Requests'
+  /search/text:
+    get:
+      description: Search by text in title, intro, subsite's or author's names
+      operationId: searchByText
+      tags:
+        - search
+      parameters:
+        - in: query
+          name: text
+          schema:
+            type: string
+          required: true
+          description: Text to search by
+        - in: query
+          name: regex
+          schema:
+            type: boolean
+          required: false
+          allowEmptyValue: true
+          description: Search with regex, passed in param "text"
+        - in: query
+          name: case-sensetive
+          schema:
+            type: boolean
+          required: false
+          allowEmptyValue: true
+          description: Search case-sensetively (applicable both for plain text and regex)
+        - in: query
+          name: skip
+          schema:
+            type: number
+          required: false
+          description: How many posts will be skipped
+          example: 20
+        - in: query
+          name: date-start
+          schema:
+            type: string
+            format: date
+            example: '2022-05-10'
+          required: false
+          description: Limit by date, starting with this parameter (inclusively)
+        - in: query
+          name: date-end
+          schema:
+            type: string
+            format: date
+            example: '2022-05-15'
+          required: false
+          description: Limit by date, ending with this parameter (inclusively)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IndexDocType'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+        '403':
+          description: Forbidden. Low account permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+        '404':
+          description: Posts not found
+          content:
+            application/json:
+              schema:
+                type: object
+        '406':
+          description: >
+            No text param or it's too short
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+        '429':
+          description: Too many requests
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: '429 Too Many Requests'
+
+security:
+  - cookieAuth: []
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: session_id
+      description: You can login to retrieve cookies on login-page
+
+  schemas:
+    APIError:
+      type: object
+      properties:
+        error:
+          type: boolean
+          default: true
+        code:
+          type: number
+        reason:
+          type: string
+      example:
+        error: true
+        code: 403
+        reason: no_permission
+
+    IndexDocType:
+      additionalProperties: false
+      properties:
+        author_avatar_url:
+          type: string
+        author_id:
+          type: number
+        author_name:
+          type: string
+        author_url:
+          type: string
+        collection:
+          type: string
+        date:
+          type: number
+        id:
+          type: number
+        intro:
+          type: string
+        subsite_avatar_url:
+          type: string
+        subsite_id:
+          type: number
+        subsite_name:
+          type: string
+        subsite_url:
+          type: string
+        title:
+          type: string
+        url:
+          type: string
+      required:
+        - id
+        - collection
+        - date
+        - title
+        - intro
+        - url
+        - author_id
+        - author_name
+        - author_url
+        - author_avatar_url
+        - subsite_id
+        - subsite_name
+        - subsite_url
+        - subsite_avatar_url
+      type: object
+
+    StatsResponse:
+      additionalProperties: false
+      properties:
+        countOfAllPosts:
+          type: number
+        sizeByDays:
+          items:
+            additionalProperties: false
+            properties:
+              date:
+                type: string
+              count:
+                type: number
+            required:
+              - date
+              - count
+            type: object
+          type: array
+      required:
+        - countOfAllPosts
+        - sizeByDays
+      type: object
+
+    Comment:
+      additionalProperties: false
+      properties:
+        attaches:
+          items:
+            $ref: '#/components/schemas/CommentAttach'
+          type: array
+        author:
+          $ref: '#/components/schemas/CommentAuthor'
+        date:
+          type: number
+        dateRFC:
+          type: string
+        date_favorite: {}
+        donate: {}
+        entry: {}
+        highlight:
+          type: string
+        html:
+          type: string
+        id:
+          type: number
+        isEdited:
+          type: boolean
+        isFavorited:
+          type: boolean
+        is_ignored:
+          type: boolean
+        is_pinned:
+          type: boolean
+        is_removed:
+          type: boolean
+        level:
+          type: number
+        likes:
+          $ref: '#/components/schemas/CommentLikes'
+        media:
+          items:
+            $ref: '#/components/schemas/CommentMedium'
+          type: array
+        replyTo:
+          type: number
+        source_id:
+          type: number
+        text:
+          type: string
+        text_wo_md:
+          type: string
+      required:
+        - id
+        - author
+        - date
+        - dateRFC
+        - isFavorited
+        - isEdited
+        - likes
+        - media
+        - level
+        - is_pinned
+        - is_ignored
+        - is_removed
+        - replyTo
+        - text
+        - text_wo_md
+        - html
+        - attaches
+        - source_id
+        - highlight
+      type: object
+    CommentAdditionalData:
+      additionalProperties: false
+      properties:
+        hasAudio:
+          type: boolean
+        type:
+          type: string
+        url:
+          type: string
+      required:
+        - type
+        - url
+        - hasAudio
+      type: object
+    CommentAttach:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/CommentAttachData'
+        type:
+          type: string
+      required:
+        - type
+        - data
+      type: object
+    CommentAttachData:
+      additionalProperties: false
+      properties:
+        color:
+          type: string
+        external_service:
+          items: {}
+          type: array
+        hash:
+          type: string
+        height:
+          type: number
+        size:
+          type: number
+        type:
+          type: string
+        uuid:
+          type: string
+        width:
+          type: number
+      required:
+        - uuid
+        - width
+        - height
+        - size
+        - type
+        - color
+        - hash
+        - external_service
+      type: object
+    CommentAuthor:
+      additionalProperties: false
+      properties:
+        avatar_url:
+          type: string
+        id:
+          type: number
+        is_online:
+          type: boolean
+        is_verified:
+          type: boolean
+        name:
+          type: string
+        online_status_text:
+          type: string
+        type:
+          type: number
+      required:
+        - id
+        - name
+        - avatar_url
+        - is_verified
+        - type
+        - is_online
+        - online_status_text
+      type: object
+    CommentLikes:
+      additionalProperties: false
+      properties:
+        count:
+          type: number
+        is_liked:
+          type: number
+        summ:
+          type: number
+      required:
+        - is_liked
+        - count
+        - summ
+      type: object
+    CommentMediaSize:
+      additionalProperties: false
+      properties:
+        height:
+          type: number
+        ratio:
+          type: number
+        width:
+          type: number
+      required:
+        - width
+        - height
+        - ratio
+      type: object
+    CommentMedium:
+      additionalProperties: false
+      properties:
+        additionalData:
+          $ref: '#/components/schemas/CommentAdditionalData'
+        imageUrl:
+          type: string
+        size:
+          $ref: '#/components/schemas/CommentMediaSize'
+        type:
+          type: number
+      required:
+        - type
+        - imageUrl
+        - additionalData
+        - size
+      type: object
+
+    LastComment:
+      additionalProperties: false
+      properties:
+        comment_id:
+          type: number
+        creator:
+          additionalProperties: false
+          properties:
+            id:
+              type: number
+            name:
+              type: string
+            url:
+              type: string
+          required:
+            - id
+            - name
+            - url
+          type: object
+        date:
+          format: date-time
+          type: string
+        media:
+          items:
+            additionalProperties: false
+            properties:
+              data:
+                additionalProperties: false
+                properties:
+                  color:
+                    type: string
+                  description:
+                    type: string
+                  external_service:
+                    items: {}
+                    type: array
+                  hash:
+                    type: string
+                  height:
+                    type: number
+                  image:
+                    additionalProperties: false
+                    properties:
+                      data:
+                        additionalProperties: false
+                        properties:
+                          color:
+                            type: string
+                          external_service:
+                            items: {}
+                            type: array
+                          hash:
+                            type: string
+                          height:
+                            type: number
+                          size:
+                            type: number
+                          type:
+                            type: string
+                          uuid:
+                            type: string
+                          width:
+                            type: number
+                        required:
+                          - uuid
+                          - width
+                          - height
+                          - size
+                          - type
+                          - color
+                          - hash
+                          - external_service
+                        type: object
+                      type:
+                        type: string
+                    required:
+                      - type
+                      - data
+                    type: object
+                  size:
+                    type: number
+                  title:
+                    type: string
+                  type:
+                    type: string
+                  url:
+                    type: string
+                  uuid:
+                    type: string
+                  v:
+                    type: number
+                  width:
+                    type: number
+                required:
+                  - uuid
+                  - width
+                  - height
+                  - size
+                  - type
+                  - color
+                  - hash
+                  - external_service
+                  - url
+                  - title
+                  - description
+                  - image
+                type: object
+              type:
+                type: string
+            required:
+              - type
+              - data
+            type: object
+          type: array
+        post_id:
+          type: number
+        reply_to_id:
+          type: number
+        text:
+          type: string
+      required:
+        - date
+        - creator
+        - post_id
+        - comment_id
+        - reply_to_id
+        - text
+        - media
+      type: object
+
+    PostBlockItem:
+      additionalProperties: false
+      properties:
+        author:
+          type: string
+        image:
+          $ref: '#/components/schemas/PostImage'
+        title:
+          type: string
+      required:
+        - title
+        - author
+        - image
+      type: object
+    PostAuthor:
+      additionalProperties: false
+      properties:
+        avatar:
+          $ref: '#/components/schemas/PostAvatar'
+        avatar_url:
+          type: string
+        id:
+          type: number
+        is_online:
+          type: boolean
+        is_subscribed:
+          type: boolean
+        is_verified:
+          type: boolean
+        name:
+          type: string
+        type:
+          type: number
+        url:
+          type: string
+      required:
+        - id
+        - url
+        - name
+        - type
+        - avatar
+        - avatar_url
+        - is_online
+        - is_verified
+        - is_subscribed
+      type: object
+    PostAvatar:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/PostMedia'
+        type:
+          type: string
+      required:
+        - type
+        - data
+      type: object
+    PostBadge:
+      additionalProperties: false
+      properties:
+        background:
+          type: string
+        border:
+          type: string
+        color:
+          type: string
+        text:
+          type: string
+        type:
+          type: string
+      required:
+        - type
+        - text
+        - background
+        - color
+        - border
+      type: object
+    PostBlock:
+      additionalProperties: false
+      properties:
+        anchor:
+          type: string
+        cover:
+          type: boolean
+        data:
+          $ref: '#/components/schemas/PostBlockData'
+        type:
+          type: string
+      required:
+        - type
+        - data
+        - cover
+        - anchor
+      type: object
+    PostBlockData:
+      additionalProperties: false
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/PostBlockItem'
+          type: array
+        text:
+          type: string
+        text_truncated:
+          type: string
+        with_background:
+          type: boolean
+        with_border:
+          type: boolean
+      required:
+        - text
+        - text_truncated
+        - items
+      type: object
+    PostCover:
+      additionalProperties: false
+      properties:
+        additionalData:
+          additionalProperties: false
+          properties:
+            size:
+              type: number
+            type:
+              type: string
+            uuid:
+              type: string
+          required:
+            - size
+            - type
+            - uuid
+          type: object
+        size:
+          additionalProperties: false
+          properties:
+            height:
+              type: number
+            width:
+              type: number
+          required:
+            - width
+            - height
+          type: object
+        size_simple:
+          type: string
+        thumbnailUrl:
+          type: string
+        type:
+          type: number
+        url:
+          type: string
+      required:
+        - additionalData
+        - size
+        - thumbnailUrl
+        - type
+        - url
+        - size_simple
+      type: object
+    PostImage:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/PostMedia'
+        type:
+          type: string
+      required:
+        - type
+        - data
+      type: object
+    PostLikes:
+      additionalProperties: false
+      properties:
+        count:
+          type: number
+        is_hidden:
+          type: boolean
+        is_liked:
+          type: number
+        summ:
+          type: number
+      required:
+        - is_liked
+        - count
+        - summ
+        - is_hidden
+      type: object
+    PostMedia:
+      additionalProperties: false
+      properties:
+        color:
+          type: string
+        external_service:
+          items: {}
+          type: array
+        hash:
+          type: string
+        height:
+          type: number
+        size:
+          type: number
+        type:
+          type: string
+        uuid:
+          type: string
+        width:
+          type: number
+      required:
+        - uuid
+        - width
+        - height
+        - size
+        - type
+        - color
+        - hash
+        - external_service
+      type: object
+    PostSubsite:
+      additionalProperties: false
+      properties:
+        avatar:
+          $ref: '#/components/schemas/PostAvatar'
+        avatar_url:
+          type: string
+        description:
+          type: string
+        head_cover:
+          type: string
+        id:
+          type: number
+        is_enable_writing:
+          type: boolean
+        is_subscribed:
+          type: boolean
+        is_subscribed_to_new_posts:
+          type: boolean
+        is_verified:
+          type: boolean
+        name:
+          type: string
+        type:
+          type: number
+        url:
+          type: string
+      required:
+        - id
+        - url
+        - type
+        - name
+        - description
+        - avatar
+        - avatar_url
+        - head_cover
+        - is_verified
+        - is_enable_writing
+        - is_subscribed
+        - is_subscribed_to_new_posts
+      type: object
+    PostVersion:
+      additionalProperties: false
+      properties:
+        audioUrl: {}
+        author:
+          $ref: '#/components/schemas/PostAuthor'
+        badges:
+          items:
+            $ref: '#/components/schemas/PostBadge'
+          type: array
+        blocks:
+          items:
+            $ref: '#/components/schemas/PostBlock'
+          type: array
+        commentEditor:
+          additionalProperties: false
+          properties:
+            enabled:
+              type: boolean
+          required:
+            - enabled
+          type: object
+        commentatorsAvatars:
+          items:
+            type: string
+          type: array
+        commentsCount:
+          type: number
+        commentsSeenCount: {}
+        cover:
+          $ref: '#/components/schemas/PostCover'
+        date:
+          type: number
+        dateRFC:
+          type: string
+        date_favorite: {}
+        favoritesCount:
+          type: number
+        highlight:
+          type: string
+        hitsCount:
+          type: number
+        hotness:
+          type: number
+        id:
+          type: number
+        intro:
+          type: string
+        introInFeed: {}
+        isEditorial:
+          type: boolean
+        isEnabledComments:
+          type: boolean
+        isEnabledLikes:
+          type: boolean
+        isFavorited:
+          type: boolean
+        isPinned:
+          type: boolean
+        isRepost:
+          type: boolean
+        is_filled_by_editors:
+          type: boolean
+        is_show_thanks:
+          type: boolean
+        is_still_updating:
+          type: boolean
+        last_modification_date:
+          type: number
+        likes:
+          $ref: '#/components/schemas/PostLikes'
+        similar:
+          items: {}
+          type: array
+        subscribedToTreads:
+          type: boolean
+        subsite:
+          $ref: '#/components/schemas/PostSubsite'
+        summarize:
+          type: string
+        title:
+          type: string
+        type:
+          type: number
+        url:
+          type: string
+        webviewUrl: {}
+      required:
+        - id
+        - url
+        - author
+        - badges
+        - commentsCount
+        - favoritesCount
+        - cover
+        - date
+        - dateRFC
+        - last_modification_date
+        - hitsCount
+        - intro
+        - isEnabledComments
+        - isEnabledLikes
+        - isFavorited
+        - isRepost
+        - likes
+        - subsite
+        - similar
+        - title
+        - type
+        - commentatorsAvatars
+        - isPinned
+        - highlight
+        - blocks
+        - subscribedToTreads
+        - is_show_thanks
+        - is_still_updating
+        - is_filled_by_editors
+        - isEditorial
+        - hotness
+        - commentEditor
+        - summarize
+      type: object
+
+    Entry:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: number
+        initial:
+          $ref: '#/components/schemas/PostVersion'
+        tenminutes:
+          $ref: '#/components/schemas/PostVersion'
+        onehour:
+          $ref: '#/components/schemas/PostVersion'
+        comments:
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/Comment'
+          type: object
+        commentsVersion:
+          type: string
+          enum:
+            - v2
+          default: v2
+        lastComments:
+          type: array
+          items:
+            $ref: '#/components/schemas/LastComment'
+      required:
+        - id
+        - initial
+        - comments
+        - commentsVersion

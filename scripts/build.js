@@ -61,10 +61,14 @@ checkBrowsers(paths.appPath, isInteractive)
     fs.emptyDirSync(paths.appBuild);
     // Merge with the public folder
     copyPublicFolder();
+
     // Create file with build hash in it
     saveBuildHashFile();
     // Copy favicon to site built folder corresp… WHO WROTE THIS?
     copyFaviconForSite();
+    // Create manifest for site
+    createManifest();
+    
     // Start the webpack build
     return build(previousFileSizes);
   })
@@ -190,7 +194,8 @@ function build(previousFileSizes) {
 function copyPublicFolder() {
   fs.copySync(paths.appPublic, paths.appBuild, {
     dereference: true,
-    filter: (file) => file !== paths.appHtml,
+    /** Do not copy template index.html and fake/dev manifest */
+    filter: (file) => file !== paths.appHtml && file !== paths.appDevManifest,
   });
 }
 
@@ -203,4 +208,37 @@ function copyFaviconForSite() {
     path.join(paths.appPublic, 'img', process.env.REACT_APP_SITE_CODE, 'favicon.ico'),
     paths.appBuildFavicon
   );
+}
+
+function createManifest() {
+  /** @typedef {{[prop: string]: string | number | null | ManifesType}} ManifesType */
+  /**
+   * @param {ManifesType} manifestPart
+   * @returns {ManifesType}
+   */
+  const ManifestTemplateHandler = (manifestPart) => {
+    const builtPart = {};
+
+    Object.keys(manifestPart).forEach((key) => {
+      if (typeof manifestPart[key] === "object") {
+        if (manifestPart[key] instanceof Array)
+          builtPart[key] = manifestPart[key].map((subValue) => ManifestTemplateHandler(subValue));
+        else
+          builtPart[key] = ManifestTemplateHandler(manifestPart[key]);
+      } else if (typeof manifestPart[key] === "string")
+        builtPart[key] = manifestPart[key]
+          .replace(/%([\w\.]+)%/g, (_match, variable) =>
+            process.env[variable] || "–"
+          );
+      else
+        builtPart[key] = manifestPart[key];
+    });
+
+    return builtPart;
+  };
+  
+  const templateManifest = JSON.parse(fs.readFileSync(paths.appTemplateManifest));
+  const builtManifest = ManifestTemplateHandler(templateManifest);
+
+  fs.writeFileSync(paths.appBuildManifest, JSON.stringify(builtManifest, false, "\t"));
 }

@@ -15,12 +15,12 @@ interface ImageData {
   external_service: any[];
 }
 
-interface Image {
+interface LastCommentImage {
   type: string;
   data: ImageData;
 }
 
-interface MediumData {
+interface LastCommentMediumData {
   uuid: string;
   width: number;
   height: number;
@@ -32,13 +32,13 @@ interface MediumData {
   url: string;
   title: string;
   description: string;
-  image: Image;
+  image: LastCommentImage;
   v?: number;
 }
 
-interface Medium {
+interface LastCommentMedium {
   type: string;
-  data: MediumData;
+  data: LastCommentMediumData;
 }
 
 export interface LastComment {
@@ -48,7 +48,7 @@ export interface LastComment {
   comment_id: number;
   reply_to_id: number;
   text: string;
-  media: Medium[];
+  media: LastCommentMedium[];
 }
 
 export default LastComment;
