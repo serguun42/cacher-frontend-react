@@ -1,9 +1,127 @@
+:root {
+  --text: #333;
+  --header: var(--primary);
+  --background: #e1e1e1;
+  --ripple: #ffffff;
+  --scroll: var(--primary);
+  --button-background: var(--primary);
+  --button-text: #fff;
+  --button-shadow: rgba(30, 30, 30, 0.1);
+  --message-background: #fff;
+  --message-text: #333;
+}
+
+:root .is-dark {
+  --text: #e1e1e1;
+  --header: #121212;
+  --background: #121212;
+  --button-background: var(--primary);
+  --button-text: #222;
+  --button-shadow: rgba(0, 0, 0, 0.3);
+  --message-background: #e1e1e1;
+  --message-text: #121212;
+}
+
 body {
-	padding: 0;
-	margin: 0;
-	background-color: #E1E1E1;
+  margin: 0;
+  padding: 0;
+  color: var(--text);
+  background-color: var(--background);
+
+  font-family: 'Inter', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.35em;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
 }
 
 * {
-	box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.default-pointer {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.default-scroll-color {
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll) transparent;
+}
+
+.default-scroll-color::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.default-scroll-color::-webkit-scrollbar {
+  width: 6px;
+  height: 0;
+  background-color: transparent;
+}
+
+@media (max-width: 500px) {
+  .default-scroll-color::-webkit-scrollbar {
+    width: 2px;
+  }
+}
+
+.default-scroll-color::-webkit-scrollbar-thumb {
+  background-color: var(--scroll);
+}
+
+.default-scroll-transparent {
+  overflow-y: hidden;
+  overflow-x: auto;
+
+  scrollbar-width: none;
+  scrollbar-color: transparent transparent;
+}
+
+.default-scroll-transparent::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.default-scroll-transparent::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  background-color: transparent;
+}
+
+.default-scroll-transparent::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+.default-no-select {
+  user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+
+a,
+a:visited {
+  color: inherit;
+}
+
+.default-title-font {
+  font-family: 'Product Sans', 'Futura', 'Inter', 'Roboto', Arial, 'Helvetica Neue', Helvetica, sans-serif;
+  font-weight: 400;
+  line-height: 1.35em;
+  text-align: center;
 }

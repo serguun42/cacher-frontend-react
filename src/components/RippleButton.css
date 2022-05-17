@@ -1,0 +1,36 @@
+.ripple-button {
+  appearance: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-button__ripple {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  background: var(--ripple);
+  display: block;
+  border-radius: 9999px;
+  opacity: 0.3;
+  animation: 0.9s ease 0s 1 forwards ripple-effect;
+}
+
+@keyframes ripple-effect {
+  0% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(10);
+    opacity: 0.125;
+  }
+  100% {
+    transform: scale(35);
+    opacity: 0;
+  }
+}
+
+.ripple-button__content {
+  position: relative;
+  z-index: 2;
+}
