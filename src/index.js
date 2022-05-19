@@ -6,15 +6,13 @@ import App from './App';
 import Home from './pages/Home';
 import Swagger from './pages/Swagger';
 import NotFound from './pages/NotFound';
+import Message from './components/Message';
 import ScrollToTop from './util/scroll-to-top';
 import store from './store';
-import Dispatcher from './util/dispatcher';
+import dispatcher from './util/dispatcher';
 import { checkSystemOnMediaChange } from './util/theme';
-
-const styleBlockWithPrimary =
-  document.getElementById('primary') || document.head.appendChild(document.createElement('style'));
-styleBlockWithPrimary.id = 'style-block-with-primary';
-styleBlockWithPrimary.innerHTML = `:root {\n--primary: ${process.env.REACT_APP_PRIMARY_COLOR};\n}`;
+import './util/set-primary';
+import './util/message';
 
 /** @param {import("./util/theme").ThemeObject} */
 function ApplyThemeClassToBody(theme) {
@@ -22,7 +20,7 @@ function ApplyThemeClassToBody(theme) {
   else document.body.classList.remove('is-dark');
 }
 
-Dispatcher.link('themeChanged', ApplyThemeClassToBody);
+dispatcher.link('themeChanged', ApplyThemeClassToBody);
 ApplyThemeClassToBody(store.getState().theme);
 
 window
@@ -32,6 +30,7 @@ window
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>
+    <Message />
     <BrowserRouter basename={process.env.PUBLIC_URL}>
       <ScrollToTop />
       <Routes>

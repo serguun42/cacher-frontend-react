@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import Dispatcher from './dispatcher';
+import dispatcher from './dispatcher';
 
 /** @typedef {"light" | "dark" | "schedule" | "system"} ThemeEnum */
 /**
- * @typedef ThemeObject
+ * @typedef {Object} ThemeObject
  * @property {ThemeEnum} raw
  * @property {boolean} isDark
  * @property {string} icon
@@ -52,10 +52,10 @@ const GetThemeIcon = (themeRawParam) => THEME_ICONS[themeRawParam];
 
 /** @type {{ [prop in ThemeEnum]: string }} */
 const THEME_NAMES = {
-  light: 'Светлая тема',
-  dark: 'Тёмная тема',
-  schedule: 'По расписанию (тёмная после 19:30)',
-  system: 'Системная тема',
+  light: 'Светлая тема (всегда)',
+  dark: 'Тёмная тема (всегда)',
+  schedule: 'Тема по расписанию (тёмная после 19:30)',
+  system: 'Тема как в системе',
 };
 
 /**
@@ -92,7 +92,7 @@ export const themeSlice = createSlice({
       state.icon = nextTheme.icon;
       state.name = nextTheme.name;
 
-      Dispatcher.call('themeChanged', state);
+      dispatcher.call('themeChanged', nextTheme);
       localStorage.setItem('theme-raw', state.raw);
     },
 
@@ -108,7 +108,7 @@ export const themeSlice = createSlice({
       state.icon = applyingTheme.icon;
       state.name = applyingTheme.name;
 
-      Dispatcher.call('themeChanged', state);
+      dispatcher.call('themeChanged', applyingTheme);
       localStorage.setItem('theme-raw', state.raw);
     },
 
@@ -122,7 +122,7 @@ export const themeSlice = createSlice({
       state.icon = checkingTheme.icon;
       state.name = checkingTheme.name;
 
-      Dispatcher.call('themeChanged', state);
+      dispatcher.call('themeChanged', checkingTheme);
       localStorage.setItem('theme-raw', state.raw);
     },
   },

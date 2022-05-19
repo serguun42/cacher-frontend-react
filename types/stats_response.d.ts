@@ -1,11 +1,22 @@
 export type StatsResponse = {
-  /* How many post in universe cacher has */
+  /** How many post in universe cacher has */
   countOfAllPosts: number;
-  /* For graph */
-  sizeByDays: {
-    /* Date, YYYY-MM-DD format */
+  /** Special stats for today */
+  today: {
+    /** Date, YYYY-MM-DD format */
     date: string;
-    /* Post published at that date */
+    /** Posts published today */
+    count: number;
+    /** Posts initially published to blogs today */
+    blogPostsCount: number;
+    /** Active posters count today */
+    distinctAuthorsCount: number;
+  };
+  /** For graph, does not include last day ('today') */
+  sizeByDays: {
+    /** Date, YYYY-MM-DD format */
+    date: string;
+    /** Posts published at that date */
     count: number;
   }[];
 };

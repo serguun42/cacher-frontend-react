@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import store from '../store';
+import LogMessageOrError from '../util/log';
 import { nextTheme } from '../util/theme';
 import './Footer.css';
 
@@ -13,7 +14,7 @@ export default function Footer() {
   ];
 
   const changeTheme = () => store.dispatch(nextTheme());
-  const clearCache = () => console.log('clearCache');
+  const clearCache = () => LogMessageOrError('clearCache');
 
   const themeState = useSelector((state) => state.theme);
 
@@ -30,7 +31,7 @@ export default function Footer() {
         <div className="footer__logo-desc">
           <div className="footer__logo-desc__title default-title-font">Cacher {process.env.REACT_APP_SITE_SHORT}</div>
           <div>
-            <i className="material-icons material-icons-round default-no-select">copyright</i>
+            <i className="material-icons">copyright</i>
             <span>{new Date().getFullYear()}</span>
           </div>
         </div>
@@ -40,7 +41,7 @@ export default function Footer() {
         {footerLinks.map((link) =>
           link.router ? (
             <Link className="footer__section__item" to={link.href} key={link.href}>
-              <i className="material-icons material-icons-round default-no-select">{link.icon}</i>
+              <i className="material-icons">{link.icon}</i>
               <span>{link.text}</span>
             </Link>
           ) : (
@@ -51,7 +52,7 @@ export default function Footer() {
               href={link.href}
               key={link.href}
             >
-              <i className="material-icons material-icons-round default-no-select">{link.icon}</i>
+              <i className="material-icons">{link.icon}</i>
               <span>{link.text}</span>
             </a>
           )
@@ -60,7 +61,7 @@ export default function Footer() {
 
       <section className="footer__section">
         <div className="footer__section__item default-pointer">
-          <i className="material-icons material-icons-round default-no-select">open_in_new</i>
+          <i className="material-icons">open_in_new</i>
           <a
             href={process.env.REACT_APP_SITE_CODE === 'tj' ? '/dtf/' : '/tj/'}
             target="_self"
@@ -71,12 +72,12 @@ export default function Footer() {
         </div>
 
         <div className="footer__section__item default-no-select default-pointer" onClick={() => changeTheme()}>
-          <i className="material-icons material-icons-round default-no-select">{themeState.icon}</i>
+          <i className="material-icons">{themeState.icon}</i>
           <span>{themeState.name}</span>
         </div>
 
         <div className="footer__section__item default-no-select default-pointer" onClick={() => clearCache()}>
-          <i className="material-icons material-icons-round default-no-select">delete_outline</i>
+          <i className="material-icons">delete_outline</i>
           <span>Очистить кэш</span>
         </div>
       </section>
@@ -103,7 +104,7 @@ export default function Footer() {
         </div>
 
         <div className="footer__section__item default-pointer">
-          <i className="material-icons material-icons-round default-no-select">api</i>
+          <i className="material-icons">api</i>
           <Link to="/docs/api/swagger">Swagger API</Link>
         </div>
       </section>

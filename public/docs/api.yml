@@ -82,7 +82,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/IndexDocType'
+                  $ref: '#/components/schemas/FeedPost'
         '401':
           description: Not authorized
           content:
@@ -177,7 +177,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/IndexDocType'
+                  $ref: '#/components/schemas/FeedPost'
         '401':
           description: Not authorized
           content:
@@ -253,7 +253,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/IndexDocType'
+                  $ref: '#/components/schemas/FeedPost'
         '401':
           description: Not authorized
           content:
@@ -343,7 +343,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/IndexDocType'
+                  $ref: '#/components/schemas/FeedPost'
         '401':
           description: Not authorized
           content:
@@ -404,74 +404,110 @@ components:
         code: 403
         reason: no_permission
 
-    IndexDocType:
-      additionalProperties: false
+    FeedPost:
+      additionalProperties: false    
       properties:
-        author_avatar_url:
-          type: string
-        author_id:
-          type: number
-        author_name:
-          type: string
-        author_url:
-          type: string
-        collection:
-          type: string
+        author:
+          additionalProperties: false
+          properties:
+            avatar_url:
+              type: string
+            id:
+              type: number
+            name:
+              type: string
+            url:
+              type: string
+          required:
+            - id
+            - name
+            - url
+            - avatar_url
+          type: object
         date:
           type: number
         id:
           type: number
         intro:
           type: string
-        subsite_avatar_url:
-          type: string
-        subsite_id:
-          type: number
-        subsite_name:
-          type: string
-        subsite_url:
-          type: string
+        subsite:
+          additionalProperties: false
+          properties:
+            avatar_url:
+              type: string
+            id:
+              type: number
+            name:
+              type: string
+            url:
+              type: string
+          required:
+            - id
+            - name
+            - url
+            - avatar_url
+          type: object
         title:
           type: string
         url:
           type: string
       required:
         - id
-        - collection
         - date
         - title
         - intro
         - url
-        - author_id
-        - author_name
-        - author_url
-        - author_avatar_url
-        - subsite_id
-        - subsite_name
-        - subsite_url
-        - subsite_avatar_url
+        - author
+        - subsite
       type: object
 
     StatsResponse:
       additionalProperties: false
       properties:
         countOfAllPosts:
+          description: How many post in universe cacher has
           type: number
         sizeByDays:
+          description: 'For graph, does not include last day (''today'')'
           items:
             additionalProperties: false
             properties:
-              date:
-                type: string
               count:
+                description: Posts published at that date
                 type: number
+              date:
+                description: 'Date, YYYY-MM-DD format'
+                type: string
             required:
               - date
               - count
             type: object
           type: array
+        today:
+          additionalProperties: false
+          description: Special stats for today
+          properties:
+            blogPostsCount:
+              description: Posts initially published to blogs today
+              type: number
+            count:
+              description: Posts published today
+              type: number
+            date:
+              description: 'Date, YYYY-MM-DD format'
+              type: string
+            distinctAuthorsCount:
+              description: Active posters count today
+              type: number
+          required:
+            - date
+            - count
+            - blogPostsCount
+            - distinctAuthorsCount
+          type: object
       required:
         - countOfAllPosts
+        - today
         - sizeByDays
       type: object
 

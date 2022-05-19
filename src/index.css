@@ -2,7 +2,7 @@
   --text: #333;
   --header: var(--primary);
   --background: #e1e1e1;
-  --ripple: #ffffff;
+  --ripple: var(--primary);
   --scroll: var(--primary);
   --button-background: var(--primary);
   --button-text: #fff;
@@ -114,6 +114,27 @@ input[type='number'] {
   -webkit-user-select: none;
 }
 
+.material-icons {
+  user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+
+button,
+button[type='button'] {
+  appearance: none;
+  border: none;
+  text-decoration: none;
+  outline: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+
 a,
 a:visited {
   color: inherit;
@@ -124,4 +145,56 @@ a:visited {
   font-weight: 400;
   line-height: 1.35em;
   text-align: center;
+}
+
+h1 {
+  margin: 24px 0;
+  font-size: 48px;
+  font-weight: 400;
+  line-height: 1.35em;
+}
+
+h2 {
+  margin: 24px 0;
+  font-size: 40px;
+  font-weight: 400;
+  line-height: 48px;
+}
+
+h3 {
+  margin: 24px 0;
+  font-size: 34px;
+  font-weight: 400;
+  line-height: 40px;
+}
+
+h4 {
+  margin: 24px 0 16px;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 32px;
+}
+
+h5 {
+  margin: 24px 0 16px;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 28px;
+}
+
+h6 {
+  margin: 24px 0 16px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+::selection {
+  background-color: var(--primary);
+  color: #121212;
+}
+
+::selection .is-dark {
+  background-color: var(--primary);
+  color: #e1e1e1;
 }

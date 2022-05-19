@@ -1,4 +1,4 @@
-.page-404 {
+.not-found {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -14,7 +14,14 @@
   text-align: center;
 }
 
-.page-404 a,
-.page-404 a:visited {
+.not-found__return,
+.not-found__return:visited {
+  display: block;
+  position: relative;
+
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 500;
+
   color: var(--primary);
 }

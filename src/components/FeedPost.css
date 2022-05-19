@@ -1,0 +1,149 @@
+.feed-post {
+  display: block;
+  position: relative;
+
+  width: 100%;
+  margin: 0 auto 24px;
+  padding: 16px 20px;
+
+  color: var(--text);
+
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+
+  transition: box-shadow 0.2s ease-in-out 0s;
+  box-shadow: 0 0 2px 0 var(--button-shadow);
+}
+
+.feed-post:hover,
+.feed-post:active {
+  box-shadow: 0 5px 10px 2px var(--button-shadow);
+}
+
+.is-dark .feed-post {
+  background-color: #333;
+}
+
+@media (max-width: 700px) {
+  .feed-post {
+    margin: 0 auto 16px;
+    padding: 12px 16px;
+
+    border-radius: 4px;
+  }
+}
+
+.feed-post__info {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+
+  margin-bottom: 10px;
+}
+
+.feed-post__info__elem {
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  margin: 0 16px 0 0;
+
+  text-decoration: none;
+}
+
+.feed-post__info__elem__img {
+  display: inline-block;
+  position: relative;
+
+  width: 22px;
+  height: 22px;
+
+  margin-right: 8px;
+
+  border-radius: 6px;
+
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.feed-post__info__elem__text {
+  height: 22px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 22px;
+
+  color: var(--text);
+}
+
+.feed-post__info__elem:hover .feed-post__info__elem__text {
+  color: var(--primary);
+}
+
+.feed-post__info__elem__text--date {
+  color: #595959;
+}
+
+.is-dark .feed-post__info__elem__text--date {
+  color: #888;
+}
+
+.feed-post__info__elem__text--date.material-icons {
+  margin-left: 4px;
+}
+
+.feed-post__info__elem:last-child {
+  margin: 0;
+}
+
+.feed-post__info__elem__verified {
+  display: inline-block;
+  position: relative;
+
+  width: 16px;
+  height: 16px;
+
+  margin: 0 4px;
+  padding: 0;
+  box-sizing: border-box;
+
+  fill: #888;
+}
+
+.feed-post__header {
+  display: block;
+  position: relative;
+
+  margin: 8px 0 10px;
+  padding: 0;
+
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 30px;
+
+  word-break: break-word;
+  line-break: normal;
+
+  text-decoration: none;
+}
+
+.feed-post__header:last-of-type {
+  margin-bottom: 0;
+}
+
+.feed-post__intro {
+  word-break: break-word;
+  line-break: normal;
+
+  text-decoration: none;
+}
+
+.feed-post__intro--empty {
+  color: #595959;
+}
+
+.is-dark .feed-post__intro--empty {
+  color: #888;
+}

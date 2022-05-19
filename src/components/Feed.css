@@ -1,0 +1,53 @@
+.feed {
+  display: block;
+  position: relative;
+
+  width: 100%;
+  padding: 0 12px;
+}
+
+.feed__more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  width: fit-content;
+  height: 48px;
+  margin: 0 auto 24px;
+  padding: 16px;
+
+  color: var(--primary);
+
+  border-radius: 24px;
+  overflow: hidden;
+  background-color: #fff;
+
+  transition: box-shadow 0.2s ease-in-out 0s;
+  box-shadow: 0 0 2px 0 var(--button-shadow);
+}
+
+.feed__more:hover,
+.feed__more:active {
+  box-shadow: 0 5px 10px 2px var(--button-shadow);
+}
+
+.is-dark .feed__more {
+  background-color: #333;
+}
+
+@media (max-width: 700px) {
+  .feed__more {
+    margin: 0 auto 16px;
+
+    border-radius: 4px;
+  }
+}
+
+.feed__more__icon {
+  margin-right: 8px;
+}
+
+.feed__more__text {
+  padding-right: 8px;
+}

@@ -1,0 +1,31 @@
+.ripple-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  color: inherit;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.ripple-container__ripple {
+  transform: scale(0);
+  border-radius: 100%;
+  position: absolute;
+  opacity: 0.3;
+  background-color: var(--ripple);
+  animation-name: ripple;
+  animation-duration: 850ms;
+}
+
+.ripple-container--inherit .ripple-container__ripple {
+  background-color: currentColor;
+}
+
+@keyframes ripple {
+  to {
+    opacity: 0;
+    transform: scale(2);
+  }
+}
