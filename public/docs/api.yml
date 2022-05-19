@@ -11,7 +11,7 @@ info:
     url: 'https://github.com/serguun42/cacher-frontend-react'
   title: Cacher API
   x-logo:
-    url: '/img/wide.png'
+    url: '/tj/img/tj/wide.png'
 
 servers:
   - description: Cacher Production, API v1, site – TJournal
@@ -488,11 +488,35 @@ components:
           description: Special stats for today
           properties:
             blogPostsCount:
-              description: Posts initially published to blogs today
+              description: Posts initially published to blogs today      
               type: number
             count:
               description: Posts published today
               type: number
+            countBySubsites:
+              description: Posts today by subsites
+              items:
+                additionalProperties: false
+                properties:
+                  avatar_url:
+                    description: Subsite avatar image url
+                    type: string
+                  count:
+                    description: Posts published today in this subsite
+                    type: number
+                  id:
+                    description: Subsite id
+                    type: number
+                  name:
+                    description: Subsite name
+                    type: string
+                required:
+                  - id
+                  - name
+                  - avatar_url
+                  - count
+                type: object
+              type: array
             date:
               description: 'Date, YYYY-MM-DD format'
               type: string
@@ -504,6 +528,7 @@ components:
             - count
             - blogPostsCount
             - distinctAuthorsCount
+            - countBySubsites
           type: object
       required:
         - countOfAllPosts

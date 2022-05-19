@@ -3,7 +3,6 @@
   position: relative;
 
   width: 100%;
-  padding: 0 12px;
 }
 
 .feed__more {
@@ -36,11 +35,9 @@
   background-color: #333;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .feed__more {
     margin: 0 auto 16px;
-
-    border-radius: 4px;
   }
 }
 

@@ -62,12 +62,8 @@ export default function Footer() {
       <section className="footer__section">
         <div className="footer__section__item default-pointer">
           <i className="material-icons">open_in_new</i>
-          <a
-            href={process.env.REACT_APP_SITE_CODE === 'tj' ? '/dtf/' : '/tj/'}
-            target="_self"
-            rel="noopener noreferrer"
-          >
-            Cacher {process.env.REACT_APP_SITE_CODE === 'tj' ? 'DTF' : 'TJ'}
+          <a href={process.env.REACT_APP_OTHER_CACHER_LINK} target="_self" rel="noopener noreferrer">
+            {process.env.REACT_APP_OTHER_CACHER_NAME}
           </a>
         </div>
 
@@ -106,6 +102,13 @@ export default function Footer() {
         <div className="footer__section__item default-pointer">
           <i className="material-icons">api</i>
           <Link to="/docs/api/swagger">Swagger API</Link>
+        </div>
+
+        <div className="footer__section__item default-pointer">
+          <i className="material-icons">api</i>
+          <a href={`${process.env.PUBLIC_URL}/docs/redoc.html`} target="_blank" rel="noopener noreferrer">
+            Redoc API
+          </a>
         </div>
       </section>
     </footer>

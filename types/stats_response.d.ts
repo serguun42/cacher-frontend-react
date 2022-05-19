@@ -1,3 +1,14 @@
+export type CountBySubsites = {
+  /** Subsite id */
+  id: number;
+  /** Subsite name */
+  name: string;
+  /** Subsite avatar image url */
+  avatar_url: string;
+  /** Posts published today in this subsite */
+  count: number;
+}[];
+
 export type StatsResponse = {
   /** How many post in universe cacher has */
   countOfAllPosts: number;
@@ -11,6 +22,8 @@ export type StatsResponse = {
     blogPostsCount: number;
     /** Active posters count today */
     distinctAuthorsCount: number;
+    /** Posts today by subsites */
+    countBySubsites: CountBySubsites;
   };
   /** For graph, does not include last day ('today') */
   sizeByDays: {

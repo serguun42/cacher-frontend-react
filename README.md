@@ -13,6 +13,7 @@ All configuration and build or launch scripts ejected with `react-scripts eject`
 - `npm run build:dtf` – Build frontend with [`.env.dtf`](#sites-build-environment)
 - `npm run build:tj` – Build frontend with [`.env.tj`](#sites-build-environment)
 - `npm run lint` – Check project with `eslint`
+- `npm run generate-openapi-redoc` – Build static Redoc API based on [`api.yml`](./public/docs/api.yml) 
 
 ### Sites build environment
 

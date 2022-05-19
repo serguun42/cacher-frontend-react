@@ -1,14 +1,24 @@
 .loader {
   display: block;
-  position: relative;
-  width: 384px;
-  height: 384px;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  margin: 0;
   padding: 0;
-  margin: 64px auto;
+  box-sizing: border-box;
 }
 
-.loader--replace-content-before {
-  top: -384px;
+.loader__obfuscator {
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0.5;
+  background-color: var(--background);
 }
 
 .loader__logo {
@@ -16,6 +26,8 @@
   position: absolute;
   width: 384px;
   height: 384px;
+  left: calc(50% - 192px);
+  top: calc(50% - 192px);
 }
 
 .loader__logo__image {

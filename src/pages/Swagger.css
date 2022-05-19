@@ -11,17 +11,3 @@
   overflow-y: hidden;
   overflow-x: auto;
 }
-
-@media (min-width: 900px) and (max-width: 1600px) {
-  #swagger-container {
-    width: calc(100vw - 200px);
-    margin: 0 calc((700px - (100vw - 200px)) / 2);
-  }
-}
-
-@media (min-width: 1600px) {
-  #swagger-container {
-    width: 1600px;
-    margin: 0 calc((700px - 1600px) / 2);
-  }
-}

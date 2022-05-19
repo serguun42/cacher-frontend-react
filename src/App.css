@@ -89,15 +89,16 @@
   display: block;
   position: relative;
 
-  width: 1600px;
+  width: 1650px;
 
   margin: 0 auto;
   padding: 0;
 }
 
-@media (max-width: 1600px) {
+@media (max-width: 1650px) {
   #content {
     width: 100%;
-    max-width: 700px;
+    max-width: 800px;
+  padding: 0 12px;
   }
 }

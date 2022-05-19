@@ -55,6 +55,7 @@
     "react-redux": "8.0.1",
     "react-refresh": "0.11.0",
     "react-router-dom": "6.3.0",
+    "redoc-cli": "0.13.14",
     "resolve": "1.22.0",
     "resolve-url-loader": "4.0.0",
     "sass-loader": "12.6.0",
@@ -72,7 +73,8 @@
     "start": "node scripts/start.js",
     "build:dtf": "node scripts/build.js --site=dtf",
     "build:tj": "node scripts/build.js --site=tj",
-    "lint": "eslint . --ext .js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
+    "lint": "eslint . --ext .js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
+    "generate-openapi-redoc": "redoc-cli build public/docs/api.yml -o public/docs/redoc.html"
   },
   "devDependencies": {
     "eslint": "8.14.0",

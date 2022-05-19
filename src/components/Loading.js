@@ -9,6 +9,7 @@ export default function Loading() {
         return false;
       }}
     >
+      <div className="loader__obfuscator" />
       <div className="loader__logo">
         <div className="loader__logo__waves">
           <div className="loader__logo__wave loader__logo__wave--1" />
