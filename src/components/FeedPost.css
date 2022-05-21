@@ -136,6 +136,7 @@
 }
 
 .feed-post__intro {
+  display: block;
   position: relative;
 
   word-break: break-word;

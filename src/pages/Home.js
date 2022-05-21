@@ -6,7 +6,7 @@ import HomeIndexCard from '../components/HomeIndexCard';
 import Loading from '../components/Loading';
 import Ripple from '../components/Ripple';
 import store from '../store';
-import { FeedLastPosts, FeedStats } from '../util/api';
+import { GetFeedLastPosts, GetFeedStats } from '../util/api';
 import CreateChart from '../util/create-chart';
 import LogMessageOrError from '../util/log';
 import { showMessage } from '../util/message';
@@ -34,7 +34,7 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    FeedStats()
+    GetFeedStats()
       .then((stats) => {
         this.setState({
           countOfAllPosts: stats.countOfAllPosts,
@@ -59,7 +59,7 @@ class Home extends Component {
   loadMoreLastPost(trueNumberOfPostsInFeed = 0) {
     const { feedPosts: feedPostsFromState } = this.state;
 
-    FeedLastPosts(trueNumberOfPostsInFeed || feedPostsFromState.length)
+    GetFeedLastPosts(trueNumberOfPostsInFeed || feedPostsFromState.length)
       .then((feedPostsFromAPI) => {
         this.setState({
           feedPosts: feedPostsFromState

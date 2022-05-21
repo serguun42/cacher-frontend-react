@@ -13,6 +13,8 @@ import dispatcher from './util/dispatcher';
 import { checkSystemOnMediaChange } from './util/theme';
 import './util/set-primary';
 import './util/message';
+import Entity from './pages/Entity';
+import Entry from './pages/Entry';
 
 /** @param {import("./util/theme").ThemeObject} */
 function ApplyThemeClassToBody(theme) {
@@ -28,6 +30,7 @@ window
   ?.addEventListener('change', () => store.dispatch(checkSystemOnMediaChange()));
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
   <Provider store={store}>
     <Message />
@@ -37,6 +40,8 @@ root.render(
         <Route element={<App />}>
           <Route path="/">
             <Route index element={<Home />} />
+            <Route path="/entity/:entityId" element={<Entity />} />
+            <Route path="/post/:entryId" element={<Entry />} />
             <Route path="docs/api/swagger" element={<Swagger />} />
           </Route>
           <Route path="*" element={<NotFound />} />

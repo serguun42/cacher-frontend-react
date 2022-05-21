@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Ripple from './Ripple';
 import FeedPost from './FeedPost';
@@ -18,6 +18,8 @@ export default function Feed({ feedPosts, callback, noAdding, notFound }) {
   if (!(feedPosts instanceof Array)) return null;
 
   const [calledCallbackAt, setCalledCallbackAt] = useState(0);
+
+  useLayoutEffect(() => {}, [notFound]);
 
   feedPosts = feedPosts.filter((value, index, array) => index === array.findIndex((comp) => comp.id === value.id));
 

@@ -95,6 +95,10 @@
   text-decoration: none;
 }
 
+.home-info-card__subsite-chart__row__text--link:hover {
+  color: var(--text);
+}
+
 .home-info-card__subsite-chart__row__line {
   display: block;
   position: relative;
@@ -114,6 +118,7 @@
   position: relative;
 
   width: 100%;
+  min-width: 12px;
   height: 12px;
   border-radius: 6px;
 

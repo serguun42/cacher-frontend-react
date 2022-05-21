@@ -13,7 +13,9 @@ const BuildURL = (method, queries, root = API_ROOT) => {
   try {
     const builtURL = new URL(method, root);
 
-    Object.keys(queries).forEach((queryName) => builtURL.searchParams.set(queryName, queries[queryName]));
+    Object.keys(queries).forEach((queryName) => {
+      if (queries[queryName]) builtURL.searchParams.set(queryName, queries[queryName]);
+    });
 
     return builtURL.href;
   } catch (e) {
@@ -31,7 +33,7 @@ const BuildURL = (method, queries, root = API_ROOT) => {
 export const FetchMethod = (method, queries = {}, options = {}) => {
   return fetch(BuildURL(method, queries), options).then((res) => {
     try {
-      return res.json();
+      return res.json().then((response) => (response?.error ? Promise.reject(response) : Promise.resolve(response)));
     } catch (e) {
       LogMessageOrError(e);
       return Promise.reject(res.status);
@@ -42,10 +44,58 @@ export const FetchMethod = (method, queries = {}, options = {}) => {
 /**
  * @returns {Promise<import("../../types/stats_response").StatsResponse>}
  */
-export const FeedStats = () => FetchMethod('feed/stats');
+export const GetFeedStats = () => FetchMethod('feed/stats');
 
 /**
  * @param {number} [skip] How many posts to skip
  * @returns {Promise<import("../../types/feed_post").FeedPost[]>}
  */
-export const FeedLastPosts = (skip = 0) => FetchMethod('feed/last', { skip });
+export const GetFeedLastPosts = (skip = 0) => FetchMethod('feed/last', { skip });
+
+/**
+ * @param {number} entryId
+ * @returns {Promise<import("../../types/entry").Entry>}
+ */
+export const GetEntry = (entryId) => FetchMethod('entry', { entryId });
+
+/**
+ * @param {number} entityId
+ * @returns {Promise<import("../../types/entity_names").EntityNamesAndAvatarsResponse>}
+ */
+export const GetEntityNames = (entityId) => FetchMethod('entity/names', { entityId });
+
+/**
+ * @param {number} entryId
+ * @returns {Promise<import("../../types/feed_post").FeedPost[]>}
+ */
+export const SearchByPostId = (entryId) => FetchMethod('search/entry', { entryId });
+
+/**
+ * @typedef {Object} SearchDefaultFilter
+ * @property {number} [skip] How many posts to skip
+ * @property {string} [date-start] Limit by date, starting with this parameter (inclusively)
+ * @property {string} [date-end] Limit by date, ending with this parameter (inclusively)
+ */
+/**
+ * @param {{ entityId: number } & SearchDefaultFilter} searchByEntityIdFilter
+ * @returns {Promise<import("../../types/feed_post").FeedPost[]>}
+ */
+export const SearchByEntityId = (searchByEntityIdFilter) => FetchMethod('search/entity', { ...searchByEntityIdFilter });
+
+/**
+ * @param {{ url: string } & SearchDefaultFilter} searchByEntityIdFilter
+ * @returns {Promise<import("../../types/feed_post").FeedPost[]>}
+ */
+export const SearchByUrl = (searchByUrlFilter) => FetchMethod('search/url', { ...searchByUrlFilter });
+
+/**
+ * @typedef {Object} SearchTextFilter
+ * @property {string} text
+ * @property {boolean} [regex] Search with regex, passed in param "text"
+ * @property {boolean} [case-sensetive] Search case-sensetively (applicable both for plain text and regex)
+ */
+/**
+ * @param {SearchTextFilter & SearchDefaultFilter} searchByTextFilter
+ * @returns {Promise<import("../../types/feed_post").FeedPost[]>}
+ */
+export const SearchByText = (searchByTextFilter) => FetchMethod('search/text', { ...searchByTextFilter });

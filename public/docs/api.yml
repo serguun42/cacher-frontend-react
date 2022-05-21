@@ -24,6 +24,8 @@ tags:
     description: Start page contents
   - name: entry
     description: Get entry
+  - name: entity
+    description: User's or subsite's data
   - name: search
     description: Search related methods
 
@@ -111,7 +113,7 @@ paths:
         - entry
       parameters:
         - in: query
-          name: id
+          name: entryId
           schema:
             type: number
           required: true
@@ -156,7 +158,59 @@ paths:
                 type: string
                 example: '429 Too Many Requests'
 
-  /search/postId:
+  /entity/names:
+    get:
+      description: Get user's or subsite's names and avatar
+      operationId: entityNames
+      tags:
+        - entity
+      parameters:
+        - in: query
+          name: entityId
+          schema:
+            type: number
+          required: true
+          description: User or subsite id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityNamesAndAvatarsResponse'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+        '403':
+          description: Forbidden. Low account permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+        '404':
+          description: Post not found
+          content:
+            application/json:
+              schema:
+                type: object
+        '406':
+          description: 'Not acceptable: pass ID parameter'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+        '429':
+          description: Too many requests
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: '429 Too Many Requests'
+
+  /search/entry:
     get:
       description: Search by post id, exactly
       operationId: searchByPostId
@@ -164,7 +218,7 @@ paths:
         - search
       parameters:
         - in: query
-          name: postId
+          name: entryId
           schema:
             type: number
           required: true
@@ -197,7 +251,7 @@ paths:
               schema:
                 type: object
         '406':
-          description: No postId param or wrong format
+          description: No entryId param or wrong format
           content:
             application/json:
               schema:
@@ -209,7 +263,7 @@ paths:
               schema:
                 type: string
                 example: '429 Too Many Requests'
-  /search/entityId:
+  /search/entity:
     get:
       description: Search by entity id (from subsite's or author's urls)
       operationId: searchByEntityId
@@ -274,6 +328,82 @@ paths:
                 type: object
         '406':
           description: No entityId param or wrong format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+        '429':
+          description: Too many requests
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: '429 Too Many Requests'
+  /search/url:
+    get:
+      description: Search by url to anything
+      operationId: searchByUrl
+      tags:
+        - search
+      parameters:
+        - in: query
+          name: url
+          schema:
+            type: number
+          required: true
+          description: url
+        - in: query
+          name: skip
+          schema:
+            type: number
+          required: false
+          description: How many posts will be skipped
+          example: 20
+        - in: query
+          name: date-start
+          schema:
+            type: string
+            format: date
+            example: '2022-05-10'
+          required: false
+          description: Limit by date, starting with this parameter (inclusively)
+        - in: query
+          name: date-end
+          schema:
+            type: string
+            format: date
+            example: '2022-05-15'
+          required: false
+          description: Limit by date, ending with this parameter (inclusively)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FeedPost'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+        '403':
+          description: Forbidden. Low account permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+        '404':
+          description: Posts not found
+          content:
+            application/json:
+              schema:
+                type: object
+        '406':
+          description: No url param or wrong format
           content:
             application/json:
               schema:
@@ -534,6 +664,25 @@ components:
         - countOfAllPosts
         - today
         - sizeByDays
+      type: object
+
+    EntityNamesAndAvatarsResponse:
+      additionalProperties: false
+      properties:
+        id:
+          description: User or subsite id
+          type: number
+        last_avatar:
+          description: Last avatar from Names Cacher (if present)      
+          type: string
+        names:
+          description: Previous names from Names Cacher. Can be empty
+          items:
+            type: string
+          type: array
+      required:
+        - id
+        - names
       type: object
 
     Comment:

@@ -28,6 +28,39 @@ const MONTHS_FULL = [
 const BeautifulCount = (count) => count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
 /**
+ * @param {{ subsite: import("../../types/stats_response").CountBySubsites, todayPostsCount: number }} props
+ */
+function CountBySubsite({ subsite, todayPostsCount }) {
+  return (
+    <div className="home-info-card__subsite-chart__row">
+      <Link
+        to={`/entity/${subsite.id}`}
+        className="home-info-card__subsite-chart__row__img"
+        style={{ backgroundImage: `url(${subsite.avatar_url})` }}
+      />
+      <Link
+        to={`/entity/${subsite.id}`}
+        className="home-info-card__subsite-chart__row__text home-info-card__subsite-chart__row__text--link"
+      >
+        {subsite.name}
+      </Link>
+      <div className="home-info-card__subsite-chart__row__line">
+        <div
+          className="home-info-card__subsite-chart__row__indicator"
+          style={{ width: `${(Math.log(subsite.count) / Math.log(todayPostsCount)) * 100}%` }}
+        />
+      </div>
+      <div className="home-info-card__subsite-chart__row__count">{BeautifulCount(subsite.count)}</div>
+    </div>
+  );
+}
+
+CountBySubsite.propTypes = {
+  subsite: PropTypes.object.isRequired,
+  todayPostsCount: PropTypes.number.isRequired,
+};
+
+/**
  * @typedef {Object} HomeIndexCardProps
  * @property {Date} todayDate
  * @property {number} countOfAllPosts
@@ -78,7 +111,7 @@ export default function HomeIndexCard({
           <div className="home-info-card__subsite-chart__row__line">
             <div
               className="home-info-card__subsite-chart__row__indicator"
-              style={{ width: `${(Math.log(blogPostsCount + 1) / Math.log(todayPostsCount)) * 100}%` }}
+              style={{ width: `${(Math.log(blogPostsCount) / Math.log(todayPostsCount)) * 100}%` }}
             />
           </div>
           <div className="home-info-card__subsite-chart__row__count">{BeautifulCount(blogPostsCount)}</div>
@@ -87,69 +120,37 @@ export default function HomeIndexCard({
           </div>
         </div>
         {countBySubsites.slice(0, 5).map((subsite) => (
-          <div className="home-info-card__subsite-chart__row" key={`chart-subsite-id-${subsite.id}`}>
-            <Link
-              to={`/entity/${subsite.id}`}
-              className="home-info-card__subsite-chart__row__img"
-              style={{ backgroundImage: `url(${subsite.avatar_url})` }}
-            />
-            <Link
-              to={`/entity/${subsite.id}`}
-              className="home-info-card__subsite-chart__row__text home-info-card__subsite-chart__row__text--link"
-            >
-              {subsite.name}
-            </Link>
-            <div className="home-info-card__subsite-chart__row__line">
-              <div
-                className="home-info-card__subsite-chart__row__indicator"
-                style={{ width: `${(Math.log(subsite.count + 1) / Math.log(todayPostsCount)) * 100}%` }}
-              />
-            </div>
-            <div className="home-info-card__subsite-chart__row__count">{BeautifulCount(subsite.count)}</div>
-          </div>
+          <CountBySubsite subsite={subsite} todayPostsCount={todayPostsCount} key={`chart-subsite-id-${subsite.id}`} />
         ))}
         <div className="home-info-card__subsite-chart__more" ref={moreRef}>
           {countBySubsites.slice(5).map((subsite) => (
-            <div className="home-info-card__subsite-chart__row" key={`chart-subsite-id-${subsite.id}`}>
-              <Link
-                to={`/entity/${subsite.id}`}
-                className="home-info-card__subsite-chart__row__img"
-                style={{ backgroundImage: `url(${subsite.avatar_url})` }}
-              />
-              <Link
-                to={`/entity/${subsite.id}`}
-                className="home-info-card__subsite-chart__row__text home-info-card__subsite-chart__row__text--link"
-              >
-                {subsite.name}
-              </Link>
-              <div className="home-info-card__subsite-chart__row__line">
-                <div
-                  className="home-info-card__subsite-chart__row__indicator"
-                  style={{ width: `${(Math.log(subsite.count + 1) / Math.log(todayPostsCount)) * 100}%` }}
-                />
-              </div>
-              <div className="home-info-card__subsite-chart__row__count">{BeautifulCount(subsite.count)}</div>
-            </div>
+            <CountBySubsite
+              subsite={subsite}
+              todayPostsCount={todayPostsCount}
+              key={`chart-subsite-id-${subsite.id}`}
+            />
           ))}
         </div>
-        <div
-          className="home-info-card__subsite-chart__switch default-pointer default-no-select"
-          onClick={() => {
-            if (shownMore) {
-              SlideUp(moreRef.current, 400);
-              document.documentElement.scrollTo({
-                top: 0,
-                behavior: 'smooth',
-              });
-            } else SlideDown(moreRef.current, 400, { display: 'block' });
+        {countBySubsites.length > 5 ? (
+          <div
+            className="home-info-card__subsite-chart__switch default-pointer default-no-select"
+            onClick={() => {
+              if (shownMore) {
+                SlideUp(moreRef.current, 400);
+                document.documentElement.scrollTo({
+                  top: 0,
+                  behavior: 'smooth',
+                });
+              } else SlideDown(moreRef.current, 400, { display: 'block' });
 
-            setShownMore(!shownMore);
-          }}
-        >
-          <div>{shownMore ? 'Свернуть' : 'Развернуть'}</div>
-          <i className="material-icons">{shownMore ? 'unfold_less' : 'unfold_more'}</i>
-          <Ripple />
-        </div>
+              setShownMore(!shownMore);
+            }}
+          >
+            <div>{shownMore ? 'Свернуть' : 'Развернуть'}</div>
+            <i className="material-icons">{shownMore ? 'unfold_less' : 'unfold_more'}</i>
+            <Ripple />
+          </div>
+        ) : null}
       </div>
 
       <div className="home-info-card__quick-lines">
