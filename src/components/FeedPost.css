@@ -100,20 +100,6 @@
   margin-right: 0;
 }
 
-.feed-post__info__elem__verified {
-  display: inline-block;
-  position: relative;
-
-  width: 16px;
-  height: 16px;
-
-  margin: 0 4px;
-  padding: 0;
-  box-sizing: border-box;
-
-  fill: #888;
-}
-
 .feed-post__header {
   display: block;
   position: relative;

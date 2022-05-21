@@ -22,6 +22,7 @@ export default function Loading() {
           className="loader__logo__image default-no-select"
           src={`${process.env.PUBLIC_URL}/img/${process.env.REACT_APP_SITE_CODE}/icons/round/192x192.png`}
           alt="Loading"
+          draggable="false"
           onContextMenu={(e) => {
             e.preventDefault();
             return false;

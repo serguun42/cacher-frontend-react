@@ -1,17 +1,4 @@
-const MONTHS_FULL = [
-  'января',
-  'февраля',
-  'марта',
-  'апреля',
-  'мая',
-  'июня',
-  'июля',
-  'августа',
-  'сентября',
-  'октября',
-  'ноября',
-  'декабря',
-];
+const MONTHS_SHORT_GENETIVE = ['янв', 'фев', 'мар', 'апр', 'мая', 'июня', 'июля', 'авг', 'сен', 'окт', 'ноя', 'дек'];
 
 /**
  * @param {number | string | Date} date
@@ -60,10 +47,13 @@ export default function DateForPost(date, toISO = false, onlyDate = false) {
   }
 
   if (Date.now() - postDate.getTime() < 30 * day) {
-    if (onlyDate) return `${postDate.getDate()} ${MONTHS_FULL[postDate.getMonth()]}`;
+    if (onlyDate) return `${postDate.getDate()} ${MONTHS_SHORT_GENETIVE[postDate.getMonth()]}`;
 
-    return `${postDate.getDate()} ${MONTHS_FULL[postDate.getMonth()]}, ${timeString}`;
+    return `${postDate.getDate()} ${MONTHS_SHORT_GENETIVE[postDate.getMonth()]}, ${timeString}`;
   }
 
-  return `${postDate.getDate()} ${MONTHS_FULL[postDate.getMonth()]} ${postDate.getFullYear()}`;
+  if (postDate.getFullYear() === new Date().getFullYear())
+    return `${postDate.getDate()} ${MONTHS_SHORT_GENETIVE[postDate.getMonth()]}, ${timeString}`;
+
+  return `${postDate.getDate()} ${MONTHS_SHORT_GENETIVE[postDate.getMonth()]} ${postDate.getFullYear()}, ${timeString}`;
 }

@@ -15,6 +15,7 @@ import './util/set-primary';
 import './util/message';
 import Entity from './pages/Entity';
 import Entry from './pages/Entry';
+import Popup from './components/Popup';
 
 /** @param {import("./util/theme").ThemeObject} */
 function ApplyThemeClassToBody(theme) {
@@ -34,6 +35,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>
     <Message />
+    <Popup />
     <BrowserRouter basename={process.env.PUBLIC_URL}>
       <ScrollToTop />
       <Routes>

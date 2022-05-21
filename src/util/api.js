@@ -1,4 +1,6 @@
 import LogMessageOrError from './log';
+import PopupNoLogin from './popups/no-login';
+import PopupNoPermission from './popups/no-permission';
 
 const API_VERSION = 'v1';
 const API_ROOT = new URL(`/api/${API_VERSION}/${process.env.REACT_APP_SITE_CODE}/`, window.location.origin);
@@ -32,6 +34,9 @@ const BuildURL = (method, queries, root = API_ROOT) => {
  */
 export const FetchMethod = (method, queries = {}, options = {}) => {
   return fetch(BuildURL(method, queries), options).then((res) => {
+    if (res.status === 401) PopupNoLogin();
+    else if (res.status === 403) PopupNoPermission();
+
     try {
       return res.json().then((response) => (response?.error ? Promise.reject(response) : Promise.resolve(response)));
     } catch (e) {

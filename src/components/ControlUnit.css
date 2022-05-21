@@ -1,8 +1,8 @@
 .control-unit {
   display: flex;
   flex-direction: column;
-  justify-self: start;
   flex-wrap: nowrap;
+  justify-content: flex-start;
   align-items: center;
   position: fixed;
 
@@ -12,7 +12,8 @@
   z-index: 10;
 }
 
-@media (max-width: 800px) {
+/* Substitute for (max-width: 800px) for better readability */
+@media (max-width: 950px) {
   .control-unit {
     flex-direction: row;
     top: unset;
@@ -69,7 +70,8 @@
   --ripple: var(--button-background);
 }
 
-@media (max-width: 800px) {
+/* Substitute for (max-width: 800px) for better readability */
+@media (max-width: 950px) {
   .control-unit__button {
     margin-bottom: 0;
     margin-right: 10px;
