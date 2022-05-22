@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
+import DateForPost from '../util/date-for-post';
 import dispatcher from '../util/dispatcher';
 import Refined from '../util/html/refined';
 import PopupAboutQuiz from '../util/popups/about-quiz';
+import TwitterMediaToOsnovaMediaBlock from '../util/tweet-entities-to-media-block';
 import './PostBlock.css';
 import Ripple from './Ripple';
 
@@ -15,16 +17,29 @@ const IS_SAFARI =
 
 /**
  * @param {string} uuid
+ * @returns {boolean}
+ */
+const TestOsnovaUUID = (uuid) => {
+  if (typeof uuid !== 'string') return false;
+
+  return /^[0-9a-f]{32}$/i.test(uuid.replace(/-/g, ''));
+};
+
+/**
+ * @param {string} uuid
  * @returns {string}
  */
-const Media = (uuid) => `https://${process.env.REACT_APP_CDN_DOMAIN}/${uuid}/`;
+const Media = (uuid) => (TestOsnovaUUID(uuid) ? `https://${process.env.REACT_APP_CDN_DOMAIN}/${uuid}/` : uuid);
 
 /**
  * @param {string} base
  * @param {string} [format='webp']
  * @returns {string}
  */
-const Format = (base, format = 'webp') => `${base}-/format/${format === 'webp' && IS_SAFARI ? 'jpg' : format}/`;
+const Format = (base, format = 'webp') =>
+  base.indexOf(process.env.REACT_APP_CDN_DOMAIN) > -1
+    ? `${base}-/format/${format === 'webp' && IS_SAFARI ? 'jpg' : format}/`
+    : base;
 
 /**
  * @param {string} uuid
@@ -73,10 +88,14 @@ function PostBlockVideo({ block }) {
       ) : null}
       {videoRequested ? null : (
         <div
-          className="video__thumbnail"
+          className="video__thumbnail default-pointer"
           style={{ backgroundImage: `url(${Media(videoData.thumbnail.data.uuid)})` }}
           onClick={() => setVideoRequested(true)}
-        />
+        >
+          <div className="media-video-pseudo-play">
+            <div className="material-icons">play_arrow</div>
+          </div>
+        </div>
       )}
     </div>
   );
@@ -253,78 +272,91 @@ PostBlockGallery.propTypes = {
 /**
  * @param {{ block: import("../../types/post_version").PostBlock }} props
  */
+function PostBlockSingleMedia({ block }) {
+  if (!block?.data?.items?.[0]) return null;
+
+  const media = block.data.items[0];
+  const type = ['jpg', 'jpeg', 'png', 'webp', 'image'].includes(media.image.data.type) ? 'photo' : 'video';
+
+  const onClick = () => {
+    /** @type {import("./MediaViewer").MediaPayload} */
+    const mediaPayload = {
+      url: Format(Media(media.image.data.uuid), type === 'video' ? 'mp4' : 'webp'),
+      type,
+      width: media.image.data.width,
+      height: media.image.data.height,
+      description: Refined(
+        media.title || media.author ? `${media.title}${media.title && media.author && ' – '}${media.author}` : ''
+      ),
+    };
+
+    dispatcher.call('media', mediaPayload);
+  };
+
+  /** @type {import("react").MutableRefObject<HTMLElement>} */
+  const mediaSingleRef = useRef();
+  /** @type {import("react").MutableRefObject<HTMLElement>} */
+  const mediaImagePreviewRef = useRef();
+
+  const [useWrapper, setUseWrapper] = useState(false);
+
+  useEffect(() => {
+    const mediaSingle = mediaSingleRef.current;
+    const mediaImagePreview = mediaImagePreviewRef.current;
+
+    if (!mediaSingle) return;
+    if (media.image.data.width < mediaSingle.clientWidth) {
+      setUseWrapper(true);
+      return;
+    }
+
+    if (!mediaImagePreview) return;
+    if (mediaImagePreview.clientWidth < mediaSingle.clientWidth - 50) setUseWrapper(true);
+  }, [mediaSingleRef, mediaImagePreviewRef]);
+
+  return (
+    <div className="media-single" ref={mediaSingleRef}>
+      <div
+        className={`media-single__wrapper ${useWrapper ? 'media-single__wrapper--visible' : ''} default-pointer`}
+        onClick={onClick}
+      >
+        <img
+          className="media-single__media"
+          alt=""
+          src={Format(Media(media.image.data.uuid))}
+          ref={mediaImagePreviewRef}
+        />
+        {type === 'video' ? (
+          <div className="media-video-pseudo-play">
+            <div className="material-icons">play_arrow</div>
+          </div>
+        ) : null}
+      </div>
+      {media.title || media.author ? (
+        <div className="media-single__desc">
+          {media.title ? <span>{Refined(media.title)}</span> : null}
+          {media.author ? <span>{Refined(media.author)}</span> : null}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+PostBlockSingleMedia.propTypes = {
+  block: PropTypes.object.isRequired,
+};
+
+/**
+ * @param {{ block: import("../../types/post_version").PostBlock }} props
+ */
 export default function PostBlock({ block }) {
   if (block.type === 'text') return <p>{Refined(block.data.text)}</p>;
 
   if (block.type === 'header') return <h4>{Refined(block.data.text)}</h4>;
 
   if (block.type === 'media' && block.data.items)
-    if (block.data.items.length === 1) {
-      const media = block.data.items[0];
-      const type = ['jpg', 'jpeg', 'png', 'webp', 'image'].includes(media.image.data.type) ? 'photo' : 'video';
-
-      const onClick = () => {
-        /** @type {import("./MediaViewer").MediaPayload} */
-        const mediaPayload = {
-          url: Format(Media(media.image.data.uuid), type === 'video' ? 'mp4' : 'webp'),
-          type,
-          width: media.image.data.width,
-          height: media.image.data.height,
-          description: Refined(
-            media.title || media.author ? `${media.title}${media.title && media.author && ' – '}${media.author}` : ''
-          ),
-        };
-
-        dispatcher.call('media', mediaPayload);
-      };
-
-      /** @type {import("react").MutableRefObject<HTMLElement>} */
-      const mediaSingleRef = useRef();
-      /** @type {import("react").MutableRefObject<HTMLElement>} */
-      const mediaImagePreviewRef = useRef();
-
-      const [useWrapper, setUseWrapper] = useState(false);
-
-      useEffect(() => {
-        const mediaSingle = mediaSingleRef.current;
-        const mediaImagePreview = mediaImagePreviewRef.current;
-
-        if (!mediaSingle) return;
-        if (media.image.data.width < mediaSingle.clientWidth) {
-          setUseWrapper(true);
-          return;
-        }
-
-        if (!mediaImagePreview) return;
-        if (mediaImagePreview.clientWidth < mediaSingle.clientWidth - 50) setUseWrapper(true);
-      }, [mediaSingleRef, mediaImagePreviewRef]);
-
-      return (
-        <div className="media-single default-pointer" ref={mediaSingleRef}>
-          <div
-            className={`media-single__wrapper ${useWrapper ? 'media-single__wrapper--visible' : ''}`}
-            onClick={onClick}
-          >
-            <img
-              className="media-single__media"
-              src={Format(Media(media.image.data.uuid))}
-              ref={mediaImagePreviewRef}
-            />
-            {type === 'video' ? (
-              <div className="media-video-pseudo-play">
-                <div className="material-icons">play_arrow</div>
-              </div>
-            ) : null}
-          </div>
-          {media.title || media.author ? (
-            <div className="media-single__desc">
-              {media.title ? <span>{Refined(media.title)}</span> : null}
-              {media.author ? <span>{Refined(media.author)}</span> : null}
-            </div>
-          ) : null}
-        </div>
-      );
-    } else return <PostBlockGallery block={block} />;
+    if (block.data.items.length === 1) return <PostBlockSingleMedia block={block} />;
+    else return <PostBlockGallery block={block} />;
 
   if (block.type === 'video' && block.data?.video?.data) return <PostBlockVideo block={block} />;
 
@@ -442,21 +474,49 @@ export default function PostBlock({ block }) {
       </div>
     );
 
-  if (block.type === 'tweet')
+  if (block.type === 'tweet') {
+    /** @type {import("../../types/tweet").Tweet} */
+    const tweet = block.data?.tweet?.data?.tweet_data;
+    if (!tweet) return null;
+
     return (
-      <div className="incut">
-        Тут твит от @${block.data.tweet.data.tweet_data.user.screen_name}, но эмбеды очень много кушоють и вообще
-        лагают, шо атас! Поэтому{' '}
-        <a
-          // eslint-disable-next-line max-len
-          href={`https://twitter.com/${block.data.tweet.data.tweet_data.user.screen_name}/status/${block.data.tweet.data.tweet_data.id_str}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          просто прямая ссылка на твит
-        </a>
+      <div className="social">
+        <div className="social__user">
+          <div className="social__avatar" style={{ backgroundImage: `url(${tweet.user.profile_image_url_https})` }} />
+          <div className="social__fullname">{tweet.user.name}</div>
+          <a
+            className="social__username"
+            href={`https://twitter.com/${tweet.user.screen_name}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            @{tweet.user.screen_name}
+          </a>
+          <a
+            className="social__date"
+            href={`https://twitter.com/${tweet.user.screen_name}/status/${tweet.id_str}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>{DateForPost(tweet.created_at)}</span>
+            <i className="material-icons">open_in_new</i>
+          </a>
+        </div>
+        <div className="social__text">
+          {Refined((tweet.full_text || '').replace(/https:\/\/t\.\w+\/\w+$/i, '').trim())}
+        </div>
+        {tweet.extended_entities?.media?.length ? (
+          <div className="social__media">
+            {tweet.extended_entities?.media?.length === 1 ? (
+              <PostBlockSingleMedia block={TwitterMediaToOsnovaMediaBlock(tweet.extended_entities)} />
+            ) : (
+              <PostBlockGallery block={TwitterMediaToOsnovaMediaBlock(tweet.extended_entities)} />
+            )}
+          </div>
+        ) : null}
       </div>
     );
+  }
 
   if (block.type === 'telegram')
     return (

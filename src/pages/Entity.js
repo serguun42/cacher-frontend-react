@@ -43,11 +43,14 @@ export default function Entity() {
           .concat(entityPostsFromAPI)
           .filter((value, index, array) => index === array.findIndex((comp) => comp.id === value.id));
 
-        const isSubsite = entityPostsToSet.every((feedPost) => parseInt(entityId) === feedPost.subsite.id);
-        const entityNameToSet = isSubsite ? entityPostsToSet[0]?.subsite?.name : entityPostsToSet[0]?.author?.name;
-        const entityAvatarToSet = isSubsite
-          ? entityPostsToSet[0]?.subsite?.avatar_url
-          : entityPostsToSet[0]?.author?.avatar_url;
+        const entityNameToSet =
+          entityPostsToSet[0]?.subsite.id === parseInt(entityId)
+            ? entityPostsToSet[0]?.subsite?.name
+            : entityPostsToSet[0]?.author?.name;
+        const entityAvatarToSet =
+          entityPostsToSet[0]?.subsite.id === parseInt(entityId)
+            ? entityPostsToSet[0]?.subsite?.avatar_url
+            : entityPostsToSet[0]?.author?.avatar_url;
 
         setEntityName(entityNameToSet);
         setEntityAvatar(entityAvatarToSet);

@@ -10,6 +10,7 @@ export default function Refined(raw) {
   if (typeof raw !== 'string') return '';
 
   const modified = raw
+    .trim()
     .replace(/<br>/g, '\n')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')

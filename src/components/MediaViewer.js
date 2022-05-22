@@ -126,6 +126,19 @@ export default function MediaViewer() {
    */
   const onKeyDown = (e) => {
     if ((e.key === 'Escape' || e.code === 'Escape') && containerState.shown) hide();
+
+    if (galleryState.media?.length) {
+      if ((e.key === 'ArrowRight' || e.code === 'ArrowRight') && containerState.shown)
+        watchGalleryEvent({
+          media: galleryState.media,
+          position: galleryState.position + 1 >= galleryState.media.length ? 0 : galleryState.position + 1,
+        });
+      else if ((e.key === 'ArrowLeft' || e.code === 'ArrowLeft') && containerState.shown)
+        watchGalleryEvent({
+          media: galleryState.media,
+          position: galleryState.position - 1 < 0 ? galleryState.media.length - 1 : galleryState.position - 1,
+        });
+    }
   };
 
   useEffect(() => {
@@ -146,10 +159,6 @@ export default function MediaViewer() {
     if (containerState.shown) FadeIn(mediaRef.current, 400);
     else FadeOut(mediaRef.current, 400);
   }, [containerState.shown]);
-
-  mediaState.description = `Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus
-              reprehenderit commodi deserunt consequuntur explicabo repellat fugit, sed
-              exercitationem molestias cum!`;
 
   return (
     <div className="media-container" ref={mediaRef}>
