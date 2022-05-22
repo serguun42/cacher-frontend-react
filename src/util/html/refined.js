@@ -2,6 +2,29 @@ import HTMLReactParser from 'html-react-parser';
 import sanitize from 'sanitize-html';
 
 /**
+ * @param {string} readyHtml
+ * @returns {string | JSX.Element | JSX.Element[]}
+ */
+export function StraightRefined(readyHtml) {
+  return HTMLReactParser(
+    sanitize(readyHtml, {
+      allowedTags: sanitize.defaults.allowedTags,
+      allowedAttributes: {
+        ...sanitize.defaults.allowedAttributes,
+        a: (sanitize.defaults.allowedAttributes.a || []).concat(['rel']),
+        span: ['class'],
+      },
+    }),
+    {
+      // eslint-disable-next-line consistent-return
+      replace(domNode) {
+        if (domNode.type === 'script' || domNode.name === 'string') return null;
+      },
+    }
+  );
+}
+
+/**
  * @param {string} raw
  * @returns {import("react").Component}
  */
@@ -45,20 +68,5 @@ export default function Refined(raw) {
     })
     .replace(/\n/g, '<br>');
 
-  return HTMLReactParser(
-    sanitize(modified, {
-      allowedTags: sanitize.defaults.allowedTags,
-      allowedAttributes: {
-        ...sanitize.defaults.allowedAttributes,
-        a: (sanitize.defaults.allowedAttributes.a || []).concat(['rel']),
-        span: ['class'],
-      },
-    }),
-    {
-      // eslint-disable-next-line consistent-return
-      replace(domNode) {
-        if (domNode.type === 'script' || domNode.name === 'string') return null;
-      },
-    }
-  );
+  return StraightRefined(modified);
 }

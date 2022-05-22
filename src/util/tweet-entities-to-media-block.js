@@ -13,6 +13,8 @@ const TestOsnovaUUID = (uuid) => {
  * @returns {string}
  */
 const GeneralSource = (anySource) => {
+  if (typeof anySource !== 'string') return anySource;
+
   if (anySource.indexOf(process.env.REACT_APP_CDN_DOMAIN) < 0) return anySource;
 
   const uuid = new URL(anySource).pathname.split('/')?.[1];
@@ -22,7 +24,6 @@ const GeneralSource = (anySource) => {
 };
 
 /**
- *
  * @param {import("../../types/tweet").ExtendedEntities} extendedEntities
  * @returns {import("../../types/post_version").PostBlock}
  */

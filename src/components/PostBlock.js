@@ -2,8 +2,9 @@ import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
 import DateForPost from '../util/date-for-post';
 import dispatcher from '../util/dispatcher';
-import Refined from '../util/html/refined';
+import Refined, { StraightRefined } from '../util/html/refined';
 import PopupAboutQuiz from '../util/popups/about-quiz';
+import TelegramMediaToOsnovaMediaBlock from '../util/telegram-media-to-media-block';
 import TwitterMediaToOsnovaMediaBlock from '../util/tweet-entities-to-media-block';
 import './PostBlock.css';
 import Ripple from './Ripple';
@@ -119,6 +120,8 @@ const GetMinAspectRatio = () => {
  * @param {{ block: import("../../types/post_version").PostBlock }} props
  */
 function PostBlockGallery({ block }) {
+  if (!block?.data?.items) return null;
+
   /** @type {import("react").MutableRefObject<HTMLElement>} */
   const galleryRef = useRef(null);
 
@@ -518,15 +521,38 @@ export default function PostBlock({ block }) {
     );
   }
 
-  if (block.type === 'telegram')
+  if (block.type === 'telegram') {
+    const telegram = block.data?.telegram?.data?.tg_data;
+    if (!telegram) return null;
+
     return (
-      <div className="incut">
-        Тут пост в Telegram, но эмбеды очень много кушоють и вообще лагают, шо атас! Поэтому{' '}
-        <a href={block.data.telegram.data.tg_data.url} target="_blank" rel="noopener noreferrer">
-          просто прямая ссылка на пост
-        </a>
+      <div className="social">
+        <div className="social__user">
+          <div className="social__avatar" style={{ backgroundImage: `url(${telegram.author.avatar_url})` }} />
+          <a
+            className="social__username"
+            href={`https://twitter.com/${telegram.author.url}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {telegram.author.name}
+          </a>
+          <a className="social__date" href={telegram.url} target="_blank" rel="noopener noreferrer">
+            <span>{DateForPost(telegram.datetime)}</span>
+            <i className="material-icons">open_in_new</i>
+          </a>
+        </div>
+        <div className="social__text">{StraightRefined(telegram.text || '')}</div>
+        {telegram.photos || telegram.videos ? (
+          telegram.photos?.length === 1 || telegram.videos?.length === 1 ? (
+            <PostBlockSingleMedia block={TelegramMediaToOsnovaMediaBlock(telegram)} />
+          ) : (
+            <PostBlockGallery block={TelegramMediaToOsnovaMediaBlock(telegram)} />
+          )
+        ) : null}
       </div>
     );
+  }
 
   if (block.type === 'instagram')
     return (
