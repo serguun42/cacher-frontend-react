@@ -11,7 +11,7 @@
 
   border-radius: 8px;
   overflow: hidden;
-  background-color: #fff;
+  background-color: var(--card);
 
   box-shadow: 0 0 2px 0 var(--button-shadow);
 }
@@ -23,10 +23,6 @@
   font-size: 24px;
   line-height: 1.2em;
   text-align: center;
-}
-
-.is-dark .home-info-card {
-  background-color: #333;
 }
 
 @media (max-width: 800px) {

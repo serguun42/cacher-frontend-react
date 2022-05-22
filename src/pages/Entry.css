@@ -9,11 +9,7 @@
   padding: 12px;
   border-radius: 12px;
 
-  background-color: #fff;
-}
-
-.is-dark .entry {
-  background-color: #333;
+  background-color: var(--card);
 }
 
 @media (max-width: 800px) {

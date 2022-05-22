@@ -55,7 +55,7 @@
   border-radius: 12px;
   overflow: hidden;
 
-  background-color: #fff;
+  background-color: var(--card);
 
   transition: box-shadow 0.2s ease-in-out 0s;
   box-shadow: 0 0 2px 0 var(--button-shadow);
@@ -64,10 +64,6 @@
 .switcher__dropdown:hover,
 .switcher__dropdown:active {
   box-shadow: 0 5px 10px 2px var(--button-shadow);
-}
-
-.is-dark .switcher__dropdown {
-  background-color: #333;
 }
 
 .switcher__option {

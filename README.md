@@ -13,23 +13,28 @@ All configuration and build or launch scripts ejected with `react-scripts eject`
 - `npm run build:dtf` – Build frontend with [`.env.dtf`](#sites-build-environment)
 - `npm run build:tj` – Build frontend with [`.env.tj`](#sites-build-environment)
 - `npm run lint` – Check project with `eslint`
-- `npm run generate-openapi-redoc` – Build static Redoc API based on [`api.yml`](./public/docs/api.yml) 
+- `npm run generate-openapi-redoc` – Build static Redoc API based on [`api.yml`](./public/docs/api.yml)
 
 ### Sites build environment
 
 Files [`.env.dtf`](./.env.dtf) and [`.env.tj`](./.env.tj) contain environment variables for both building scripts and client usage. Some of them:
 
-| variable                  | description                                                                                                             |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `REACT_APP_VERSION`       | Same as in [`package.json`](./package.json). Used for client cache control                                              |
-| `BUILD_PATH`              | Build directory for webpack output                                                                                      |
-| `GENERATE_SOURCEMAP`      | Explicitly set to `false` (but modification in [`webpack.config.js`](./config/webpack.config.js#L32) allows to skip it) |
-| `PUBLIC_URL`              | Root of project                                                                                                         |
-| `REACT_APP_SITE_CODE`     | `dtf` or `tj`                                                                                                           |
-| `REACT_APP_SITE_SHORT`    | `DTF` or `TJ`                                                                                                           |
-| `REACT_APP_SITE_LONG`     | `DTF` or `TJournal`                                                                                                     |
-| `REACT_APP_SITE_LINK`     | `dtf.ru` or `tjournal.ru`                                                                                               |
-| `REACT_APP_PRIMARY_COLOR` | Hex color, used in [manifest](./config/manifest.template.json) and [`index.html`](./public/index.html) templates        |
+| variable                      | description                                                                                                             |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `REACT_APP_VERSION`           | Same as in [`package.json`](./package.json). Used for client cache control                                              |
+| `BUILD_PATH`                  | Build directory for webpack output                                                                                      |
+| `GENERATE_SOURCEMAP`          | Explicitly set to `false` (but modification in [`webpack.config.js`](./config/webpack.config.js#L32) allows to skip it) |
+| `PUBLIC_URL`                  | Root of project                                                                                                         |
+| `REACT_APP_SITE_CODE`         | `dtf` or `tj`                                                                                                           |
+| `REACT_APP_SITE_SHORT`        | `DTF` or `TJ`                                                                                                           |
+| `REACT_APP_SITE_LONG`         | `DTF` or `TJournal`                                                                                                     |
+| `REACT_APP_SITE_LINK`         | `dtf.ru` or `tjournal.ru`                                                                                               |
+| `REACT_APP_PRIMARY_COLOR`     | Hex color, used in [manifest](./config/manifest.template.json) and [`index.html`](./public/index.html) templates        |
+| `REACT_APP_CDN_DOMAIN`        | Origin of Osnova's CDN                                                                                                  |
+| `REACT_APP_OTHER_CACHER_LINK` | Link to same Cacher for other site                                                                                      |
+| `REACT_APP_OTHER_CACHER_NAME` | `Cacher DTF` or `Cacher TJ`                                                                                             |
+| `REACT_APP_LOGIN_PAGE`        | URL of login page, where auth is set                                                                                    |
+| `REACT_APP_REQUEST_PAGE`      | URL of permission request page                                                                                          |
 
 You may pass more variables, see standard `react-scripts` and `webpack` docs.
 

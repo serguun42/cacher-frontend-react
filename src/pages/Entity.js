@@ -4,6 +4,7 @@ import Feed from '../components/Feed';
 import Loading from '../components/Loading';
 import { SlideDown, SlideUp } from '../util/animations';
 import { GetEntityNames, SearchByEntityId } from '../util/api';
+import Avatar from '../util/html/avatar';
 import LogMessageOrError from '../util/log';
 import './Entity.css';
 
@@ -93,7 +94,7 @@ export default function Entity() {
               {entityAvatar || lastEntityAvatar ? (
                 <div
                   className="entity__entry-card__avatar"
-                  style={{ backgroundImage: `url(${entityAvatar || lastEntityAvatar})` }}
+                  style={{ backgroundImage: Avatar(entityAvatar || lastEntityAvatar) }}
                 />
               ) : null}
               <div className="entity__entry-card__texts">

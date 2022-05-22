@@ -15,7 +15,7 @@ import './Feed.css';
  * @param {FeedComponentProps} props
  */
 export default function Feed({ feedPosts, callback, noAdding, notFound }) {
-  if (!(feedPosts instanceof Array)) return null;
+  if (!Array.isArray(feedPosts)) return null;
 
   const [calledCallbackAt, setCalledCallbackAt] = useState(0);
 

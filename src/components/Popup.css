@@ -41,13 +41,9 @@
 
   z-index: 10;
 
-  background-color: #fff;
+  background-color: var(--card);
 
   border-radius: 12px;
-}
-
-.is-dark .popup-body {
-  background-color: #333;
 }
 
 .popup__title {

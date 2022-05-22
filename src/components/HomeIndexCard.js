@@ -3,6 +3,7 @@ import { createRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { SlideDown, SlideUp } from '../util/animations';
 import GetForm from '../util/get-form';
+import Avatar from '../util/html/avatar';
 import './HomeIndexCard.css';
 import Ripple from './Ripple';
 
@@ -36,7 +37,7 @@ function CountBySubsite({ subsite, todayPostsCount }) {
       <Link
         to={`/entity/${subsite.id}`}
         className="home-info-card__subsite-chart__row__img"
-        style={{ backgroundImage: `url(${subsite.avatar_url})` }}
+        style={{ backgroundImage: Avatar(subsite.avatar_url) }}
       />
       <Link
         to={`/entity/${subsite.id}`}

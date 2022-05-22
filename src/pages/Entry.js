@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Loading from '../components/Loading';
+import MediaViewer from '../components/MediaViewer';
 import PostVersion from '../components/PostVersion';
 import Ripple from '../components/Ripple';
 import Switcher from '../components/Switcher';
@@ -76,7 +77,7 @@ export default function Post() {
           <Switcher data={entryVersions} onOptionSelect={SwitcherOnSelect} prefix="Версия: " />
 
           <div className="entry__about default-pointer" onClick={PopupAboutSchedule}>
-            <i className="material-icons">info</i>
+            <i className="material-icons">help</i>
             <Ripple />
           </div>
         </div>
@@ -86,6 +87,7 @@ export default function Post() {
       {entry[postVersion] ? (
         <PostVersion postVersion={entry[postVersion]} showAbout={entryVersions.length <= 1} key={postVersion} />
       ) : null}
+      <MediaViewer />
     </div>
   ) : (
     <Loading />

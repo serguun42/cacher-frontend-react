@@ -20,85 +20,69 @@
   text-align: left;
 }
 
-.post-version__info {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  position: relative;
-
-  margin-bottom: 10px;
-}
-
-.post-version__info__elem {
-  display: flex;
-  align-items: center;
-  position: relative;
-
-  margin-right: 16px;
-  margin-top: 6px;
-
-  text-decoration: none;
-}
-
-.post-version__info__elem__img {
+.post-version__title__is-editorial {
   display: inline-block;
   position: relative;
 
-  width: 22px;
-  height: 22px;
+  margin-left: 6px;
+  vertical-align: -8px;
 
-  margin-right: 8px;
-
-  border-radius: 6px;
-
-  background-position: center center;
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-
-.post-version__info__elem__text {
-  height: 22px;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 22px;
-
-  color: var(--text);
-}
-
-.post-version__info__elem:hover .post-version__info__elem__text {
+  font-size: 36px;
   color: var(--primary);
 }
 
-.post-version__info__elem__text--date {
-  color: #595959;
+.post-version__stats {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
 }
 
-.is-dark .post-version__info__elem__text--date {
-  color: #888;
-}
-
-.post-version__info__elem__text--date.material-icons {
-  margin-left: 4px;
-}
-
-.post-version__info__elem:last-child {
-  margin-right: 0;
-}
-
-.post-version__about {
+.post-version__stats__pos {
   display: block;
   position: relative;
 
-  width: 24px;
-  height: 24px;
+  margin-right: 8px;
+  padding: 4px 8px;
 
-  padding: 4px;
+  border-radius: 4px;
+  background-color: var(--primary-faded);
 
-  border-radius: 12px;
+  font-size: 14px;
+  line-height: 20px;
 }
 
-.post-version__about .material-icons {
-  font-size: 16px;
-  color: var(--primary);
+.post-version__stats__pos:last-of-type {
+  margin-right: 0;
+}
+
+.post-version__stats__pos--saved {
+  color: #fff;
+  background-color: rgba(230, 36, 52, 0.8);
+}
+
+.is-dark .post-version__stats__pos--saved {
+  background-color: rgba(232, 71, 84, 0.5);
+}
+
+.karma--positive {
+  color: #07a23b;
+  background-color: #eefbf3;
+}
+
+.karma--negative {
+  color: #cd192e;
+  background-color: #fff1f1;
+}
+
+.is-dark .karma--positive {
+  color: #10ec0d;
+  background: rgba(7, 162, 59, 0.08);
+}
+
+.is-dark .karma--negative {
+  color: #ff0000;
+  background: rgba(205, 25, 46, 0.08);
 }

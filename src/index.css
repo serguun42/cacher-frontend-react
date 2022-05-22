@@ -2,6 +2,7 @@
   --text: #333;
   --header: var(--primary);
   --background: #e1e1e1;
+  --card: #fff;
   --ripple: var(--primary);
   --scroll: var(--primary);
   --button-background: var(--primary);
@@ -15,6 +16,7 @@
   --text: #e1e1e1;
   --header: #121212;
   --background: #121212;
+  --card: #333;
   --button-background: var(--primary);
   --button-text: #222;
   --button-shadow: rgba(0, 0, 0, 0.3);

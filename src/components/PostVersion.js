@@ -1,9 +1,7 @@
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import DateForPost from '../util/date-for-post';
-import PopupAboutSchedule from '../util/popups/about-schedule';
+import PostBlock from './PostBlock';
+import PostInfoLine from './PostInfoLine';
 import './PostVersion.css';
-import Ripple from './Ripple';
 
 /**
  * @param {{ postVersion: import("../../types/post_version").PostVersion, showAbout: boolean }} props
@@ -11,52 +9,33 @@ import Ripple from './Ripple';
 export default function PostVersion({ postVersion, showAbout }) {
   return (
     <div className="post-version">
-      <div className="post-version__info">
-        <Link to={`/entity/${postVersion.subsite.id}`} className="post-version__info__elem">
-          <div
-            style={{
-              backgroundImage: `url(${postVersion.subsite.avatar_url}${
-                postVersion.subsite.avatar_url.indexOf(process.env.REACT_APP_CDN_DOMAIN) > -1
-                  ? '-/format/jpg/-/scale_crop/64x64/'
-                  : ''
-              })`,
-            }}
-            className="post-version__info__elem__img default-no-select"
-          />
-          <div className="post-version__info__elem__text">{postVersion.subsite.name}</div>
-        </Link>
-        {postVersion.author.id !== postVersion.subsite.id ? (
-          <Link to={`/entity/${postVersion.author.id}`} className="post-version__info__elem">
-            <div
-              style={{
-                backgroundImage: `url(${postVersion.author.avatar_url}${
-                  postVersion.author.avatar_url.indexOf(process.env.REACT_APP_CDN_DOMAIN) > -1
-                    ? '-/format/jpg/-/scale_crop/64x64/'
-                    : ''
-                })`,
-              }}
-              className="post-version__info__elem__img default-no-select"
-            />
-            <div className="post-version__info__elem__text">{postVersion.author.name}</div>
-          </Link>
-        ) : null}
-        <a className="post-version__info__elem" target="_blank" rel="noopener noreferrer" href={postVersion.url}>
-          <div className="post-version__info__elem__text post-version__info__elem__text--date">
-            {DateForPost(postVersion.date)}
-          </div>
-          <i className="material-icons post-version__info__elem__text post-version__info__elem__text--date">
-            open_in_new
-          </i>
-        </a>
+      <PostInfoLine postVersion={postVersion} showAbout={showAbout} />
 
-        {showAbout ? (
-          <div className="post-version__info__elem post-version__about default-pointer" onClick={PopupAboutSchedule}>
-            <i className="material-icons">info</i>
-            <Ripple />
+      {postVersion.title ? (
+        <h3 className="post-version__title default-title-font">
+          {postVersion.title}
+          {postVersion.isEditorial ? <i className="post-version__title__is-editorial material-icons">done</i> : null}
+        </h3>
+      ) : null}
+
+      {postVersion.blocks.map((block, index) => (
+        <PostBlock block={block} key={`block-${block.type}-${index.toString()}`} />
+      ))}
+
+      <div className="post-version__stats">
+        <div
+          className={`post-version__stats__pos ${
+            postVersion.likes.summ ? (postVersion.likes.summ > 0 ? 'karma--positive' : 'karma--negative') : ''
+          } default-no-select`}
+        >
+          <span>Оценка поста: {postVersion.likes.summ}</span>
+        </div>
+        {postVersion.favoritesCount ? (
+          <div className="post-version__stats__pos post-version__stats__pos--saved default-no-select">
+            <span>Добавили в закладки: {postVersion.favoritesCount || 0}</span>
           </div>
         ) : null}
       </div>
-      {postVersion.title ? <h3 className="post-version__title default-title-font">{postVersion.title}</h3> : null}
     </div>
   );
 }
