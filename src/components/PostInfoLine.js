@@ -62,7 +62,7 @@ export default function PostInfoLine({ postVersion, showAbout }) {
 
       {showAbout ? (
         <div className="post-info-line__elem post-info-line__about default-pointer" onClick={PopupAboutSchedule}>
-          <i className="material-icons">help</i>
+          <i className="material-icons">help_outline</i>
           <Ripple />
         </div>
       ) : null}

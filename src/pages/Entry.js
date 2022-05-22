@@ -77,7 +77,7 @@ export default function Post() {
           <Switcher data={entryVersions} onOptionSelect={SwitcherOnSelect} prefix="Версия: " />
 
           <div className="entry__about default-pointer" onClick={PopupAboutSchedule}>
-            <i className="material-icons">help</i>
+            <i className="material-icons">help_outline</i>
             <Ripple />
           </div>
         </div>

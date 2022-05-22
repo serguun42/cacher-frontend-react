@@ -6,11 +6,16 @@ import Ripple from './Ripple';
 
 /**
  * @typedef {Object} MediaPayload
- * @property {string} media URL to media
+ * @property {string} url URL to media
  * @property {"photo" | "video"} type URL to media
  * @property {number} width
  * @property {number} height
  * @property {string} [description]
+ */
+/**
+ * @typedef {Object} GalleryPayload
+ * @property {MediaPayload[]} media
+ * @property {number} position
  */
 /**
  * @typedef {Object} MediaContainer
@@ -21,7 +26,7 @@ import Ripple from './Ripple';
 
 /** @type {MediaPayload} */
 const DEFAULT_MEDIA_STATE = Object.freeze({
-  media: '',
+  url: '',
   type: 'photo',
   width: 800,
   height: 600,
@@ -32,6 +37,7 @@ const DEFAULT_MEDIA_STATE = Object.freeze({
 const DEFAULT_CONTAINER_STATE = Object.freeze({
   width: 800,
   height: 600,
+  gallery: null,
 });
 
 export default function MediaViewer() {
@@ -39,6 +45,8 @@ export default function MediaViewer() {
   const [mediaState, setMediaState] = useState({ ...DEFAULT_MEDIA_STATE });
   /** @type {[MediaContainer]} */
   const [containerState, setContainerState] = useState({ ...DEFAULT_CONTAINER_STATE });
+  /** @type {[GalleryPayload]} */
+  const [galleryState, setGalleryState] = useState({});
   /** @type {import("react").RefObject<HTMLElement>} */
   const mediaRef = createRef();
 
@@ -54,39 +62,40 @@ export default function MediaViewer() {
     const CONTAINER_WIDTH = mediaPayload.width;
     const CONTAINER_HEIGHT = mediaPayload.height;
     const CONTAINER_RATIO = CONTAINER_WIDTH / CONTAINER_HEIGHT;
+    const MAX_RATIO = 0.8;
 
     let finalWidth = 0;
     let finalHeight = 0;
 
     if (WINDOW_RATIO >= 1) {
       if (CONTAINER_RATIO >= WINDOW_RATIO) {
-        if (WINDOW_WIDTH * 0.8 >= CONTAINER_WIDTH) {
+        if (WINDOW_WIDTH * MAX_RATIO >= CONTAINER_WIDTH) {
           finalWidth = CONTAINER_WIDTH;
           finalHeight = CONTAINER_HEIGHT;
         } else {
-          finalWidth = WINDOW_WIDTH * 0.8;
+          finalWidth = WINDOW_WIDTH * MAX_RATIO;
           finalHeight = finalWidth / CONTAINER_RATIO;
         }
-      } else if (WINDOW_HEIGHT * 0.8 >= CONTAINER_HEIGHT) {
+      } else if (WINDOW_HEIGHT * MAX_RATIO >= CONTAINER_HEIGHT) {
         finalWidth = CONTAINER_WIDTH;
         finalHeight = CONTAINER_HEIGHT;
       } else {
-        finalHeight = WINDOW_HEIGHT * 0.8;
+        finalHeight = WINDOW_HEIGHT * MAX_RATIO;
         finalWidth = finalHeight * CONTAINER_RATIO;
       }
     } else if (CONTAINER_RATIO <= WINDOW_RATIO) {
-      if (WINDOW_HEIGHT * 0.8 >= CONTAINER_HEIGHT) {
+      if (WINDOW_HEIGHT * MAX_RATIO >= CONTAINER_HEIGHT) {
         finalWidth = CONTAINER_WIDTH;
         finalHeight = CONTAINER_HEIGHT;
       } else {
-        finalHeight = WINDOW_HEIGHT * 0.8;
+        finalHeight = WINDOW_HEIGHT * MAX_RATIO;
         finalWidth = finalHeight * CONTAINER_RATIO;
       }
-    } else if (WINDOW_WIDTH * 0.8 >= CONTAINER_WIDTH) {
+    } else if (WINDOW_WIDTH * MAX_RATIO >= CONTAINER_WIDTH) {
       finalWidth = CONTAINER_WIDTH;
       finalHeight = CONTAINER_HEIGHT;
     } else {
-      finalWidth = WINDOW_WIDTH * 0.8;
+      finalWidth = WINDOW_WIDTH * MAX_RATIO;
       finalHeight = finalWidth / CONTAINER_RATIO;
     }
 
@@ -97,7 +106,20 @@ export default function MediaViewer() {
     });
   };
 
-  const hide = () => setContainerState({ ...containerState, shown: false });
+  /**
+   * @param {GalleryPayload} galleryPayload
+   */
+  const watchGalleryEvent = (galleryPayload) => {
+    if (!galleryPayload.position) galleryPayload.position = 0;
+
+    setGalleryState(galleryPayload);
+    watchMediaEvent(galleryPayload.media[galleryPayload.position]);
+  };
+
+  const hide = () => {
+    setContainerState({ ...containerState, shown: false });
+    setGalleryState([]);
+  };
 
   /**
    * @param {KeyboardEvent} e
@@ -108,10 +130,12 @@ export default function MediaViewer() {
 
   useEffect(() => {
     dispatcher.link('media', watchMediaEvent);
+    dispatcher.link('gallery', watchGalleryEvent);
     window.addEventListener('keydown', onKeyDown);
 
     return () => {
       dispatcher.unlink('media', watchMediaEvent);
+      dispatcher.unlink('gallery', watchGalleryEvent);
       window.removeEventListener('keydown', onKeyDown);
     };
   });
@@ -123,9 +147,45 @@ export default function MediaViewer() {
     else FadeOut(mediaRef.current, 400);
   }, [containerState.shown]);
 
+  mediaState.description = `Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus
+              reprehenderit commodi deserunt consequuntur explicabo repellat fugit, sed
+              exercitationem molestias cum!`;
+
   return (
     <div className="media-container" ref={mediaRef}>
       <div className="media-obfuscator default-pointer" onClick={hide} />
+      {galleryState.media?.length ? (
+        <>
+          <div
+            className="media-gallery-turn-button default-pointer media-gallery-turn-button--previous"
+            onClick={() => {
+              watchGalleryEvent({
+                media: galleryState.media,
+                position: galleryState.position - 1 < 0 ? galleryState.media.length - 1 : galleryState.position - 1,
+              });
+            }}
+          >
+            <div className="media-gallery-turn-button__icon">
+              <div className="material-icons">chevron_left</div>
+              <Ripple inheritTextColor />
+            </div>
+          </div>
+          <div
+            className="media-gallery-turn-button default-pointer media-gallery-turn-button--next"
+            onClick={() => {
+              watchGalleryEvent({
+                media: galleryState.media,
+                position: galleryState.position + 1 >= galleryState.media.length ? 0 : galleryState.position + 1,
+              });
+            }}
+          >
+            <div className="media-gallery-turn-button__icon">
+              <div className="material-icons">chevron_right</div>
+              <Ripple inheritTextColor />
+            </div>
+          </div>
+        </>
+      ) : null}
       <div className="media-close-button default-pointer" onClick={hide}>
         <i className="material-icons">close</i>
         <Ripple inheritTextColor />
@@ -137,8 +197,16 @@ export default function MediaViewer() {
           height: containerState.height,
         }}
       >
-        {mediaState.type === 'photo' ? <img src={mediaState.media} className="media-body__img" /> : null}
-        {mediaState.description ? <div className="media-body__description">{mediaState.description}</div> : null}
+        {mediaState.type === 'photo' ? <img src={mediaState.url} className="media-body__media" /> : null}
+        {mediaState.type === 'video' ? <video src={mediaState.url} className="media-body__media" controls /> : null}
+        <div className="media-body__lower-bar">
+          <div className="media-body__description">{mediaState.description || ''}</div>
+          {galleryState.media?.length ? (
+            <div className="media-body__controls default-no-select">
+              {galleryState.position + 1} из {galleryState.media?.length}
+            </div>
+          ) : null}
+        </div>
       </div>
     </div>
   );

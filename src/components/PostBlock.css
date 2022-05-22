@@ -5,57 +5,23 @@
   line-break: normal;
 }
 
-.post-version .post-version p {
+.post-version p,
+.post-version ul {
+  margin: 12px auto;
+}
+
+.post-version p,
+.post-version ul,
+.post-version li {
   font-weight: 400;
   font-size: 16px;
   line-height: 1.35em;
-  margin: 0 0 8px;
   word-break: break-word;
   line-break: normal;
 }
 
 .post-version .post-version pre {
   overflow-x: auto;
-}
-
-.post-version .media-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-
-  max-width: 100%;
-  margin-bottom: 12px;
-
-  border-radius: 8px;
-}
-
-:root {
-  --media-container-child-size: calc(100% / 5 - 24px / 4);
-  --media-container-child-margin: calc(24px / 5);
-}
-
-@media (min-width: 500px) {
-  :root {
-    --media-container-child-size: calc(100% / 6 - 24px / 5);
-    --media-container-child-margin: calc(24px / 6);
-  }
-}
-
-@media (min-width: 700px) {
-  :root {
-    --media-container-child-size: calc(100% / 7 - 32px / 7);
-    --media-container-child-margin: calc(32px / 7);
-  }
-}
-
-@media (min-width: 800px) {
-  :root {
-    --media-container-child-size: calc(752px / 7);
-    --media-container-child-size: calc(752px / 7);
-  }
 }
 
 .post-version a,
@@ -67,59 +33,42 @@
   color: var(--text);
 }
 
-.post-version .media-container__img,
-.post-version .media-container__vid {
-  display: block;
-  position: relative;
-  width: var(--media-container-child-size);
-  padding-top: var(--media-container-child-size);
-  margin-left: var(--media-container-child-margin);
-  margin-right: var(--media-container-child-margin);
-  margin-bottom: 8px;
-  border-radius: 4px;
-
-  background-position: center center;
-  background-size: cover;
-  background-repeat: no-repeat;
-
-  border: none;
-  outline: none;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.post-version .media-container__fake-child {
-  display: block;
-  position: relative;
-  width: var(--media-container-child-size);
-  height: 0;
-  opacity: 0;
-}
-
-.post-version .media-container__child__dummy {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-}
-
 .post-version .media-single {
   display: block;
   position: relative;
-  width: fit-content;
-  max-width: 100%;
+  width: 100%;
   margin: 16px auto;
   padding: 0;
 }
 
-.post-version .media-single__img,
-.post-version .media-single__vid {
+.post-version .media-single__wrapper {
+  display: block;
+  position: relative;
+
+  width: 100%;
+}
+
+.post-version .media-single__wrapper--visible {
+  padding: 16px 0;
+  background-color: #eee;
+}
+
+.is-dark .post-version .media-single__wrapper--visible {
+  background-color: #242424;
+}
+
+.post-version .media-single__media {
   display: block;
   position: relative;
   margin: 0 auto;
   max-width: 100%;
-  max-height: 60vh;
+  max-height: 400px;
+}
+
+@media (max-width: 800px) {
+  .post-version .media-single__media {
+    max-height: 60vh;
+  }
 }
 
 .post-version .media-single__desc {
@@ -143,11 +92,82 @@
   margin: 0 16px 0 0;
 }
 
+.post-version .media-gallery {
+  display: block;
+  position: relative;
+
+  width: 100%;
+}
+
+.post-version .media-gallery__figure {
+  display: block;
+  position: absolute;
+
+  overflow: hidden;
+
+  left: 0;
+  top: 0;
+
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.post-version .media-gallery__figure__left {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+
+  width: 100%;
+  height: 100%;
+
+  top: 0;
+  left: 0;
+
+  color: #fff;
+  background-color: rgba(20, 20, 20, 0.5);
+
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 24px;
+  text-align: center;
+}
+
+.post-version .media-video-pseudo-play {
+  display: block;
+  position: absolute;
+
+  width: 64px;
+  height: 64px;
+
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  padding: 16px;
+
+  color: #fff;
+  background-color: rgba(20, 20, 20, 0.5);
+  border-radius: 32px;
+}
+
+.post-version .media-single__wrapper:hover > .media-video-pseudo-play,
+.post-version .media-gallery__figure:hover > .media-video-pseudo-play {
+  color: var(--primary);
+}
+
+.post-version .media-video-pseudo-play .material-icons {
+  font-size: 32px;
+}
+
 .post-version .delimiter {
   display: block;
   position: relative;
   width: 100%;
-  margin: 36px 0 24px;
+  margin: 20px 0;
   font-weight: 700;
   font-size: 32px;
   line-height: 32px;
@@ -226,7 +246,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: start;
+  align-items: center;
   position: relative;
 }
 
@@ -234,8 +254,8 @@
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
-  justify-content: flex-start;
-  align-items: start;
+  justify-content: center;
+  align-items: flex-start;
   position: relative;
 }
 
@@ -375,31 +395,48 @@
 .post-version .quiz {
   display: block;
   position: relative;
+
   margin: 0 auto 12px;
-  padding: 24px;
+  padding: 6px 12px 12px;
+
+  border-left: 2px solid var(--primary);
 }
 
 @media (max-width: 900px) {
   .post-version .quiz {
-    padding: 12px;
+    padding: 6px;
   }
 }
 
 .post-version .quiz__title {
-  display: block;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
   position: relative;
+
   font-size: 20px;
   font-weight: 700;
-  line-height: 32px;
+  line-height: 24px;
 }
 
-.post-version .quiz__subtitle {
+.post-version .quiz__about {
   display: block;
   position: relative;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 1.35em;
-  color: #818181;
+
+  width: 36px;
+  height: 36px;
+
+  margin-left: 8px;
+  padding: 9px;
+
+  border-radius: 16px;
+}
+
+.post-version .quiz__about .material-icons {
+  font-size: 16px;
+  color: var(--primary);
 }
 
 .post-version .quiz__options__answer {
@@ -409,5 +446,5 @@
   font-weight: 400;
   line-height: 1.35em;
   padding: 8px 8px 4px;
-  border-bottom: 4px solid var(--primary);
+  border-bottom: 2px solid var(--primary-faded);
 }

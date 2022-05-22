@@ -41,10 +41,12 @@ export default function Ripple({ inheritTextColor }) {
     setRippleArray([...rippleArray, rippleToSet]);
   };
 
+  const supportTouch = 'ontouchstart' in window;
+
   return (
     <div
       className={`ripple-container ${inheritTextColor ? 'ripple-container--inherit' : ''}`}
-      onMouseDown={addRipple}
+      onMouseDown={!supportTouch && addRipple}
       onTouchStart={addRipple}
     >
       {rippleArray.length > 0 &&

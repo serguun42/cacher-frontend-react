@@ -34,8 +34,6 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <Provider store={store}>
-    <Message />
-    <Popup />
     <BrowserRouter basename={process.env.PUBLIC_URL}>
       <ScrollToTop />
       <Routes>
@@ -50,5 +48,7 @@ root.render(
         </Route>
       </Routes>
     </BrowserRouter>
+    <Message />
+    <Popup />
   </Provider>
 );

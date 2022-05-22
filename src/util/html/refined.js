@@ -31,7 +31,7 @@ export default function Refined(raw) {
     .replace(/\\\*/g, '✱')
     .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
     .replace(/\*([^*]+)\*/g, '<i>$1</i>')
-    .replace(/==([^*=]+)==/g, "<span class='bc-decoration'>$1</span>")
+    .replace(/==([^*=]+)==/g, `<span class='bc-decoration'>$1</span>`)
     .replace(/\\(\[|\])/g, '$1')
     .replace(/\\(\.|-|\)|\()/g, '$1')
     .replace(/&lt;([^>]{10,})&gt;/g, (a, b) => {
@@ -47,6 +47,11 @@ export default function Refined(raw) {
   return HTMLReactParser(
     sanitize(modified, {
       allowedTags: sanitize.defaults.allowedTags,
+      allowedAttributes: {
+        ...sanitize.defaults.allowedAttributes,
+        a: (sanitize.defaults.allowedAttributes.a || []).concat(['rel']),
+        span: ['class'],
+      },
     }),
     {
       // eslint-disable-next-line consistent-return
