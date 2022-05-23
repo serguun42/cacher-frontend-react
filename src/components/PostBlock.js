@@ -557,10 +557,17 @@ export default function PostBlock({ block }) {
   if (block.type === 'instagram')
     return (
       <div className="incut">
-        Тут пост в Instagram, но эмбеды очень много кушоють и вообще лагают, шо атас! Поэтому{' '}
-        <a href={block.data.instagram.data.box_data.url} target="_blank" rel="noopener noreferrer">
-          просто прямая ссылка на пост
+        <a href={block.data?.instagram?.data?.box_data?.url} target="_blank" rel="noopener noreferrer">
+          Пост в Instagram
         </a>
+        <span>
+          . Однако API Основы не даёт никаких данных о посте кроме прямой ссылки, API Инстаграма не существует в
+          природе, а прикручивать собственный{' '}
+          <a href="https://github.com/serguun42/Social-Picker-API" target="_blank" rel="noopener noreferrer">
+            Social Picker API
+          </a>{' '}
+          ради одного типа блока просто лень.
+        </span>
       </div>
     );
 

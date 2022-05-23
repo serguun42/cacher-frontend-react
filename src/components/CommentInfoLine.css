@@ -1,0 +1,125 @@
+.comment-info-line {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+
+  margin-bottom: 10px;
+}
+
+.comment-info-line--no-avatar {
+  padding-left: 4px;
+}
+
+.comment-info-line__elem {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+
+  margin-right: 16px;
+  margin-top: 6px;
+
+  text-decoration: none;
+}
+
+.comment-info-line__elem__img {
+  display: inline-block;
+  position: relative;
+
+  width: 22px;
+  height: 22px;
+
+  margin-right: 8px;
+
+  border-radius: 6px;
+
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.comment-info-line__elem__text {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+
+  height: 22px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 22px;
+}
+
+.comment-info-line__elem:hover .comment-info-line__elem__text:not(.comment-info-line__elem__text--karma) {
+  color: var(--primary);
+}
+
+.comment-info-line__elem__text--action {
+  color: #595959;
+}
+
+.is-dark .comment-info-line__elem__text--action {
+  color: #888;
+}
+
+.comment-info-line__elem__text--action.material-icons {
+  margin-left: 4px;
+}
+
+.comment-info-line__elem__text--action.material-icons:first-child {
+  margin-left: 0;
+}
+
+.comment-info-line__elem__text--karma {
+  padding: 0 8px;
+  border-radius: 6px;
+}
+
+.comment-info-line__elem__text--karma:not(.karma--positive):not(.karma--negative) {
+  color: #595959;
+  background-color: rgba(201, 201, 201, 0.15);
+}
+
+.is-dark .comment-info-line__elem__text--karma:not(.karma--positive):not(.karma--negative) {
+  color: #aaa;
+  background-color: rgba(20, 20, 20, 0.15);
+}
+
+.comment-info-line__elem:last-child {
+  margin-right: 0;
+}
+
+.comment-info-line__elem__verified {
+  width: 16px;
+  height: 16px;
+
+  margin-left: 4px;
+}
+
+.path-with-dynamic-color {
+  fill: var(--card);
+}
+
+.comment-info-line__about {
+  display: block;
+  position: relative;
+
+  width: 24px;
+  height: 24px;
+
+  padding: 4px;
+
+  border-radius: 12px;
+}
+
+.comment-info-line__about .material-icons {
+  font-size: 16px;
+  color: var(--primary);
+}

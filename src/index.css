@@ -199,3 +199,23 @@ h6 {
   background-color: var(--primary);
   color: #e1e1e1;
 }
+
+.karma--positive {
+  color: #07a23b;
+  background-color: #eefbf3;
+}
+
+.karma--negative {
+  color: #cd192e;
+  background-color: #fff1f1;
+}
+
+.is-dark .karma--positive {
+  color: #10ec0d;
+  background: rgba(7, 162, 59, 0.08);
+}
+
+.is-dark .karma--negative {
+  color: #ff0000;
+  background: rgba(205, 25, 46, 0.08);
+}

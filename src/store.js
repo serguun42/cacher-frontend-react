@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { reducer as themeReducer } from './util/theme';
-import { hideMessage, reducer as messageReducer, showMessage } from './util/message';
+import { showMessage, hideMessage, reducer as messageReducer } from './util/message';
 import dispatcher from './util/dispatcher';
 
 const store = configureStore({
@@ -9,6 +9,8 @@ const store = configureStore({
     message: messageReducer,
   },
 });
+
+dispatcher.link('message', (messageText) => store.dispatch(showMessage(messageText)));
 
 dispatcher.link('hideMessageIfPossible', (currentMessageId) => {
   if (store.getState().message.lastId === currentMessageId) store.dispatch(hideMessage());

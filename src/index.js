@@ -16,6 +16,7 @@ import './util/message';
 import Entity from './pages/Entity';
 import Entry from './pages/Entry';
 import Popup from './components/Popup';
+import MediaViewer from './components/MediaViewer';
 
 /** @param {import("./util/theme").ThemeObject} */
 function ApplyThemeClassToBody(theme) {
@@ -48,6 +49,7 @@ root.render(
         </Route>
       </Routes>
     </BrowserRouter>
+    <MediaViewer />
     <Message />
     <Popup />
   </Provider>

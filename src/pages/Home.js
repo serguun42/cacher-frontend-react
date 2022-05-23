@@ -8,8 +8,8 @@ import Ripple from '../components/Ripple';
 import store from '../store';
 import { GetFeedLastPosts, GetFeedStats } from '../util/api';
 import CreateChart from '../util/create-chart';
+import dispatcher from '../util/dispatcher';
 import LogMessageOrError from '../util/log';
-import { showMessage } from '../util/message';
 import { nextTheme } from '../util/theme';
 import './Home.css';
 
@@ -93,7 +93,7 @@ class Home extends Component {
             <div className="home__action-cards-container">
               <div
                 className="home__action-card home__action-card--accent default-pointer"
-                onClick={() => store.dispatch(showMessage('search!!!'))}
+                onClick={() => dispatcher.call('message', 'search!!!')}
               >
                 <i className="material-icons">search</i>
                 <div>Поиск</div>

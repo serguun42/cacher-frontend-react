@@ -1,0 +1,139 @@
+.comments {
+  display: block;
+  position: relative;
+
+  width: 100%;
+
+  padding: 12px 24px;
+}
+
+@media (max-width: 800px) {
+  .comments {
+    padding: 12px 12px;
+  }
+}
+
+.comments-empty {
+  margin: 0;
+  padding: 12px 8px;
+}
+
+.comment-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  position: relative;
+
+  width: 100%;
+}
+
+@keyframes container-animation {
+  0% {
+    background-color: transparent;
+  }
+  25% {
+    background-color: var(--primary-faded);
+  }
+  50% {
+    background-color: transparent;
+  }
+  75% {
+    background-color: var(--primary-faded);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.comment-container--animating {
+  animation-name: container-animation;
+  animation-duration: 1.4s;
+  animation-timing-function: cubic-bezier(0.79, 0.51, 0.42, 1);
+  animation-delay: 0;
+  animation-fill-mode: both;
+  animation-iteration-count: 1;
+}
+
+:root {
+  --comment-dots-width: 8px;
+}
+
+.comment-dots {
+  display: block;
+  position: relative;
+
+  width: 1px;
+
+  margin-right: var(--comment-dots-width);
+  border-left: 1px dashed #ddd;
+}
+
+.is-dark .comment-dots {
+  border-left-color: #595959;
+}
+
+.comment-dots:nth-child(1n + 6) {
+  display: none;
+}
+
+.comment {
+  display: block;
+  position: relative;
+  width: 100%;
+  margin: 0;
+  padding: 10px 16px 10px 4px;
+}
+
+.comment-dots:nth-child(1) ~ .comment {
+  width: calc(100% - var(--comment-dots-width) * 1);
+}
+
+.comment-dots:nth-child(2) ~ .comment {
+  width: calc(100% - var(--comment-dots-width) * 2);
+}
+
+.comment-dots:nth-child(3) ~ .comment {
+  width: calc(100% - var(--comment-dots-width) * 3);
+}
+
+.comment-dots:nth-child(4) ~ .comment {
+  width: calc(100% - var(--comment-dots-width) * 4);
+}
+
+.comment-dots:nth-child(5) ~ .comment {
+  width: calc(100% - var(--comment-dots-width) * 5);
+}
+
+.comment__text {
+  display: block;
+  position: relative;
+
+  width: 100%;
+  margin-bottom: 12px;
+
+	word-break: break-word;
+	word-wrap: break-word;
+}
+
+.comment__text:last-child {
+  margin-bottom: 0;
+}
+
+.comment p {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.comment p:last-child {
+  margin-bottom: 0;
+}
+
+.comment a,
+.comment a:visited {
+	color: var(--primary);
+}
+
+.comment a:hover {
+	color: var(--text);
+}
