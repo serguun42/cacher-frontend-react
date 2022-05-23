@@ -38,10 +38,10 @@ export default function Switcher({ data, onOptionSelect, preselectedIndex, prefi
         <Ripple />
       </div>
       <div className="switcher__dropdown" ref={dropdownRef}>
-        {data.map(({ title, key }, index) => (
+        {data.map(({ title, key }) => (
           <div
             className={`switcher__option ${key === selected ? 'switcher__option--selected' : ''}`}
-            key={`switcher-option-${title}-${key}-${index.toString()}`}
+            key={`switcher-option-${title}-${key}`}
             onClick={() => {
               onOptionSelect(key);
               setDisplaying(title);

@@ -226,7 +226,7 @@ function PostBlockGallery({ block }) {
       {galleryImages.map((galleryImage, galleryImageIndex) => (
         <div
           className="media-gallery__figure default-pointer"
-          key={`gallery-figure-${galleryImageIndex.toString()}-${galleryImage.uuid}`}
+          key={`gallery-figure-${galleryImage.uuid}`}
           style={{
             backgroundImage: `url(${Format(Media(galleryImage.uuid))})`,
             width: galleryImage.styles.width,
@@ -431,8 +431,8 @@ export default function PostBlock({ block }) {
   if (block.type === 'list' && Array.isArray(block.data.items))
     return (
       <ul>
-        {block.data.items.map((line, index) => (
-          <li key={`ul-line-${line}-${index.toString()}`}>{Refined(line)}</li>
+        {block.data.items.map((line) => (
+          <li key={`ul-line-${line}`}>{Refined(line)}</li>
         ))}
       </ul>
     );

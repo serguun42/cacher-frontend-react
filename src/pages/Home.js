@@ -92,14 +92,17 @@ class Home extends Component {
           <div className="home__flex__side">
             <div className="home__action-cards-container">
               <div
-                className="home__action-card home__action-card--accent default-pointer"
+                className="home__action-card home__action-card--accent default-pointer default-no-select"
                 onClick={() => dispatcher.call('message', 'search!!!')}
               >
                 <i className="material-icons">search</i>
                 <div>Поиск</div>
                 <Ripple inheritTextColor />
               </div>
-              <div className="home__action-card default-pointer" onClick={() => store.dispatch(nextTheme())}>
+              <div
+                className="home__action-card default-pointer default-no-select"
+                onClick={() => store.dispatch(nextTheme())}
+              >
                 <i className="material-icons">{theme.icon}</i>
                 <div>Переключить тему</div>
                 <Ripple />

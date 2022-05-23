@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Comments from '../components/Comments';
+import CommentsList from '../components/CommentsList';
 import Loading from '../components/Loading';
 import PostVersion from '../components/PostVersion';
 import Ripple from '../components/Ripple';
@@ -197,7 +197,7 @@ export default function Entry() {
             </div>
           </div>
 
-          <Comments
+          <CommentsList
             comments={commentsVersion === 'last' ? entry.lastComments : entry.comments[commentsVersion]}
             entryId={entry.id}
             key={commentsVersion}

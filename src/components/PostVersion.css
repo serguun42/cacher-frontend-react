@@ -48,10 +48,19 @@
   padding: 4px 8px;
 
   border-radius: 4px;
-  background-color: var(--primary-faded);
 
   font-size: 14px;
   line-height: 20px;
+}
+
+.post-version__stats__pos:not(.karma--positive):not(.karma--negative):not(.post-version__stats__pos--saved) {
+  color: #595959;
+  background-color: rgba(201, 201, 201, 0.15);
+}
+
+.is-dark .post-version__stats__pos:not(.karma--positive):not(.karma--negative):not(.post-version__stats__pos--saved) {
+  color: #aaa;
+  background-color: rgba(20, 20, 20, 0.15);
 }
 
 .post-version__stats__pos:last-of-type {

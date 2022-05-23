@@ -18,8 +18,8 @@ export default function PostVersion({ postVersion, showAbout }) {
         </h3>
       ) : null}
 
-      {postVersion.blocks.map((block, index) => (
-        <PostBlock block={block} key={`block-${block.type}-${index.toString()}`} />
+      {postVersion.blocks.map((block) => (
+        <PostBlock block={block} key={`block-${block.type}-${block.data.text || JSON.stringify(block.data.items)}`} />
       ))}
 
       <div className="post-version__stats">

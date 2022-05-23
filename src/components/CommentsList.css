@@ -1,0 +1,19 @@
+.comments {
+  display: block;
+  position: relative;
+
+  width: 100%;
+
+  padding: 12px 24px;
+}
+
+@media (max-width: 800px) {
+  .comments {
+    padding: 12px 12px;
+  }
+}
+
+.comments-empty {
+  margin: 0;
+  padding: 12px 8px;
+}

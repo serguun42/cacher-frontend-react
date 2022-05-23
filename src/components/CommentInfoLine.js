@@ -1,16 +1,23 @@
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import DateForPost from '../util/date-for-post';
 import Esc from '../util/html/escape';
 import Avatar from '../util/html/avatar';
-import './CommentInfoLine.css';
 import LogMessageOrError from '../util/log';
 import dispatcher from '../util/dispatcher';
+import ScrollToComment from '../util/scroll-to-comment';
+import './CommentInfoLine.css';
 
 /**
  * @param {{ comment: import("../../types/comment").Comment, entryId: number }} props
  */
 export default function CommentInfoLine({ comment, entryId }) {
+  if (!comment) return null;
+  if (!entryId) {
+    const params = useParams();
+    entryId = parseInt(params.entryId);
+  }
+
   const commentLink = `https://${process.env.REACT_APP_SITE_LINK}/${entryId}?comment=${comment.id}`;
 
   return (
@@ -39,27 +46,7 @@ export default function CommentInfoLine({ comment, entryId }) {
       {comment.replyTo > 0 ? (
         <div
           className="comment-info-line__elem default-pointer"
-          onClick={() => {
-            const parentCommentElem = document.querySelector(
-              `.comment-container[data-comment-id="${comment.replyTo}"]`
-            );
-
-            if (!parentCommentElem) return;
-
-            const targetDispacement = parentCommentElem.getBoundingClientRect().top;
-            const targetHeight = parentCommentElem.getBoundingClientRect().height;
-            const initialScrollTop = document.documentElement.scrollTop;
-            const commentsTopBarHeight = document.querySelector('.entry-comments__upper-info')?.clientHeight || 50;
-
-            document.documentElement.scrollTo({
-              left: 0,
-              top: initialScrollTop + targetDispacement - targetHeight - commentsTopBarHeight * 2,
-              behavior: 'smooth',
-            });
-
-            parentCommentElem.classList.add('comment-container--animating');
-            setTimeout(() => parentCommentElem.classList.remove('comment-container--animating'), 4000);
-          }}
+          onClick={() => ScrollToComment({ commentId: comment.replyTo })}
         >
           <div className="material-icons comment-info-line__elem__text comment-info-line__elem__text--action">
             arrow_upward
@@ -103,5 +90,9 @@ export default function CommentInfoLine({ comment, entryId }) {
 
 CommentInfoLine.propTypes = {
   comment: PropTypes.object.isRequired,
-  entryId: PropTypes.number.isRequired,
+  entryId: PropTypes.number,
+};
+
+CommentInfoLine.defaultProps = {
+  entryId: 0,
 };

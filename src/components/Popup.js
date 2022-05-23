@@ -73,8 +73,8 @@ export default function Popup() {
         {popupState.title ? <div className="popup__title">{popupState.title}</div> : null}
         <div className={`popup__messages ${popupState.isBig ? 'popup__messages--big' : ''} default-scroll-color`}>
           <div className="popup__messages-wrapper">
-            {popupState.messages.map((message, index) => (
-              <div className="popup__message-line" key={`popup-message-${message}-${index.toString()}`}>
+            {popupState.messages.map((message) => (
+              <div className="popup__message-line" key={`popup-message-${message}-${message.length}`}>
                 {message}
               </div>
             ))}
