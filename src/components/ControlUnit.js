@@ -1,9 +1,11 @@
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import store from '../store';
-import { nextTheme } from '../util/theme';
+import { nextTheme } from '../store/theme';
 import Ripple from './Ripple';
 import './ControlUnit.css';
+import OpenSearch from '../util/open-search';
+import LogMessageOrError from '../util/log';
 
 export default function ControlUnitToHide() {
   const navigate = useNavigate();
@@ -14,7 +16,16 @@ export default function ControlUnitToHide() {
 
   return (
     <div className="control-unit">
-      <button type="button" className="control-unit__button" title="Поиск">
+      <button
+        type="button"
+        className="control-unit__button"
+        title="Поиск"
+        onClick={(e) =>
+          OpenSearch(e.currentTarget)
+            .then(() => navigate('/search'))
+            .catch(LogMessageOrError)
+        }
+      >
         <i className="material-icons">search</i>
         <Ripple inheritTextColor />
       </button>

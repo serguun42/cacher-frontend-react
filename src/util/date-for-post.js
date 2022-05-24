@@ -52,8 +52,13 @@ export default function DateForPost(date, toISO = false, onlyDate = false) {
     return `${postDate.getDate()} ${MONTHS_SHORT_GENETIVE[postDate.getMonth()]}, ${timeString}`;
   }
 
-  if (postDate.getFullYear() === new Date().getFullYear())
+  if (postDate.getFullYear() === new Date().getFullYear()) {
+    if (onlyDate) return `${postDate.getDate()} ${MONTHS_SHORT_GENETIVE[postDate.getMonth()]}`;
+
     return `${postDate.getDate()} ${MONTHS_SHORT_GENETIVE[postDate.getMonth()]}, ${timeString}`;
+  }
+
+  if (onlyDate) return `${postDate.getDate()} ${MONTHS_SHORT_GENETIVE[postDate.getMonth()]} ${postDate.getFullYear()}`;
 
   return `${postDate.getDate()} ${MONTHS_SHORT_GENETIVE[postDate.getMonth()]} ${postDate.getFullYear()}, ${timeString}`;
 }

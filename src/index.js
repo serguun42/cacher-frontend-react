@@ -10,15 +10,16 @@ import Message from './components/Message';
 import ScrollToTop from './util/scroll-to-top';
 import store from './store';
 import dispatcher from './util/dispatcher';
-import { checkSystemOnMediaChange } from './util/theme';
+import { checkSystemOnMediaChange } from './store/theme';
 import './util/set-primary';
-import './util/message';
+import './store/message';
 import Entity from './pages/Entity';
 import Entry from './pages/Entry';
+import Search from './pages/Search';
 import Popup from './components/Popup';
 import MediaViewer from './components/MediaViewer';
 
-/** @param {import("./util/theme").ThemeObject} */
+/** @param {import("./store/theme").ThemeObject} */
 function ApplyThemeClassToBody(theme) {
   if (theme.isDark) document.body.classList.add('is-dark');
   else document.body.classList.remove('is-dark');
@@ -43,6 +44,7 @@ root.render(
             <Route index element={<Home />} />
             <Route path="/entity/:entityId" element={<Entity />} />
             <Route path="/post/:entryId" element={<Entry />} />
+            <Route path="/search" element={<Search />} />
             <Route path="docs/api/swagger" element={<Swagger />} />
           </Route>
           <Route path="*" element={<NotFound />} />

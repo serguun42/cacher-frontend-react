@@ -1,3 +1,4 @@
+import dispatcher from './dispatcher';
 import LogMessageOrError from './log';
 import PopupNoLogin from './popups/no-login';
 import PopupNoPermission from './popups/no-permission';
@@ -36,6 +37,7 @@ export const FetchMethod = (method, queries = {}, options = {}) => {
   return fetch(BuildURL(method, queries), options).then((res) => {
     if (res.status === 401) PopupNoLogin();
     else if (res.status === 403) PopupNoPermission();
+    else if (res.status === 429) dispatcher.call('message', 'Слишком много запросов ⌛');
 
     try {
       return res.json().then((response) => (response?.error ? Promise.reject(response) : Promise.resolve(response)));
@@ -88,7 +90,7 @@ export const SearchByPostId = (entryId) => FetchMethod('search/entry', { entryId
 export const SearchByEntityId = (searchByEntityIdFilter) => FetchMethod('search/entity', { ...searchByEntityIdFilter });
 
 /**
- * @param {{ url: string } & SearchDefaultFilter} searchByEntityIdFilter
+ * @param {{ url: string } & SearchDefaultFilter} searchByUrlFilter
  * @returns {Promise<import("../../types/feed_post").FeedPost[]>}
  */
 export const SearchByUrl = (searchByUrlFilter) => FetchMethod('search/url', { ...searchByUrlFilter });

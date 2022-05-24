@@ -1,0 +1,52 @@
+.hotkey-line {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+
+  width: 100%;
+
+  margin-bottom: 8px;
+}
+
+.hotkey-buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+
+  margin-right: 12px;
+}
+
+.hotkey-button {
+  display: block;
+  position: relative;
+
+  margin-right: 8px;
+  padding: 6px 10px;
+
+  background-color: var(--text);
+  color: var(--card);
+  border-radius: 6px;
+}
+
+.hotkey-button:last-child {
+  margin-right: 0;
+}
+
+.hotkey-description {
+  display: block;
+  position: relative;
+  flex-shrink: 1;
+
+  width: 100%;
+  text-align: right;
+
+  word-break: break-word;
+  line-break: normal;
+}

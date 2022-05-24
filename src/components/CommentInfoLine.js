@@ -22,7 +22,10 @@ export default function CommentInfoLine({ comment, entryId }) {
 
   return (
     <div className={`comment-info-line ${!comment.author.avatar_url ? 'comment-info-line--no-avatar' : ''}`}>
-      <Link to={`/entity/${comment.author.id}`} className="comment-info-line__elem">
+      <Link
+        to={`/entity/${comment.author.id}`}
+        className={`comment-info-line__elem ${comment.replyTo > 0 ? 'comment-info-line__elem--before-area' : ''}`}
+      >
         {comment.author.avatar_url ? (
           <div
             style={{
@@ -45,7 +48,7 @@ export default function CommentInfoLine({ comment, entryId }) {
       </Link>
       {comment.replyTo > 0 ? (
         <div
-          className="comment-info-line__elem default-pointer"
+          className="comment-info-line__elem comment-info-line__elem--with-area default-pointer"
           onClick={() => ScrollToComment({ commentId: comment.replyTo })}
         >
           <div className="material-icons comment-info-line__elem__text comment-info-line__elem__text--action">
@@ -63,6 +66,9 @@ export default function CommentInfoLine({ comment, entryId }) {
         }}
       >
         <div className="comment-info-line__elem__text comment-info-line__elem__text--action">#{comment.id}</div>
+        <i className="material-icons comment-info-line__elem__text comment-info-line__elem__text--action">
+          content_copy
+        </i>
       </div>
       <a className="comment-info-line__elem" target="_blank" rel="noopener noreferrer" href={commentLink}>
         <div className="comment-info-line__elem__text comment-info-line__elem__text--action">

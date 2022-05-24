@@ -9,7 +9,7 @@
  * @param {number} [skip=0] - How many of progress to skip, ranges from `0` to `1`
  * @returns {Promise<null>}
  */
-export const GlobalAnimation = (duration, styleCallback, curve = 'ease-in-out', skip = 0) =>
+export const Animation = (duration, styleCallback, curve = 'ease-in-out', skip = 0) =>
   new Promise((resolve) => {
     const startTime = performance.now();
 
@@ -64,7 +64,7 @@ export const FadeIn = (elem, duration, options = {}) => {
   elem.style.opacity = options.initialOpacity;
   elem.style.display = options.display;
 
-  return GlobalAnimation(
+  return Animation(
     duration,
     (iProgress) => {
       elem.style.opacity = (1 - options.initialOpacity) * iProgress + options.initialOpacity;
@@ -89,7 +89,7 @@ export const FadeOut = (elem, duration, options) => {
 
   elem.style.opacity = options.initialOpacity;
 
-  return GlobalAnimation(
+  return Animation(
     duration,
     (iProgress) => {
       elem.style.opacity = (1 - iProgress) * options.initialOpacity;
@@ -140,7 +140,7 @@ export const SlideDown = (elem, duration, options = {}, styleCallback = null) =>
   elem.style.paddingBottom = 0;
   elem.dataset.targetHeight = finalHeight;
 
-  return GlobalAnimation(
+  return Animation(
     duration,
     (iProgress) => {
       elem.style.height = `${iProgress * finalHeight}px`;
@@ -181,7 +181,7 @@ export const SlideUp = (elem, duration, styleCallback) => {
 
   elem.style.overflow = 'hidden';
 
-  return GlobalAnimation(
+  return Animation(
     duration,
     (iProgress) => {
       elem.style.height = `${(1 - iProgress) * initSize}px`;
@@ -206,7 +206,7 @@ export const SlideUp = (elem, duration, styleCallback) => {
 };
 
 export default {
-  GlobalAnimation,
+  Animation,
   FadeIn,
   FadeOut,
   SlideDown,

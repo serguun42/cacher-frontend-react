@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { createRef, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Feed from '../components/Feed';
@@ -8,9 +9,16 @@ import Avatar from '../util/html/avatar';
 import LogMessageOrError from '../util/log';
 import './Entity.css';
 
-export default function Entity() {
-  /** @type {{ entityId: string }} */
-  const { entityId } = useParams();
+/**
+ * @param {{ entityId?: number | string, dateStart?: '', dateEnd?: '' }} props
+ */
+export default function Entity({ entityId, dateStart, dateEnd }) {
+  if (!entityId) {
+    /** @type {{ entityId: string }} */
+    const params = useParams();
+    entityId = params.entityId;
+  }
+
   const [everFetched, setEverFetched] = useState(false);
   const [entityName, setEntityName] = useState('');
   const [lastEntityName, setLastEntityName] = useState('');
@@ -35,7 +43,7 @@ export default function Entity() {
   const [notFound, setNotFound] = useState(false);
 
   const LoadMorePosts = () => {
-    SearchByEntityId({ entityId, skip: entityPosts.length })
+    SearchByEntityId({ entityId, skip: entityPosts.length, 'date-start': dateStart, 'date-end': dateEnd })
       .then((entityPostsFromAPI) => {
         if (!entityPostsFromAPI?.length) setNotFound(true);
 
@@ -143,3 +151,15 @@ export default function Entity() {
     </>
   );
 }
+
+Entity.propTypes = {
+  entityId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  dateStart: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+  dateEnd: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+};
+
+Entity.defaultProps = {
+  entityId: 0,
+  dateStart: '',
+  dateEnd: '',
+};

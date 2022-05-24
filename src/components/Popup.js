@@ -7,7 +7,7 @@ import './Popup.css';
 /**
  * @typedef {Object} PopupPayload
  * @property {string} [title] Popup title, can be omited
- * @property {(string | import("react").Component)[]} messages Layout ready lines
+ * @property {(string | JSX.Element)[]} messages Layout ready lines
  * @property {boolean} [isBig=false]
  * @property {boolean} [hideable=true] Pass `true` to hide by user with no effect
  * @property {string} [acceptText] Accept button text, omit if there is no accept action
@@ -73,11 +73,16 @@ export default function Popup() {
         {popupState.title ? <div className="popup__title">{popupState.title}</div> : null}
         <div className={`popup__messages ${popupState.isBig ? 'popup__messages--big' : ''} default-scroll-color`}>
           <div className="popup__messages-wrapper">
-            {popupState.messages.map((message) => (
-              <div className="popup__message-line" key={`popup-message-${message}-${message.length}`}>
-                {message}
-              </div>
-            ))}
+            {Array.isArray(popupState.messages)
+              ? popupState.messages.map((message) => (
+                  <div
+                    className="popup__message-line"
+                    key={message.key || `popup-message-${message}-${message.length}`}
+                  >
+                    {message}
+                  </div>
+                ))
+              : popupState.messages}
           </div>
         </div>
         <div className="popup__actions">

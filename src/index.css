@@ -10,6 +10,7 @@
   --button-shadow: rgba(30, 30, 30, 0.1);
   --message-background: #fff;
   --message-text: #333;
+  --font-family: 'Inter', 'Roboto', 'Helvetica', 'Arial', sans-serif;
 }
 
 :root .is-dark {
@@ -34,6 +35,10 @@ body {
   font-weight: 400;
   font-size: 16px;
   line-height: 1.35em;
+}
+
+input {
+  font-family: var(--font-family);
 }
 
 /* Chrome, Safari, Edge, Opera */
@@ -125,6 +130,7 @@ input[type='number'] {
 
 button,
 button[type='button'] {
+  font-family: var(--font-family);
   appearance: none;
   border: none;
   text-decoration: none;

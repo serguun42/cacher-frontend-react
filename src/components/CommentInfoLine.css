@@ -27,6 +27,15 @@
   text-decoration: none;
 }
 
+.comment-info-line__elem--before-area {
+  margin-right: 0;
+}
+
+.comment-info-line__elem--with-area {
+  margin-right: 0;
+  padding: 0 16px;
+}
+
 .comment-info-line__elem__img {
   display: inline-block;
   position: relative;

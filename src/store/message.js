@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import dispatcher from './dispatcher';
+import dispatcher from '../util/dispatcher';
 
 /**
  * @param {string} color

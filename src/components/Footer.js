@@ -1,8 +1,9 @@
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import store from '../store';
-import LogMessageOrError from '../util/log';
-import { nextTheme } from '../util/theme';
+import dispatcher from '../util/dispatcher';
+import PopupAboutHotkeys from '../util/popups/hotkeys';
+import { nextTheme } from '../store/theme';
 import './Footer.css';
 
 export default function Footer() {
@@ -14,7 +15,7 @@ export default function Footer() {
   ];
 
   const changeTheme = () => store.dispatch(nextTheme());
-  const clearCache = () => LogMessageOrError('clearCache');
+  const clearCache = () => dispatcher.call('clearCache');
 
   const themeState = useSelector((state) => state.theme);
 
@@ -75,6 +76,11 @@ export default function Footer() {
         <div className="footer__section__item default-no-select default-pointer" onClick={() => clearCache()}>
           <i className="material-icons">delete_outline</i>
           <span>Очистить кэш</span>
+        </div>
+
+        <div className="footer__section__item default-no-select default-pointer" onClick={PopupAboutHotkeys}>
+          <i className="material-icons">keyboard</i>
+          <span>Горячие клавиши</span>
         </div>
       </section>
 

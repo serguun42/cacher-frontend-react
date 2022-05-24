@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
+import GetForm from '../util/get-form';
 import CommentContainer from './CommentContainer';
 import './CommentsList.css';
 
@@ -7,20 +8,23 @@ import './CommentsList.css';
  * @param {{ comments: import("../../types/comment").Comment[] }} props
  */
 export default function CommentsList({ comments, entryId }) {
+  if (!comments?.length)
+    return (
+      <div className="comments">
+        <h4 className="comments__empty">Тут пусто! 🤷‍♂️</h4>
+      </div>
+    );
+
   if (!entryId) {
     const params = useParams();
     entryId = parseInt(params.entryId);
   }
 
-  if (!comments?.length)
-    return (
-      <div className="comments">
-        <h4 className="comments-empty">Тут пусто! 🤷‍♂️</h4>
-      </div>
-    );
-
   return (
     <div className="comments">
+      <div className="comments__count">
+        {comments.length} {GetForm(comments.length, ['комментарий', 'комментария', 'комментариев'])}
+      </div>
       {
         /**
          * https://reactjs.org/docs/lists-and-keys.html#keys

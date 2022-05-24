@@ -1,0 +1,37 @@
+.checkbox {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+
+  padding: 0 8px;
+}
+
+.checkbox__square {
+  display: block;
+  position: relative;
+  flex-shrink: 0;
+
+  width: 36px;
+  height: 36px;
+
+  padding: 6px;
+  margin-right: 0;
+  
+  border-radius: 18px;
+  color: var(--primary);
+}
+
+.checkbox__label {
+  display: block;
+  position: relative;
+  flex-shrink: 1;
+
+  padding: 6px;
+
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--text);
+}

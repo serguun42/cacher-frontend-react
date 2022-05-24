@@ -12,13 +12,12 @@ export default function ScrollToComment({ commentId, commentElem }) {
   if (!targetCommentElem) return;
 
   const targetDispacement = targetCommentElem.getBoundingClientRect().top;
-  const targetHeight = targetCommentElem.getBoundingClientRect().height;
   const initialScrollTop = document.documentElement.scrollTop;
   const commentsTopBarHeight = document.querySelector('.entry-comments__upper-info')?.clientHeight || 50;
 
   document.documentElement.scrollTo({
     left: 0,
-    top: initialScrollTop + targetDispacement - targetHeight - commentsTopBarHeight * 2,
+    top: initialScrollTop + targetDispacement - commentsTopBarHeight * 2,
     behavior: 'smooth',
   });
 

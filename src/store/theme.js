@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import dispatcher from './dispatcher';
+import dispatcher from '../util/dispatcher';
 
 /** @typedef {"light" | "dark" | "schedule" | "system"} ThemeEnum */
 /**
