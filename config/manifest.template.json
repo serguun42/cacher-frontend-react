@@ -1,14 +1,9 @@
 {
   "name": "Cacher %REACT_APP_SITE_SHORT%",
   "short_name": "Cacher %REACT_APP_SITE_SHORT%",
+  "description": "Кэшированные статьи и комментарии с %REACT_APP_SITE_LONG%",
   "theme_color": "%REACT_APP_PRIMARY_COLOR%",
   "icons": [
-    {
-      "src": "%PUBLIC_URL%/img/%REACT_APP_SITE_CODE%/icons/round/36x36.png",
-      "sizes": "36x36",
-      "type": "image/png",
-      "purpose": "any"
-    },
     {
       "src": "%PUBLIC_URL%/img/%REACT_APP_SITE_CODE%/icons/round/48x48.png",
       "sizes": "48x48",
@@ -56,12 +51,6 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
-    },
-    {
-      "src": "%PUBLIC_URL%/img/%REACT_APP_SITE_CODE%/icons/maskable/36x36.png",
-      "sizes": "36x36",
-      "type": "image/png",
-      "purpose": "maskable"
     },
     {
       "src": "%PUBLIC_URL%/img/%REACT_APP_SITE_CODE%/icons/maskable/48x48.png",
@@ -112,7 +101,7 @@
       "purpose": "maskable"
     }
   ],
-  "start_url": "%PUBLIC_URL%",
+  "start_url": "/%REACT_APP_SITE_CODE%/",
   "display": "standalone",
   "background_color": "#FFFFFF"
 }

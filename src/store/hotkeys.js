@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export const keyboardSlice = createSlice({
-  name: 'keyboard',
+export const hotkeysSlice = createSlice({
+  name: 'hotkeys',
   initialState: {
     hotkeysActive: true,
   },
@@ -17,6 +17,6 @@ export const keyboardSlice = createSlice({
   },
 });
 
-export const { activateHotkeys, deactivateHotkeys } = keyboardSlice.actions;
+export const { activateHotkeys, deactivateHotkeys } = hotkeysSlice.actions;
 
-export const { reducer } = keyboardSlice;
+export const { reducer } = hotkeysSlice;

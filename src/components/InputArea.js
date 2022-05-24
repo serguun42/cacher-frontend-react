@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
+import dispatcher from '../util/dispatcher';
 import Ripple from './Ripple';
 import './InputArea.css';
 
@@ -34,6 +35,16 @@ export default function InputArea({ preset, label, setState, enterHandler, autof
     if (e.code === 'Enter' || e.key === 'Enter') if (typeof enterHandler === 'function') enterHandler(e);
   };
 
+  const OnFocus = () => {
+    setIsFocused(true);
+    dispatcher.call('deactivateHotkeys');
+  };
+
+  const OnBlur = () => {
+    setIsFocused(false);
+    dispatcher.call('activateHotkeys');
+  };
+
   const ClearButtonHandler = () => {
     setIsDirty(false);
     setState('');
@@ -51,6 +62,8 @@ export default function InputArea({ preset, label, setState, enterHandler, autof
     if (autofocus) inputRef.current.focus();
   }, [inputRef.current]);
 
+  useEffect(() => () => dispatcher.call('activateHotkeys'), []);
+
   return (
     <div className="field-area">
       <div
@@ -64,8 +77,8 @@ export default function InputArea({ preset, label, setState, enterHandler, autof
           type="text"
           inputMode="text"
           onInput={OnInput}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
+          onFocus={OnFocus}
+          onBlur={OnBlur}
           onKeyUp={OnKeyUp}
           ref={inputRef}
         />

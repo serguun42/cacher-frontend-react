@@ -24,7 +24,7 @@ dispatcher.link('hideMessageIfPossible', (currentMessageId) => {
   if (store.getState().message.lastId === currentMessageId) store.dispatch(hideMessage());
 });
 
-dispatcher.link('activateHotkeys', activateHotkeys);
-dispatcher.link('deactivateHotkeys', deactivateHotkeys);
+dispatcher.link('activateHotkeys', () => store.dispatch(activateHotkeys()));
+dispatcher.link('deactivateHotkeys', () => store.dispatch(deactivateHotkeys()));
 
 export default store;

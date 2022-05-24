@@ -1,23 +1,23 @@
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import './index.css';
 import App from './App';
 import Home from './pages/Home';
-import Swagger from './pages/Swagger';
 import NotFound from './pages/NotFound';
-import Message from './components/Message';
-import ScrollToTop from './util/scroll-to-top';
-import store from './store';
-import dispatcher from './util/dispatcher';
-import { checkSystemOnMediaChange } from './store/theme';
-import './util/set-primary';
-import './store/message';
+import Swagger from './pages/Swagger';
 import Entity from './pages/Entity';
 import Entry from './pages/Entry';
 import Search from './pages/Search';
+import Message from './components/Message';
 import Popup from './components/Popup';
 import MediaViewer from './components/MediaViewer';
+import ScrollToTop from './util/scroll-to-top';
+import dispatcher from './util/dispatcher';
+import store from './store';
+import { checkSystemOnMediaChange } from './store/theme';
+import './util/set-primary';
+import './util/cache';
+import './index.css';
 
 /** @param {import("./store/theme").ThemeObject} */
 function ApplyThemeClassToBody(theme) {
