@@ -24,23 +24,18 @@ const GeneralSource = (anySource) => {
 };
 
 /**
- * @typedef {Object} TelegramPostMedia
- * @property {{ width: number, height: number, leonardo_url: string }[]} [photos]
- * @property {{ width: number, height: number, src: string }[]} [videos]
- */
-/**
- * @param {TelegramPostMedia} props
+ * @param {import("../../types/telegram_post").TelegramPost} props
  * @returns {import("../../types/post_version").PostBlock}
  */
 export default function TelegramMediaToOsnovaMediaBlock({ photos, videos }) {
-  /** @type {import("../../types/post_version").PostBlockItem[]} */
+  /** @type {import("../../types/post_version").PostBlockMediaItem[]} */
   const commonPostBlockItem = [];
 
   if (Array.isArray(photos))
     photos.forEach((photo) => {
       const uuid = GeneralSource(photo.leonardo_url);
 
-      /** @type {import("../../types/post_version").PostBlockItem} */
+      /** @type {import("../../types/post_version").PostBlockMediaItem} */
       const mediaItem = {
         title: '',
         image: {
@@ -61,7 +56,7 @@ export default function TelegramMediaToOsnovaMediaBlock({ photos, videos }) {
     videos.forEach((video) => {
       const uuid = GeneralSource(video.src);
 
-      /** @type {import("../../types/post_version").PostBlockItem} */
+      /** @type {import("../../types/post_version").PostBlockMediaItem} */
       const mediaItem = {
         title: '',
         image: {

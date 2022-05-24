@@ -63,7 +63,7 @@ export default function CommentContainer({ comment, entryId }) {
                       })),
                   },
                 }}
-                key={`attach-images-${comment.id}-${comment.is_pinned}`}
+                key={`attach-images-${comment.id}`}
               />
             ) : null}
             {comment.attaches
@@ -76,7 +76,7 @@ export default function CommentContainer({ comment, entryId }) {
                       [attach.type]: attach,
                     },
                   }}
-                  key={`attach-${attach.type}-${comment.id}-${comment.is_pinned}`}
+                  key={`attach-${attach.type}-${attach.data?.uuid || attach.data?.url}-${comment.id}`}
                 />
               ))}
           </>

@@ -1,18 +1,17 @@
-export interface PostAvatar {
-  type: string;
-  data: PostMedia;
-}
-
-export interface PostAuthor {
+export interface PostEntity {
   id: number;
   url: string;
   name: string;
   type: number;
-  avatar: PostAvatar;
+  description: string;
+  avatar: PostMedia;
   avatar_url: string;
+  head_cover: string;
   is_online: boolean;
   is_verified: boolean;
+  is_enable_writing: boolean;
   is_subscribed: boolean;
+  is_subscribed_to_new_posts: boolean;
 }
 
 export interface PostBadge {
@@ -46,22 +45,24 @@ export interface PostLikes {
   is_hidden: boolean;
 }
 
-export interface PostSubsite {
-  id: number;
-  url: string;
-  type: number;
-  name: string;
-  description: string;
-  avatar: PostAvatar;
-  avatar_url: string;
-  head_cover: string;
-  is_verified: boolean;
-  is_enable_writing: boolean;
-  is_subscribed: boolean;
-  is_subscribed_to_new_posts: boolean;
+export interface PostExternalService {
+  additional_data?: any[];
+  id: string;
+  name: 'coub' | 'youtube' | 'etc';
 }
 
-export interface PostMedia {
+export interface PostVideo {
+  type: 'video';
+  data: {
+    width: number;
+    height: number;
+    thumbnail: PostMedia;
+    external_service: PostExternalService;
+    time: number;
+  };
+}
+
+export interface PostMediaData {
   uuid: string;
   width: number;
   height: number;
@@ -69,39 +70,218 @@ export interface PostMedia {
   type: string;
   color: string;
   hash: string;
-  external_service: any[];
+  external_service: PostExternalService;
 }
 
-export interface PostImage {
+export type PostMedia = {
   type: string;
-  data: PostMedia;
-}
+  data: PostMediaData;
+};
 
-export interface PostBlockItem {
+export type PostBlockMediaItem = {
   title: string;
-  author: string;
-  image: PostImage;
-}
+  author?: string;
+  image: PostMedia;
+};
 
-export interface PostBlockData {
-  text: string;
-  text_truncated: string;
-  items: PostBlockItem[];
-  with_background?: boolean;
-  with_border?: boolean;
-}
-
-export interface PostBlock {
-  type: string;
-  data: PostBlockData;
-  cover: boolean;
+export type PostBlockTypeText = {
+  type: 'text';
+  data: {
+    text: string;
+    text_truncated: string;
+  };
   anchor: string;
-}
+  cover: boolean;
+  hidden: boolean;
+};
+
+export type PostBlockTypeHeader = {
+  type: 'header';
+  data: {
+    text: string;
+    style: string;
+  };
+  anchor: string;
+  cover: boolean;
+  hidden: boolean;
+};
+
+export type PostBlockTypeList = {
+  type: 'list';
+  data: {
+    type: 'UL';
+    items: string[];
+  };
+  anchor: string;
+  cover: boolean;
+  hidden: boolean;
+};
+
+export type PostBlockTypeMedia = {
+  type: 'media';
+  data: {
+    items: PostBlockMediaItem[];
+    with_background: boolean;
+    with_border: boolean;
+  };
+  anchor: string;
+  cover: boolean;
+  hidden: boolean;
+};
+
+export type PostBlockTypeVideo = {
+  type: 'video';
+  data: {
+    video: PostVideo;
+  };
+  anchor: string;
+  cover: boolean;
+  hidden: boolean;
+};
+
+export type PostBlockTypeIncut = {
+  type: 'incut';
+  data: {
+    text: string;
+    text_size: string;
+    type: 'centered';
+  };
+  anchor: string;
+  cover: boolean;
+  hidden: boolean;
+};
+
+export type PostBlockTypeNumber = {
+  type: 'number';
+  data: {
+    title: string;
+    number: string;
+  };
+  anchor: string;
+  cover: boolean;
+  hidden: boolean;
+};
+
+export type PostBlockTypeQuote = {
+  type: 'quote';
+  data: {
+    image?: PostMedia;
+    subline1?: string;
+    subline2?: string;
+    text: string;
+    text_size: string;
+  };
+  anchor: string;
+  cover: boolean;
+  hidden: boolean;
+};
+
+export type PostBlockTypePerson = {
+  type: 'person';
+  data: {
+    image?: PostMedia;
+    title: string;
+    description: string;
+  };
+  anchor: string;
+  cover: boolean;
+  hidden: boolean;
+};
+
+export type PostBlockTypeTweet = {
+  type: 'tweet';
+  data: {
+    media: boolean;
+    conversation: boolean;
+    title: string;
+    markdown: string;
+    tweet: {
+      type: 'tweet';
+      data: {
+        tweet_data: import('./tweet').Tweet;
+        tweet_data_encoded: string;
+        version: string;
+      };
+    };
+  };
+  anchor: string;
+  cover: boolean;
+  hidden: boolean;
+};
+
+export type PostBlockTypeTelegram = {
+  type: 'telegram';
+  data: {
+    title: string;
+    markdown: string;
+    telegram: {
+      type: 'telegram';
+      data: {
+        tg_data: import('./telegram_post').TelegramPost;
+        tg_data_encoded: string;
+      };
+    };
+  };
+  anchor: string;
+  cover: boolean;
+  hidden: boolean;
+};
+
+export type PostBlockTypeDelimiter = {
+  type: 'delimiter';
+  data: {};
+  anchor: string;
+  cover: boolean;
+  hidden: boolean;
+};
+
+export type PostBlockTypeLink = {
+  type: 'link';
+  data: {
+    link: {
+      type: 'link';
+      data: {
+        url: string;
+        title: string;
+        description: string;
+        image?: PostMedia;
+        v: 1;
+      };
+    };
+  };
+  anchor: string;
+  cover: boolean;
+  hidden: boolean;
+};
+
+export type PostBlockTypeDefault = {
+  type: 'default';
+  data: {};
+  anchor: string;
+  cover: boolean;
+  hidden: boolean;
+};
+
+export type PostBlock =
+  | PostBlockTypeText
+  | PostBlockTypeHeader
+  | PostBlockTypeList
+  | PostBlockTypeMedia
+  | PostBlockTypeVideo
+  | PostBlockTypeIncut
+  | PostBlockTypeNumber
+  | PostBlockTypeQuote
+  | PostBlockTypePerson
+  | PostBlockTypeTweet
+  | PostBlockTypeTelegram
+  | PostBlockTypeDelimiter
+  | PostBlockTypeLink
+  | PostBlockTypeDefault;
 
 export interface PostVersion {
   id: number;
   url: string;
-  author: PostAuthor;
+  author: PostEntity;
   badges: PostBadge[];
   commentsCount: number;
   commentsSeenCount?: any;
@@ -119,7 +299,7 @@ export interface PostVersion {
   isFavorited: boolean;
   isRepost: boolean;
   likes: PostLikes;
-  subsite: PostSubsite;
+  subsite: PostEntity;
   similar: any[];
   title: string;
   type: number;

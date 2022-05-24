@@ -4,22 +4,24 @@ Frontend for [TJournal and DTF cacher platform](https://cacher.serguun42.ru) bui
 
 ## Configuration, building and launching
 
-All configuration and build or launch scripts ejected with `react-scripts eject` and modified for specific purposes of this project.
+All configuration, npm and webpack scripts are modified ones from `react-scripts eject` with specific purposes of this project.
 
 ### Commands
 
 - `npm i --production` – Install only necessary npm dependencies. Or install everything with `npm i` for development.
 - `npm run start` – Start dev server. Files `.env.dtf` and `.env.tj` will not be used so consider creating [local environment file](#local-environment)
-- `npm run build:dtf` – Build frontend with [`.env.dtf`](#sites-build-environment)
-- `npm run build:tj` – Build frontend with [`.env.tj`](#sites-build-environment)
+- `npm run build:SITE` – [More about environment and builds](#sites-build-environment)
 - `npm run lint` – Check project with `eslint`
-- `npm run generate-openapi-redoc` – Build static Redoc API based on [`api.yml`](./public/docs/api.yml)
+- `npm run generate-openapi-redoc` – Build static Redoc API – [more about API](#api)
 
 ### Sites build environment
 
-Files [`.env.dtf`](./.env.dtf) and [`.env.tj`](./.env.tj) contain environment variables for both building scripts and client usage. Some of them:
+- `npm run build:tj` – Generate TJournal version of frontend using environment file [`.env.tj`](./.env.tj)
+- `npm run build:dtf` – Generate DTF version of frontend using environment file [`.env.dtf`](./.env.dtf)
 
-| variable                      | description                                                                                                             |
+Files [`.env.dtf`](./.env.dtf) and [`.env.tj`](./.env.tj) contain environment variables for building scripts and for client usage. Some of those env variables:
+
+| name                          | description/type                                                                                                        |
 | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | `REACT_APP_VERSION`           | Same as in [`package.json`](./package.json). Used for client cache control                                              |
 | `BUILD_PATH`                  | Build directory for webpack output                                                                                      |
@@ -53,8 +55,11 @@ Manifest is built with `npm run build` from [template](./config/manifest.templat
 
 ## API
 
-OpenAPI docs available at [`api.yml`](./public/docs/api.yml). Project uses Swagger UI to build human-readable documentation pages. Redoc is yet to do.
+OpenAPI docs available at [`api.yml`](./public/docs/api.yml). Project uses Swagger UI in runtime and precompiled Redoc `.html` bundle.
 
-- `npm exec -- ts-to-openapi -f types/*.d.ts` – Convert Typescript defenitions to YAML format.
+- `npm exec -- ts-to-openapi -f types/*.d.ts` – Convert Typescript defenitions to YAML format (*for new types*).
+- `npm run generate-openapi-redoc` – Build static Redoc API
 
-#### [BSL-1.0 License](./LICENSE)
+---
+
+### [BSL-1.0 License](./LICENSE)

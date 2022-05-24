@@ -465,6 +465,28 @@
   border-color: #595959;
 }
 
+.social__logo {
+  display: block;
+  position: absolute;
+
+  width: 24px;
+  height: 24px;
+
+  top: 16px;
+  right: 12px;
+
+  color: var(--text);
+  fill: currentColor;
+}
+
+.social__logo--tweet {
+  color: #1d9bf0;
+}
+
+.is-dark .social__logo {
+  color: var(--text);
+}
+
 .social__user {
   display: flex;
   flex-direction: row;
@@ -474,7 +496,9 @@
   position: relative;
 
   width: 100%;
+
   margin-bottom: 12px;
+  padding-right: 28px;
 }
 
 .social__avatar {

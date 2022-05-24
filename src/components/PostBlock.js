@@ -50,7 +50,7 @@ const Format = (base, format = 'webp') =>
 const Preview = (uuid, size = 100) => `${Format(Media(uuid))}-/preview/${size}/`;
 
 /**
- * @param {{ block: import("../../types/post_version").PostBlock }} props
+ * @param {{ block: import("../../types/post_version").PostBlockTypeVideo }} props
  */
 function PostBlockVideo({ block }) {
   const [videoRequested, setVideoRequested] = useState(false);
@@ -117,7 +117,7 @@ const GetMinAspectRatio = () => {
 };
 
 /**
- * @param {{ block: import("../../types/post_version").PostBlock }} props
+ * @param {{ block: import("../../types/post_version").PostBlockTypeMedia }} props
  */
 function PostBlockGallery({ block }) {
   if (!block?.data?.items) return null;
@@ -134,7 +134,7 @@ function PostBlockGallery({ block }) {
    * @property {{ width: number, height: number, translateX: number, translateY: number }} styles
    */
   /**
-   * @typedef {import("../../types/post_version").PostMedia & GalleryAddition} GalleryImage
+   * @typedef {import("../../types/post_version").PostMediaData & GalleryAddition} GalleryImage
    */
   /** @type {[GalleryImage[]]} */
   const [galleryImages, setGalleryImages] = useState([]);
@@ -273,7 +273,7 @@ PostBlockGallery.propTypes = {
 };
 
 /**
- * @param {{ block: import("../../types/post_version").PostBlock }} props
+ * @param {{ block: import("../../types/post_version").PostBlockTypeMedia }} props
  */
 function PostBlockSingleMedia({ block }) {
   if (!block?.data?.items?.[0]) return null;
@@ -383,7 +383,7 @@ export default function PostBlock({ block }) {
   if (block.type === 'quote')
     return (
       <div className="incut incut-quote">
-        {block.data.text ? <div className="incut__text">{Refined(block.data.text)}</div> : null}
+        <div className="incut__text">{Refined(block.data.text)}</div>
         <div className="incut__flex-row">
           {block.data.image ? (
             <div className="incut__image" style={{ backgroundImage: `url(${Preview(block.data.image.data.uuid)})` }} />
@@ -484,6 +484,20 @@ export default function PostBlock({ block }) {
 
     return (
       <div className="social">
+        <svg viewBox="0 0 24 24" className="social__logo social__logo--tweet default-no-select">
+          <g>
+            <path
+              d="M23.643 4.937c-.835.37-1.732.62-2.675.733.962-.576 1.7-1.49 2.048-2.578-.9.534-1.897.922-2.958
+                1.13-.85-.904-2.06-1.47-3.4-1.47-2.572 0-4.658 2.086-4.658 4.66 0 .364.042.718.12
+                1.06-3.873-.195-7.304-2.05-9.602-4.868-.4.69-.63 1.49-.63 2.342 0 1.616.823 3.043
+                2.072 3.878-.764-.025-1.482-.234-2.11-.583v.06c0 2.257 1.605 4.14 3.737
+                4.568-.392.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.593 1.85 2.313
+                3.198 4.352 3.234-1.595 1.25-3.604 1.995-5.786 1.995-.376 0-.747-.022-1.112-.065
+                2.062 1.323 4.51 2.093 7.14 2.093 8.57 0 13.255-7.098 13.255-13.254
+                0-.2-.005-.402-.014-.602.91-.658 1.7-1.477 2.323-2.41z"
+            />
+          </g>
+        </svg>
         <div className="social__user">
           <div className="social__avatar" style={{ backgroundImage: `url(${tweet.user.profile_image_url_https})` }} />
           <div className="social__fullname">{tweet.user.name}</div>
@@ -527,14 +541,34 @@ export default function PostBlock({ block }) {
 
     return (
       <div className="social">
+        <svg className="social__logo default-no-select" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+          <defs>
+            <linearGradient id="linear-gradient" x1="120" y1="240" x2="120" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stopColor="#1d93d2" />
+              <stop offset="1" stopColor="#38b0e3" />
+            </linearGradient>
+          </defs>
+          <title>Telegram_logo</title>
+          <circle cx="120" cy="120" r="120" fill="url(#linear-gradient)" />
+          <path
+            d="M81.229,128.772l14.237,39.406s1.78,3.687,3.686,3.687,30.255-29.492,
+            30.255-29.492l31.525-60.89L81.737,118.6Z"
+            fill="#c8daea"
+          />
+          <path d="M100.106,138.878l-2.733,29.046s-1.144,8.9,7.754,0,17.415-15.763,17.415-15.763" fill="#a9c6d8" />
+          <path
+            d="M81.486,130.178,52.2,120.636s-3.5-1.42-2.373-4.64c.232-.664.7-1.229,2.1-2.2,6.489-4.523,
+            120.106-45.36,120.106-45.36s3.208-1.081,5.1-.362a2.766,2.766,0,0,1,1.885,2.055,9.357,9.357,0,0,1,.254,
+            2.585c-.009.752-.1,1.449-.169,2.542-.692,11.165-21.4,94.493-21.4,94.493s-1.239,4.876-5.678,
+            5.043A8.13,8.13,0,0,1,146.1,172.5c-8.711-7.493-38.819-27.727-45.472-32.177a1.27,1.27,0,0,
+            1-.546-.9c-.093-.469.417-1.05.417-1.05s52.426-46.6,53.821-51.492c.108-.379-.3-.566-.848-.4-3.482,
+            1.281-63.844,39.4-70.506,43.607A3.21,3.21,0,0,1,81.486,130.178Z"
+            fill="#fff"
+          />
+        </svg>
         <div className="social__user">
           <div className="social__avatar" style={{ backgroundImage: `url(${telegram.author.avatar_url})` }} />
-          <a
-            className="social__username"
-            href={`https://twitter.com/${telegram.author.url}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a className="social__username" href={telegram.author.url} target="_blank" rel="noopener noreferrer">
             {telegram.author.name}
           </a>
           <a className="social__date" href={telegram.url} target="_blank" rel="noopener noreferrer">
@@ -543,8 +577,9 @@ export default function PostBlock({ block }) {
           </a>
         </div>
         <div className="social__text">{StraightRefined(telegram.text || '')}</div>
-        {telegram.photos || telegram.videos ? (
-          telegram.photos?.length === 1 || telegram.videos?.length === 1 ? (
+        {telegram.photos?.length || telegram.videos?.length ? (
+          // eslint-disable-next-line no-bitwise
+          (telegram.photos?.length === 1) ^ (telegram.videos?.length === 1) ? (
             <PostBlockSingleMedia block={TelegramMediaToOsnovaMediaBlock(telegram)} />
           ) : (
             <PostBlockGallery block={TelegramMediaToOsnovaMediaBlock(telegram)} />

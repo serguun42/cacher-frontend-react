@@ -18,8 +18,12 @@ export default function PostVersion({ postVersion, showAbout }) {
         </h3>
       ) : null}
 
-      {postVersion.blocks.map((block) => (
-        <PostBlock block={block} key={`block-${block.type}-${block.data.text || JSON.stringify(block.data.items)}`} />
+      {postVersion.blocks.map((block, blockIndex) => (
+        /**
+         * https://reactjs.org/docs/lists-and-keys.html#keys
+         * Aka 'last resort', since blocks could be identical (incl. type and payload)
+         */
+        <PostBlock block={block} key={`block-${block.type}-${blockIndex.toString()}`} />
       ))}
 
       <div className="post-version__stats">

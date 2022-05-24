@@ -9,59 +9,8 @@ import { GetEntry } from '../util/api';
 import DateForPost from '../util/date-for-post';
 import LogMessageOrError from '../util/log';
 import PopupAboutSchedule from '../util/popups/about-schedule';
+import TransformEntryComments from '../util/transform-entry-comments';
 import './Entry.css';
-
-/**
- * @param {import("../../types/last_comment").LastComment[]} lastComments
- * @returns {import("../../types/comment").Comment[]}
- */
-const TransformLastCommentsToRegular = (lastComments) => {
-  /** @type {import("../../types/comment").Comment[]} */
-  const commentsAscendingOrder = lastComments
-    .map(
-      /** @returns {import("../../types/comment").Comment} */ (lastComment) => ({
-        author: {
-          id: lastComment.creator.id,
-          name: lastComment.creator.name,
-        },
-        id: lastComment.comment_id,
-        date: Math.round(new Date(lastComment.date).getTime() / 1e3),
-        dateRFC: lastComment.date,
-        html: lastComment.text.replace(
-          /\[@(\d+)\|([^\]]+)\]/g,
-          `<a href="https://${process.env.REACT_APP_SITE_LINK}/u/$1" target="_blank" rel="noopener noreferrer">@$2</a>`
-        ),
-        text: lastComment.text,
-        replyTo: lastComment.reply_to_id,
-        attaches: lastComment.media,
-        media: lastComment.media,
-        level: 0,
-        likes: null,
-      })
-    )
-    .sort((prev, next) => prev.id - next.id);
-
-  /** @type {import("../../types/comment").Comment[]} */
-  const rebuiltComments = [];
-
-  commentsAscendingOrder.forEach((comment) => {
-    if (!comment) return;
-
-    const movingComment = comment;
-
-    if (!comment.replyTo) rebuiltComments.push(movingComment);
-    else {
-      let indexOfParent = rebuiltComments.findIndex((commentToFind) => commentToFind.id === comment.replyTo);
-      if (indexOfParent < 0) indexOfParent = commentsAscendingOrder.length - 1;
-
-      movingComment.level = (rebuiltComments[indexOfParent]?.level || 0) + 1;
-
-      rebuiltComments.splice(indexOfParent + 1, 0, movingComment);
-    }
-  });
-
-  return rebuiltComments;
-};
 
 /** Second is not 1000 ms because it's Unix Timestamp */
 const SECOND_FROM_API = 1;
@@ -97,17 +46,7 @@ export default function Entry() {
   const LoadEntryFromAPI = () => {
     GetEntry(entryId)
       .then((entryFromAPI) => {
-        entryFromAPI.comments ??= {};
-
-        if (entryFromAPI.commentsVersion !== 'v2') {
-          entryFromAPI.commentsVersion = 'v2';
-          entryFromAPI.comments = {
-            [new Date(entryFromAPI.commentsFetchedDate).getTime()]: entryFromAPI.comments,
-          };
-        }
-
-        if (entryFromAPI.lastComments)
-          entryFromAPI.lastComments = TransformLastCommentsToRegular(entryFromAPI.lastComments);
+        TransformEntryComments(entryFromAPI);
 
         setEverFetched(true);
         setEntry(entryFromAPI);

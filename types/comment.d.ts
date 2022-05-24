@@ -2,8 +2,8 @@ export interface CommentAuthor {
   id: number;
   name: string;
   avatar_url: string;
-  is_verified: boolean;
   type: number;
+  is_verified: boolean;
   is_online: boolean;
   online_status_text: string;
 }
@@ -14,40 +14,65 @@ export interface CommentLikes {
   summ: number;
 }
 
-export interface CommentAdditionalData {
-  type: string;
-  url: string;
-  hasAudio: boolean;
-}
-
-export interface CommentMediaSize {
-  width: number;
-  height: number;
-  ratio: number;
-}
-
 export interface CommentMedium {
   type: number;
   imageUrl: string;
-  additionalData: CommentAdditionalData;
-  size: CommentMediaSize;
+  additionalData: {
+    type: string;
+    url: string;
+    hasAudio: boolean;
+  };
+  size: {
+    width: number;
+    height: number;
+    ratio: number;
+  };
 }
 
-export interface CommentAttachData {
-  uuid: string;
-  width: number;
-  height: number;
-  size: number;
-  type: string;
-  color: string;
-  hash: string;
-  external_service: any[];
-}
+export type CommentAttachTypeMedia = import('./post_version').PostMedia;
 
-export interface CommentAttach {
-  type: string;
-  data: CommentAttachData;
-}
+export type CommentAttachTypeVideo = import('./post_version').PostVideo;
+
+export type CommentAttachTypeTweet = {
+  type: 'tweet';
+  data: {
+    tweet_data: import('./tweet').Tweet;
+    tweet_data_encoded: string;
+    version: string;
+  };
+};
+
+export type CommentAttachTypeTelegram = {
+  type: 'telegram';
+  data: {
+    tg_data: import('./telegram_post').TelegramPost;
+    tg_data_encoded: string;
+  };
+};
+
+export type CommentAttachTypeLink = {
+  type: 'link';
+  data: {
+    url: string;
+    title: string;
+    description: string;
+    image?: PostMedia;
+    v: 1;
+  };
+};
+
+export type CommentAttachTypeDefault = {
+  type: 'default';
+  data: {};
+};
+
+export type CommentAttach =
+  | CommentAttachTypeMedia
+  | CommentAttachTypeVideo
+  | CommentAttachTypeTweet
+  | CommentAttachTypeTelegram
+  | CommentAttachTypeLink
+  | CommentAttachTypeDefault;
 
 export interface Comment {
   id: number;

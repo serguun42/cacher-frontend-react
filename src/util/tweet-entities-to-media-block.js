@@ -44,7 +44,7 @@ export default function TwitterMediaToOsnovaMediaBlock(extendedEntities) {
               .sort((prev, next) => prev.w - next.w)
               .pop();
 
-            /** @type {import("../../types/post_version").PostBlockItem} */
+            /** @type {import("../../types/post_version").PostBlockMediaItem} */
             const mediaItem = {
               title: '',
               image: {
@@ -75,7 +75,7 @@ export default function TwitterMediaToOsnovaMediaBlock(extendedEntities) {
               .sort((prev, next) => prev.w - next.w)
               .pop();
 
-            /** @type {import("../../types/post_version").PostBlockItem} */
+            /** @type {import("../../types/post_version").PostBlockMediaItem} */
             const mediaItem = {
               title: '',
               image: {

@@ -79,6 +79,8 @@
     "generate-openapi-redoc": "redoc-cli build public/docs/api.yml -o public/docs/redoc.html"
   },
   "devDependencies": {
+    "@types/react": "18.0.9",
+    "@types/react-dom": "18.0.5",
     "eslint": "8.14.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-prettier": "8.5.0",

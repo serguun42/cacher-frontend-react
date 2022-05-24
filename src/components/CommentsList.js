@@ -21,9 +21,19 @@ export default function CommentsList({ comments, entryId }) {
 
   return (
     <div className="comments">
-      {comments.map((comment) => (
-        <CommentContainer comment={comment} entryId={entryId} key={`comment-${comment.id}-${comment.is_pinned}`} />
-      ))}
+      {
+        /**
+         * https://reactjs.org/docs/lists-and-keys.html#keys
+         * Aka 'last resort', since blocks could be identical (incl. type and payload)
+         */
+        comments.map((comment, commentIndex) => (
+          <CommentContainer
+            comment={comment}
+            entryId={entryId}
+            key={`comment-${comment.id}-${commentIndex.toString()}`}
+          />
+        ))
+      }
     </div>
   );
 }
