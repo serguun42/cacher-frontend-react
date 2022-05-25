@@ -22,6 +22,7 @@ export default function Home() {
 
   /** @type {{ theme: import("../store/theme").ThemeObject }} */
   const themeState = useSelector((state) => state.theme);
+  const [everFetched, setEverFetched] = useState(false);
   const [countOfAllPosts, setCountOfAllPosts] = useState(0);
   const [todayDate, setTodayDate] = useState(new Date());
   const [todayPostsCount, setTodayPostsCount] = useState(0);
@@ -45,7 +46,8 @@ export default function Home() {
             .filter((value, index, array) => index === array.findIndex((comp) => comp.id === value.id))
         );
       })
-      .catch(LogMessageOrError);
+      .catch(LogMessageOrError)
+      .finally(() => setEverFetched(true));
   };
 
   useEffect(() => {
@@ -62,14 +64,15 @@ export default function Home() {
 
         return LoadMoreLastPost();
       })
-      .catch(LogMessageOrError);
+      .catch(LogMessageOrError)
+      .finally(() => setEverFetched(true));
   }, []);
 
   return (
     <>
       <h1 className="home__title default-title-font">Cacher {process.env.REACT_APP_SITE_LONG}</h1>
 
-      <div id="home__flex">
+      <div className="home__flex">
         <div className="home__flex__side">
           <div className="home__action-cards-container">
             <div
@@ -109,7 +112,7 @@ export default function Home() {
         </div>
 
         <div className="home__flex__side">
-          {feedPosts.length ? (
+          {everFetched ? (
             <>
               <h3 className="home__title default-title-font">Последние записи</h3>
               <Feed

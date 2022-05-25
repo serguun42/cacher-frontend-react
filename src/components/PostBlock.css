@@ -54,7 +54,7 @@
   background-color: #eee;
 }
 
-.entry .is-dark .media-single__wrapper--visible {
+.is-dark .entry .media-single__wrapper--visible {
   background-color: #242424;
 }
 
@@ -85,7 +85,7 @@
   text-align: center;
 }
 
-.entry .is-dark .media-single__desc {
+.is-dark .entry .media-single__desc {
   color: #888;
 }
 
@@ -461,7 +461,7 @@
   border: 1px solid #ddd;
 }
 
-.entry .is-dark .social {
+.is-dark .entry .social {
   border-color: #595959;
 }
 
@@ -483,7 +483,7 @@
   color: #1d9bf0;
 }
 
-.entry .is-dark .social__logo {
+.is-dark .entry .social__logo {
   color: var(--text);
 }
 
@@ -537,7 +537,7 @@
   text-decoration: none;
 }
 
-.entry .is-dark .social__date {
+.is-dark .entry .social__date {
   color: #888;
 }
 

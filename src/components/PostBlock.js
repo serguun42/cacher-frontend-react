@@ -6,8 +6,8 @@ import Refined, { StraightRefined } from '../util/html/refined';
 import PopupAboutQuiz from '../util/popups/about-quiz';
 import TelegramMediaToOsnovaMediaBlock from '../util/telegram-media-to-media-block';
 import TwitterMediaToOsnovaMediaBlock from '../util/tweet-entities-to-media-block';
-import './PostBlock.css';
 import Ripple from './Ripple';
+import './PostBlock.css';
 
 const IS_SAFARI =
   navigator.userAgent.search('Safari') > -1 &&

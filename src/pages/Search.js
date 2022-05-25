@@ -51,18 +51,24 @@ export default function Search() {
   const [loadCounter, setLoadCounter] = useState(0);
   /** @type {[import("../../types/feed_post").FeedPost[]]} */
   const [feedPosts, setFeedPosts] = useState([]);
+  const [commentId, setCommentId] = useState(0);
 
   useEffect(() => {
+    const searchQuery = searchParams.get('q');
+    setUserInput(searchQuery);
     setEntryId(0);
     setEntityId(0);
     setUrl('');
     setText('');
-
-    const searchQuery = searchParams.get('q');
     setRegex(searchParams.has('regex'));
     setCaseSensetive(searchParams.has('case-sensetive'));
     setDateStart(searchParams.get('date-start'));
     setDateEnd(searchParams.get('date-end'));
+    setNotFound(false);
+    setNoAdding(true);
+    setLoadCounter(loadCounter + 1);
+    setFeedPosts([]);
+    setCommentId(0);
 
     const isNumber = /^\d+$/.test(searchQuery);
     const isUrl = TestUrl(searchQuery);
@@ -73,16 +79,15 @@ export default function Search() {
       ? parseInt(searchingPathParts[2])
       : parseInt(searchingPathParts[1]) || parseInt(searchingPathParts[0]);
 
-    setNotFound(false);
-    setNoAdding(true);
-    setLoadCounter(loadCounter + 1);
-    setFeedPosts([]);
-    setUserInput(searchQuery);
-
     if (entryIdToSet || isNumber) setEntryId(entryIdToSet || parseInt(searchQuery));
     else if (entityIdToSet) setEntityId(entityIdToSet);
     else if (isUrl) setUrl(searchQuery);
     else setText(searchQuery);
+
+    if (isUrl) {
+      const searchParamsWithCommentId = new URL(searchQuery).searchParams;
+      if (searchParamsWithCommentId.get('comment')) setCommentId(parseInt(searchParamsWithCommentId.get('comment')));
+    }
   }, [location.search]);
 
   /**
@@ -297,7 +302,13 @@ export default function Search() {
       {entityId ? (
         <Entity entityId={entityId} dateStart={dateStart} dateEnd={dateEnd} key={`${entityId}-${loadCounter}`} />
       ) : (
-        <Feed feedPosts={feedPosts} callback={() => LoadMorePosts()} noAdding={noAdding} notFound={notFound} />
+        <Feed
+          feedPosts={feedPosts}
+          callback={() => LoadMorePosts()}
+          noAdding={noAdding}
+          notFound={notFound}
+          commentId={commentId}
+        />
       )}
 
       {isLoading ? <Loading /> : null}

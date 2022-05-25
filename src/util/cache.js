@@ -7,7 +7,7 @@ const CACHE_STORAGE_NAME = 'cacher_react_cache_storage';
  * @param {boolean} showMessage
  * @returns {void}
  */
-export const ClearCache = () => {
+export default function ClearCache() {
   caches
     .delete(CACHE_STORAGE_NAME)
     .then(() => {
@@ -21,7 +21,7 @@ export const ClearCache = () => {
 
   if ('serviceWorker' in navigator)
     navigator.serviceWorker.getRegistrations().then((registered) => registered.forEach((sw) => sw.unregister()));
-};
+}
 
 dispatcher.link('clearCache', ClearCache);
 
@@ -31,17 +31,15 @@ if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production')
   });
 
 window.addEventListener('load', () => {
+  if (process.env.NODE_ENV !== 'production') return;
+
   fetch(`/${process.env.REACT_APP_SITE_CODE}/build_hash`)
     .then((res) => {
       if (res.status === 200) return res.text();
       return Promise.reject(new Error(`Status code ${res.status} ${res.statusText}`));
     })
     .then((versionFileContents) => {
-      if (versionFileContents.trim() !== process.env.REACT_APP_BUILD_HASH) ClearCache(true);
+      if (versionFileContents.trim() !== process.env.REACT_APP_BUILD_HASH) ClearCache();
     })
     .catch(LogMessageOrError);
 });
-
-export default {
-  ClearCache,
-};

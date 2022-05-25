@@ -6,9 +6,11 @@
 
   margin: 0;
   padding: 24px 12px;
+
+  text-align: center;
 }
 
-#home__flex {
+.home__flex {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -25,7 +27,7 @@
 }
 
 @media (max-width: 1650px) {
-  #home__flex {
+  .home__flex {
     width: 100%;
     flex-direction: column;
     justify-content: unset;

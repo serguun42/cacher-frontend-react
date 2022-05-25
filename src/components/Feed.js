@@ -10,11 +10,12 @@ import './Feed.css';
  * @property {(trueNumberOfPostsInFeed: number) => {}} callback
  * @property {boolean} [noAdding]
  * @property {boolean} [notFound]
+ * @property {number} [commentId]
  */
 /**
  * @param {FeedComponentProps} props
  */
-export default function Feed({ feedPosts, callback, noAdding, notFound }) {
+export default function Feed({ feedPosts, callback, noAdding, notFound, commentId }) {
   if (!Array.isArray(feedPosts)) return null;
 
   const [calledCallbackAt, setCalledCallbackAt] = useState(0);
@@ -26,7 +27,7 @@ export default function Feed({ feedPosts, callback, noAdding, notFound }) {
   return (
     <div className="feed">
       {feedPosts.map((feedPost) => (
-        <FeedPost feedPost={feedPost} key={feedPost.id} />
+        <FeedPost feedPost={feedPost} key={feedPost.id} commentId={commentId} />
       ))}
       {!noAdding ? (
         <div
@@ -65,9 +66,11 @@ Feed.propTypes = {
   callback: PropTypes.func.isRequired,
   noAdding: PropTypes.bool,
   notFound: PropTypes.bool,
+  commentId: PropTypes.number,
 };
 
 Feed.defaultProps = {
   noAdding: false,
   notFound: false,
+  commentId: 0,
 };

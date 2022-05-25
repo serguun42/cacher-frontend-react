@@ -63,10 +63,9 @@ export default function Entity({ entityId, dateStart, dateEnd }) {
         setEntityName(entityNameToSet);
         setEntityAvatar(entityAvatarToSet);
         setEntityPosts(entityPostsToSet);
-
-        setEverFetched(true);
       })
-      .catch(LogMessageOrError);
+      .catch(LogMessageOrError)
+      .finally(() => setEverFetched(true));
   };
 
   const GetPreviousNames = () => {

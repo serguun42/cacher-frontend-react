@@ -5,10 +5,10 @@ import './FeedPost.css';
 import Esc from '../util/html/escape';
 
 /**
- * @param {{ feedPost: import("../../types/feed_post").FeedPost }} props
+ * @param {{ feedPost: import("../../types/feed_post").FeedPost, commentId?: number }} props
  */
-export default function FeedPost({ feedPost }) {
-  const postLink = `/post/${feedPost.id}`;
+export default function FeedPost({ feedPost, commentId }) {
+  const postLink = `/post/${feedPost.id}${commentId ? `?comment=${commentId}` : ''}`;
 
   return (
     <div className="feed-post default-pointer">
@@ -29,4 +29,9 @@ export default function FeedPost({ feedPost }) {
 
 FeedPost.propTypes = {
   feedPost: PropTypes.object.isRequired,
+  commentId: PropTypes.number,
+};
+
+FeedPost.defaultProps = {
+  commentId: 0,
 };

@@ -48,7 +48,6 @@ export default function Entry() {
       .then((entryFromAPI) => {
         TransformEntryComments(entryFromAPI);
 
-        setEverFetched(true);
         setEntry(entryFromAPI);
 
         /** @type {{ title: string, key: VersionEnum }[]} */
@@ -81,7 +80,8 @@ export default function Entry() {
         setCommentsVersion(availableCommentsVersionsToSet[lastIndex]?.key);
         setPreselectedCommentsIndex(lastIndex);
       })
-      .catch(LogMessageOrError);
+      .catch(LogMessageOrError)
+      .finally(() => setEverFetched(true));
   };
 
   useEffect(() => {
@@ -102,7 +102,7 @@ export default function Entry() {
     setCommentsVersion(key);
   };
 
-  return entry.id ? (
+  return everFetched ? (
     <>
       <div className="entry">
         {entryVersions.length > 1 ? (
