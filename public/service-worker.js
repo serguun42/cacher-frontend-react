@@ -2,7 +2,7 @@
 const CACHE_STORAGE_NAME = 'cacher_react_cache_storage';
 
 self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE_STORAGE_NAME).then((cache) => cache.addAll(['/', '/favicon.ico', '/tj/', '/dtf/'])));
+  e.waitUntil(caches.open(CACHE_STORAGE_NAME).then((cache) => cache.addAll(['/tj/', '/dtf/'])));
 });
 
 self.addEventListener('activate', () => {});

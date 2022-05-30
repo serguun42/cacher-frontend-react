@@ -51,7 +51,7 @@ You may create own local env (e.g. [.env.development.local](./.env.development.l
 
 ### Manifest and PWA
 
-Manifest is built with `npm run build` from [template](./config/manifest.template.json) in [`scripts/build`](./scripts/build.js#L213). PWA is controlled by [Service Worker](./public/service-worker.js) (*Cache*) and [`cache.js`](./src/util/cache.js).
+Manifest is built with `npm run build` from [template](./config/manifest.template.json) in [`scripts/build`](./scripts/build.js#L213). PWA is controlled by [Service Worker](./public/service-worker.js) (*Cache first for static, network first for API*) and [`cache.js`](./src/util/cache.js).
 
 ## API
 

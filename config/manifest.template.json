@@ -3,6 +3,7 @@
   "short_name": "Cacher %REACT_APP_SITE_SHORT%",
   "description": "Кэшированные статьи и комментарии с %REACT_APP_SITE_LONG%",
   "theme_color": "%REACT_APP_PRIMARY_COLOR%",
+  "lang": "ru",
   "icons": [
     {
       "src": "%PUBLIC_URL%/img/%REACT_APP_SITE_CODE%/icons/round/48x48.png",
@@ -103,5 +104,5 @@
   ],
   "start_url": "/%REACT_APP_SITE_CODE%/",
   "display": "standalone",
-  "background_color": "#FFFFFF"
+  "background_color": "#121212"
 }

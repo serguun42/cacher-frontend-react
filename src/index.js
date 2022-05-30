@@ -45,7 +45,7 @@ root.render(
             <Route path="/entity/:entityId" element={<Entity />} />
             <Route path="/post/:entryId" element={<Entry />} />
             <Route path="/search" element={<Search />} />
-            <Route path="docs/api/swagger" element={<Swagger />} />
+            <Route path="/docs/api/swagger" element={<Swagger />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Route>

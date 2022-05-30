@@ -421,9 +421,9 @@ export default function PostBlock({ block }) {
     );
 
     return (
-      <a href={fineLink} className="link" target="_blank" rel="noopener noreferrer">
-        <div className="link__title">{Refined(block.data.link.data.title)}</div>
-        <div className="link__fake-url">{Refined(fineLink)}</div>
+      <a href={fineLink} className="rich-link" target="_blank" rel="noopener noreferrer">
+        <div className="rich-link__title">{Refined(block.data.link.data.title)}</div>
+        <div className="rich-link__fake-url">{Refined(fineLink)}</div>
       </a>
     );
   }

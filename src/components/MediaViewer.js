@@ -48,6 +48,8 @@ export default function MediaViewer() {
   /** @type {[GalleryPayload]} */
   const [galleryState, setGalleryState] = useState({});
   /** @type {import("react").RefObject<HTMLElement>} */
+  const containerRef = createRef();
+  /** @type {import("react").RefObject<HTMLVideoElement | HTMLImageElement>} */
   const mediaRef = createRef();
 
   /**
@@ -119,6 +121,9 @@ export default function MediaViewer() {
   const hide = () => {
     setContainerState({ ...containerState, shown: false });
     setGalleryState([]);
+
+    const mediaElem = mediaRef.current;
+    if (mediaElem && 'pause' in mediaElem) mediaElem.pause();
   };
 
   /**
@@ -156,12 +161,17 @@ export default function MediaViewer() {
   useEffect(() => {
     if (!('shown' in containerState)) return;
 
-    if (containerState.shown) FadeIn(mediaRef.current, 400);
-    else FadeOut(mediaRef.current, 400);
+    if (containerState.shown) FadeIn(containerRef.current, 400);
+    else
+      FadeOut(containerRef.current, 400).then(() => {
+        setMediaState({ ...DEFAULT_MEDIA_STATE });
+        const mediaElem = mediaRef.current;
+        if (mediaElem && 'src' in mediaElem) mediaElem.src = null;
+      });
   }, [containerState.shown]);
 
   return (
-    <div className="media-container" ref={mediaRef}>
+    <div className="media-container" ref={containerRef}>
       <div className="media-obfuscator default-pointer" onClick={hide} />
       {galleryState.media?.length ? (
         <>
@@ -206,8 +216,10 @@ export default function MediaViewer() {
           height: containerState.height,
         }}
       >
-        {mediaState.type === 'photo' ? <img src={mediaState.url} className="media-body__media" /> : null}
-        {mediaState.type === 'video' ? <video src={mediaState.url} className="media-body__media" controls /> : null}
+        {mediaState.type === 'photo' ? <img src={mediaState.url} className="media-body__media" ref={mediaRef} /> : null}
+        {mediaState.type === 'video' ? (
+          <video src={mediaState.url} className="media-body__media" controls ref={mediaRef} />
+        ) : null}
         <div className="media-body__lower-bar">
           <div className="media-body__description">{mediaState.description || ''}</div>
           {galleryState.media?.length ? (

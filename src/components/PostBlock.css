@@ -33,7 +33,7 @@
   color: var(--text);
 }
 
-.entry .media-single {
+.media-single {
   display: block;
   position: relative;
   width: 100%;
@@ -41,7 +41,7 @@
   padding: 0;
 }
 
-.entry .media-single__wrapper {
+.media-single__wrapper {
   display: block;
   position: relative;
 
@@ -49,16 +49,16 @@
   min-height: 80px;
 }
 
-.entry .media-single__wrapper--visible {
+.media-single__wrapper--visible {
   padding: 16px 0;
   background-color: #eee;
 }
 
-.is-dark .entry .media-single__wrapper--visible {
+.is-dark .media-single__wrapper--visible {
   background-color: #242424;
 }
 
-.entry .media-single__media {
+.media-single__media {
   display: block;
   position: relative;
   margin: 0 auto;
@@ -72,7 +72,7 @@
   }
 }
 
-.entry .media-single__desc {
+.media-single__desc {
   display: block;
   position: relative;
   width: 100%;
@@ -85,22 +85,22 @@
   text-align: center;
 }
 
-.is-dark .entry .media-single__desc {
+.is-dark .media-single__desc {
   color: #888;
 }
 
-.entry .media-single__desc *:first-of-type {
+.media-single__desc *:first-of-type {
   margin: 0 16px 0 0;
 }
 
-.entry .media-gallery {
+.media-gallery {
   display: block;
   position: relative;
 
   width: 100%;
 }
 
-.entry .media-gallery__figure {
+.media-gallery__figure {
   display: block;
   position: absolute;
 
@@ -114,7 +114,7 @@
   background-repeat: no-repeat;
 }
 
-.entry .media-gallery__figure__left {
+.media-gallery__figure__left {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -137,7 +137,7 @@
   text-align: center;
 }
 
-.entry .media-video-pseudo-play {
+.media-video-pseudo-play {
   display: block;
   position: absolute;
 
@@ -159,11 +159,11 @@
   color: var(--primary);
 }
 
-.entry .media-video-pseudo-play .material-icons {
+.media-video-pseudo-play .material-icons {
   font-size: 32px;
 }
 
-.entry .delimiter {
+.delimiter {
   display: block;
   position: relative;
   width: 100%;
@@ -174,7 +174,7 @@
   text-align: center;
 }
 
-.entry .incut {
+.incut {
   display: block;
   position: relative;
 
@@ -187,7 +187,7 @@
   border-left: 2px solid var(--primary);
 }
 
-.entry .incut__text {
+.incut__text {
   display: block;
   position: relative;
 
@@ -197,11 +197,11 @@
   font-weight: 400;
 }
 
-.entry .incut__text:last-of-type {
+.incut__text:last-of-type {
   margin-bottom: 0;
 }
 
-.entry .incut__bigger {
+.incut__bigger {
   margin-bottom: 12px;
 
   font-size: 30px;
@@ -209,11 +209,11 @@
   font-weight: 700;
 }
 
-.entry .incut__bigger:last-of-type {
+.incut__bigger:last-of-type {
   margin-bottom: 0;
 }
 
-.entry .incut__medium {
+.incut__medium {
   font-size: 20px;
   line-height: 1.35em;
   font-weight: 700;
@@ -221,11 +221,11 @@
   margin-bottom: 12px;
 }
 
-.entry .incut__medium:last-of-type {
+.incut__medium:last-of-type {
   margin-bottom: 0;
 }
 
-.entry .incut__image {
+.incut__image {
   display: inline-block;
   position: relative;
 
@@ -241,7 +241,7 @@
   background-repeat: no-repeat;
 }
 
-.entry .incut__flex-row {
+.incut__flex-row {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -250,7 +250,7 @@
   position: relative;
 }
 
-.entry .incut__flex-column {
+.incut__flex-column {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -259,11 +259,11 @@
   position: relative;
 }
 
-.entry .bc-decoration {
+.bc-decoration {
   background-color: var(--primary-faded);
 }
 
-.entry .tag {
+.tag {
   display: inline-block;
   position: relative;
   background-color: var(--primary-faded);
@@ -272,7 +272,7 @@
   border-radius: 3px;
 }
 
-.entry .link {
+.rich-link {
   display: block;
   position: relative;
   width: fit-content;
@@ -288,7 +288,7 @@
   text-decoration: none;
 }
 
-.entry .link__title {
+.rich-link__title {
   display: block;
   position: relative;
 
@@ -303,7 +303,7 @@
   text-overflow: ellipsis;
 }
 
-.entry .link__fake-url {
+.rich-link__fake-url {
   display: block;
   position: relative;
 
@@ -317,7 +317,7 @@
   text-overflow: ellipsis;
 }
 
-.entry .video {
+.video {
   display: block;
   position: relative;
   max-width: 100%;
@@ -325,7 +325,7 @@
   padding: 0;
 }
 
-.entry .video__thumbnail {
+.video__thumbnail {
   display: block;
   position: absolute;
   width: 100%;
@@ -337,7 +337,7 @@
   background-repeat: no-repeat;
 }
 
-.entry .video__frame {
+.video__frame {
   display: block;
   position: absolute;
   width: 100%;
@@ -349,7 +349,7 @@
   border: none;
 }
 
-.entry .audio {
+.audio {
   display: block;
   position: relative;
   width: calc(100% - 32px);
@@ -357,7 +357,7 @@
   padding: 16px;
 }
 
-.entry .audio__image {
+.audio__image {
   display: block;
   position: relative;
   width: 100%;
@@ -371,14 +371,14 @@
   background-repeat: no-repeat;
 }
 
-.entry .audio__flex {
+.audio__flex {
   display: flex;
   flex-direction: row;
   justify-content: center;
   flex-wrap: wrap;
 }
 
-.entry .audio__flex__title {
+.audio__flex__title {
   display: block;
   position: relative;
   font-size: 16px;
@@ -388,11 +388,11 @@
   padding: 16px;
 }
 
-.entry .audio__flex__actual-audio {
+.audio__flex__actual-audio {
   height: 56px;
 }
 
-.entry .quiz {
+.quiz {
   display: block;
   position: relative;
 
@@ -408,7 +408,7 @@
   }
 }
 
-.entry .quiz__title {
+.quiz__title {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -421,7 +421,7 @@
   line-height: 24px;
 }
 
-.entry .quiz__about {
+.quiz__about {
   display: block;
   position: relative;
 
@@ -434,12 +434,12 @@
   border-radius: 16px;
 }
 
-.entry .quiz__about .material-icons {
+.quiz__about .material-icons {
   font-size: 16px;
   color: var(--primary);
 }
 
-.entry .quiz__options__answer {
+.quiz__options__answer {
   display: block;
   position: relative;
   font-size: 16px;
@@ -449,7 +449,7 @@
   border-bottom: 2px solid var(--primary-faded);
 }
 
-.entry .social {
+.social {
   display: block;
   position: relative;
 
@@ -461,11 +461,11 @@
   border: 1px solid #ddd;
 }
 
-.is-dark .entry .social {
+.is-dark .social {
   border-color: #595959;
 }
 
-.entry .social__logo {
+.social__logo {
   display: block;
   position: absolute;
 
@@ -479,15 +479,15 @@
   fill: currentColor;
 }
 
-.entry .social__logo--tweet {
+.social__logo--tweet {
   color: #1d9bf0;
 }
 
-.is-dark .entry .social__logo {
+.is-dark .social__logo {
   color: var(--text);
 }
 
-.entry .social__user {
+.social__user {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -501,7 +501,7 @@
   padding-right: 28px;
 }
 
-.entry .social__avatar {
+.social__avatar {
   display: block;
   position: relative;
 
@@ -515,17 +515,17 @@
   background-repeat: no-repeat;
 }
 
-.entry .social__fullname,
-.entry .social__username {
+.social__fullname,
+.social__username {
   display: block;
   position: relative;
 }
 
-.entry .social__fullname {
+.social__fullname {
   font-weight: 500;
 }
 
-.entry .social__date {
+.social__date {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -537,35 +537,35 @@
   text-decoration: none;
 }
 
-.is-dark .entry .social__date {
+.is-dark .social__date {
   color: #888;
 }
 
-.entry .social__date:hover {
+.social__date:hover {
   color: var(--primary);
 }
 
-.entry .social__date .material-icons {
+.social__date .material-icons {
   margin-left: 4px;
   font-size: 16px;
 }
 
-.entry .social__avatar,
-.entry .social__fullname,
-.entry .social__username,
-.entry .social__date {
+.social__avatar,
+.social__fullname,
+.social__username,
+.social__date {
   margin-right: 12px;
 }
 
-.entry .social__avatar:last-child,
-.entry .social__fullname:last-child,
-.entry .social__username:last-child,
-.entry .social__date:last-child {
+.social__avatar:last-child,
+.social__fullname:last-child,
+.social__username:last-child,
+.social__date:last-child {
   margin-right: 0;
 }
 
-.entry .social__text,
-.entry .social__media {
+.social__text,
+.social__media {
   display: block;
   position: relative;
 
@@ -573,12 +573,12 @@
   margin-bottom: 12px;
 }
 
-.entry .social__text:last-child,
-.entry .social__media:last-child {
+.social__text:last-child,
+.social__media:last-child {
   margin-bottom: 0;
 }
 
-.entry .social__media .media-single,
-.entry .social__media .media-single {
+.social__media .media-single,
+.social__media .media-single {
   margin-bottom: 0;
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState, createRef } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import Feed from '../components/Feed';
 import HomeIndexCard from '../components/HomeIndexCard';
 import Loading from '../components/Loading';
@@ -14,6 +14,7 @@ import { nextTheme } from '../store/theme';
 import './Home.css';
 
 export default function Home() {
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   /** @type {import("react").RefObject<HTMLCanvasElement>} */
@@ -51,21 +52,24 @@ export default function Home() {
   };
 
   useEffect(() => {
-    GetFeedStats()
-      .then((stats) => {
-        setCountOfAllPosts(stats.countOfAllPosts);
-        setTodayDate(new Date(stats.today.date) || new Date());
-        setTodayPostsCount(stats.today.count);
-        setTodayBlogPostsCount(stats.today.blogPostsCount);
-        setTodayDistinctAuthorsCount(stats.today.distinctAuthorsCount);
-        setTodayCountBySubsites(stats.today.countBySubsites);
+    const idFromOldUrlFormat = parseInt(searchParams.get('id'));
+    if (idFromOldUrlFormat) navigate(`/post/${idFromOldUrlFormat}`, { replace: true });
+    else
+      GetFeedStats()
+        .then((stats) => {
+          setCountOfAllPosts(stats.countOfAllPosts);
+          setTodayDate(new Date(stats.today.date) || new Date());
+          setTodayPostsCount(stats.today.count);
+          setTodayBlogPostsCount(stats.today.blogPostsCount);
+          setTodayDistinctAuthorsCount(stats.today.distinctAuthorsCount);
+          setTodayCountBySubsites(stats.today.countBySubsites);
 
-        CreateChart(canvasRef?.current?.getContext('2d'), stats);
+          CreateChart(canvasRef?.current?.getContext('2d'), stats);
 
-        return LoadMoreLastPost();
-      })
-      .catch(LogMessageOrError)
-      .finally(() => setEverFetched(true));
+          return LoadMoreLastPost();
+        })
+        .catch(LogMessageOrError)
+        .finally(() => setEverFetched(true));
   }, []);
 
   return (
