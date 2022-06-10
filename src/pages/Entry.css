@@ -19,6 +19,36 @@
   }
 }
 
+.entry--not-found {
+  text-align: center;
+  padding-top: 32px;
+  padding-bottom: 24px;
+}
+
+.entry--not-found__title {
+  display: block;
+  position: relative;
+
+  margin-top: 0;
+}
+
+.entry--not-found__return,
+.entry--not-found__return:visited {
+  display: block;
+  position: relative;
+
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 500;
+
+  color: var(--primary);
+}
+
+.entry--not-found__return:hover,
+.entry--not-found__return:active {
+  color: var(--text);
+}
+
 .entry__upper-info {
   display: flex;
   flex-direction: row;

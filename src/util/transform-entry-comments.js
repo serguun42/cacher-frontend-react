@@ -59,11 +59,14 @@ const TransformLastCommentsToRegular = (lastComments, usersIdToTheirAvatars) => 
 const TransformEntryComments = (entry) => {
   entry.comments ??= {};
 
-  if (entry.commentsVersion !== 'v2') {
+  if (entry.commentsVersion !== 'v2' && entry.commentsFetchedDate) {
     entry.commentsVersion = 'v2';
-    entry.comments = {
-      [new Date(entry.commentsFetchedDate).getTime()]: entry.comments,
-    };
+
+    const commentsFetchedDateMS = new Date(entry.commentsFetchedDate).getTime();
+    if (commentsFetchedDateMS)
+      entry.comments = {
+        [commentsFetchedDateMS]: entry.comments,
+      };
   }
 
   /** @type {{ [userId: number]: string }} */

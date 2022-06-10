@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import CommentsList from '../components/CommentsList';
 import Loading from '../components/Loading';
 import PostVersion from '../components/PostVersion';
@@ -22,6 +22,7 @@ export default function Entry() {
   const { entryId } = useParams();
 
   const [everFetched, setEverFetched] = useState(false);
+  const [notFound, setNotFound] = useState(false);
   /** @type {[import("../../types/entry").Entry]} */
   const [entry, setEntry] = useState({});
 
@@ -49,6 +50,10 @@ export default function Entry() {
         TransformEntryComments(entryFromAPI);
 
         setEntry(entryFromAPI);
+        if (!entryFromAPI.initial || entryFromAPI.id === -1) {
+          setNotFound(true);
+          return;
+        }
 
         /** @type {{ title: string, key: VersionEnum }[]} */
         const entryVersionsToSet = [];
@@ -103,47 +108,56 @@ export default function Entry() {
   };
 
   return everFetched ? (
-    <>
-      <div className="entry">
-        {entryVersions.length > 1 ? (
-          <div className="entry__upper-info">
-            <Switcher data={entryVersions} onOptionSelect={SwitcherOnPostSelect} prefix="Версия: " />
-
-            <div className="entry__about default-pointer" onClick={PopupAboutSchedule}>
-              <i className="material-icons">help_outline</i>
-              <Ripple />
-            </div>
-          </div>
-        ) : null}
-
-        {entry[postVersion] ? (
-          <PostVersion postVersion={entry[postVersion]} showAbout={entryVersions.length <= 1} key={postVersion} />
-        ) : null}
+    notFound ? (
+      <div className="entry entry--not-found">
+        <h3 className="entry--not-found__title default-title-font">Пост не найден!</h3>
+        <Link to="/" className="entry--not-found__return">
+          На главную
+        </Link>
       </div>
-      {availableCommentsVersions.length ? (
-        <div className="entry-comments">
-          <div className="entry-comments__upper-info">
-            <Switcher
-              data={availableCommentsVersions}
-              onOptionSelect={SwitcherOnCommentsSelect}
-              prefix="Комментарии: "
-              preselectedIndex={preselectedCommentsIndex}
-            />
+    ) : (
+      <>
+        <div className="entry">
+          {entryVersions.length > 1 ? (
+            <div className="entry__upper-info">
+              <Switcher data={entryVersions} onOptionSelect={SwitcherOnPostSelect} prefix="Версия: " />
 
-            <div className="entry__about default-pointer" onClick={PopupAboutSchedule}>
-              <i className="material-icons">help_outline</i>
-              <Ripple />
+              <div className="entry__about default-pointer" onClick={PopupAboutSchedule}>
+                <i className="material-icons">help_outline</i>
+                <Ripple />
+              </div>
             </div>
-          </div>
+          ) : null}
 
-          <CommentsList
-            comments={commentsVersion === 'last' ? entry.lastComments : entry.comments[commentsVersion]}
-            entryId={entry.id}
-            key={commentsVersion}
-          />
+          {entry[postVersion] ? (
+            <PostVersion postVersion={entry[postVersion]} showAbout={entryVersions.length <= 1} key={postVersion} />
+          ) : null}
         </div>
-      ) : null}
-    </>
+        {availableCommentsVersions.length ? (
+          <div className="entry-comments">
+            <div className="entry-comments__upper-info">
+              <Switcher
+                data={availableCommentsVersions}
+                onOptionSelect={SwitcherOnCommentsSelect}
+                prefix="Комментарии: "
+                preselectedIndex={preselectedCommentsIndex}
+              />
+
+              <div className="entry__about default-pointer" onClick={PopupAboutSchedule}>
+                <i className="material-icons">help_outline</i>
+                <Ripple />
+              </div>
+            </div>
+
+            <CommentsList
+              comments={commentsVersion === 'last' ? entry.lastComments : entry.comments[commentsVersion]}
+              entryId={entry.id}
+              key={commentsVersion}
+            />
+          </div>
+        ) : null}
+      </>
+    )
   ) : (
     <Loading />
   );
