@@ -1,12 +1,18 @@
 .field-area {
   display: block;
   position: relative;
-  width: calc(100% - 16px);
+  width: 100%;
   max-width: 400px;
   height: 64px;
   margin: 8px auto 0;
   padding: 22px 0 0;
   background-color: transparent;
+}
+
+.field-area--no-margin {
+  height: 64px;
+  margin: 0;
+  padding: 28px 0 0;
 }
 
 .field-area.field-area--no-padding {
@@ -105,20 +111,14 @@
 .field-area__icon {
   display: block;
   position: absolute;
+
   width: 48px;
   height: 48px;
   right: 0;
   top: 8px;
   padding: 12px;
+
   border-radius: 24px;
-  overflow: hidden;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
+
   color: var(--primary);
-  border: none;
-  outline: none;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
 }

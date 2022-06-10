@@ -11,11 +11,12 @@ import './InputArea.css';
  * @property {import("react").SetStateAction<string>} setState
  * @property {() => {}} [enterHandler]
  * @property {boolean} [autofocus]
+ * @property {boolean} [noMargin]
  */
 /**
  * @param {InputAreaProps} props
  */
-export default function InputArea({ preset, label, setState, enterHandler, autofocus }) {
+export default function InputArea({ preset, label, setState, enterHandler, autofocus, noMargin }) {
   const [isDirty, setIsDirty] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [inputId] = useState(`${Math.floor(Math.random() * 1e8)}${Date.now()}`);
@@ -65,7 +66,7 @@ export default function InputArea({ preset, label, setState, enterHandler, autof
   useEffect(() => () => dispatcher.call('activateHotkeys'), []);
 
   return (
-    <div className="field-area">
+    <div className={`field-area ${noMargin ? 'field-area--no-margin' : ''}`}>
       <div
         className={`field-area__textfield ${isDirty ? 'field-area__textfield--is-dirty' : ''} ${
           isFocused ? 'field-area__textfield--is-focused' : ''
@@ -89,7 +90,7 @@ export default function InputArea({ preset, label, setState, enterHandler, autof
         <div className="field-area__textfield__input-dashed-border" />
       </div>
       {isDirty && (
-        <div className="field-area__icon" onClick={ClearButtonHandler}>
+        <div className="field-area__icon default-pointer" onClick={ClearButtonHandler}>
           <span className="material-icons">clear</span>
           <Ripple />
         </div>
@@ -104,10 +105,12 @@ InputArea.propTypes = {
   setState: PropTypes.func.isRequired,
   enterHandler: PropTypes.func,
   autofocus: PropTypes.bool,
+  noMargin: PropTypes.bool,
 };
 
 InputArea.defaultProps = {
   preset: '',
   enterHandler: () => {},
   autofocus: true,
+  noMargin: false,
 };

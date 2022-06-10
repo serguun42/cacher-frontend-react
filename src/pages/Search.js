@@ -1,12 +1,11 @@
-import { createRef, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createSearchParams, useLocation, useSearchParams } from 'react-router-dom';
-import Checkbox from '../components/Checkbox';
+import Chip from '../components/Chip';
 import DatePicker from '../components/DatePicker';
 import Feed from '../components/Feed';
 import InputArea from '../components/InputArea';
 import Loading from '../components/Loading';
 import Ripple from '../components/Ripple';
-import { SlideDown, SlideUp } from '../util/animations';
 import { SearchByPostId, SearchByText, SearchByUrl } from '../util/api';
 import DateForPost from '../util/date-for-post';
 import dispatcher from '../util/dispatcher';
@@ -237,66 +236,60 @@ export default function Search() {
     LoadMorePosts();
   }, [loadCounter]);
 
-  const [shownMore, setShownMore] = useState(false);
-  const filtersRef = createRef();
-
   return (
     <div className="search">
       <div className="search__entry-card">
-        <InputArea
-          preset={userInput}
-          label="Поиск"
-          setState={setUserInput}
-          autofocus={!userInput}
-          enterHandler={SearchWithParams}
-          key={location}
-        />
-        <div className="search__switch-line">
-          <div
-            className="search__switch-filters default-pointer default-no-select"
-            onClick={() => {
-              if (shownMore) SlideUp(filtersRef.current, 400);
-              else SlideDown(filtersRef.current, 400, { display: 'flex' });
-
-              setShownMore(!shownMore);
-            }}
-          >
-            <div>{shownMore ? 'Свернуть' : 'Фильтры'}</div>
-            <i className="material-icons">{shownMore ? 'unfold_less' : 'unfold_more'}</i>
-            <Ripple />
-          </div>
-          <div className="search__filters-divider" />
-          <div className="search__about default-pointer" onClick={PopupAboutSearch}>
-            <i className="material-icons">help_outline</i>
-            <Ripple />
-          </div>
-        </div>
-        <div className="search__filters" ref={filtersRef}>
-          <Checkbox state={regex} setState={setRegex} label="Поиск с помощью регулярных выражений" />
-          <Checkbox state={caseSensetive} setState={setCaseSensetive} label="Чувствительность к регистру" />
-          <Checkbox
-            state={!!dateStart || !!dateEnd}
-            setState={SwitchDateRanges}
-            label={`Ограничить диапазон дат${
-              !!dateStart || !!dateEnd
-                ? ` (${dateStart ? DateForPost(dateStart, false, true) : '…'} – ${
-                    dateEnd ? DateForPost(dateEnd, false, true) : '…'
-                  })`
-                : ''
-            }`}
+        <div className="search__input-line">
+          <InputArea
+            preset={userInput}
+            label="Поиск"
+            setState={setUserInput}
+            autofocus={!userInput}
+            enterHandler={SearchWithParams}
+            key={location}
+            noMargin
           />
+          <button
+            type="button"
+            className={`search__button ${
+              userInput ? 'search__button--active default-pointer' : 'search__button--inactive disabled'
+            } default-no-select`}
+            onClick={SearchWithParams}
+          >
+            <div className="search__button__text">Искать</div>
+            <div className="material-icons">search</div>
+            {userInput && <Ripple inheritTextColor />}
+          </button>
         </div>
-        <button
-          type="button"
-          className={`search__button ${
-            userInput ? 'search__button--active default-pointer' : 'search__button--inactive'
-          } default-no-select`}
-          onClick={SearchWithParams}
-        >
-          Искать
-          <div className="material-icons">search</div>
-          {userInput && <Ripple inheritTextColor />}
-        </button>
+        <div className="search__switch-line default-scroll-transparent">
+          <div className="search__switch-line__wrapper">
+            <div className="search__about default-pointer default-no-select" onClick={PopupAboutSearch}>
+              <i className="material-icons">help_outline</i>
+              <div className="search__about__label">О поиске</div>
+              <Ripple />
+            </div>
+
+            <Chip state={regex} setState={setRegex} label="Регулярные выражения" />
+            <Chip state={caseSensetive} setState={setCaseSensetive} label="Чувствительность к регистру" />
+            <Chip
+              state={!!dateStart || !!dateEnd}
+              setState={SwitchDateRanges}
+              label={
+                !dateStart && !dateEnd
+                  ? 'Выбрать даты'
+                  : dateStart && !dateEnd
+                  ? `Искать с ${DateForPost(dateStart, false, true).toLowerCase()}`
+                  : !dateStart && dateEnd
+                  ? `Искать до ${DateForPost(dateEnd, false, true).toLowerCase()}`
+                  : `Искать с ${DateForPost(dateStart, false, true).toLowerCase()} до ${DateForPost(
+                      dateEnd,
+                      false,
+                      true
+                    ).toLowerCase()}`
+              }
+            />
+          </div>
+        </div>
       </div>
 
       {entityId ? (

@@ -1,0 +1,44 @@
+.chip {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+
+  width: fit-content;
+  height: 32px;
+
+  padding: 0 8px;
+  margin-right: 8px;
+  flex-shrink: 0;
+
+  background-color: var(--primary);
+  color: var(--card);
+
+  border-radius: 16px;
+}
+
+.chip:last-of-type {
+  margin-right: 0;
+}
+
+.chip--inactive {
+  color: #888;
+  background-color: #ddd;
+}
+
+.is-dark .chip--inactive {
+  background-color: #242424;
+}
+
+.chip__label {
+  display: block;
+  position: relative;
+  flex-shrink: 1;
+
+  padding: 6px;
+
+  font-size: 16px;
+  line-height: 20px;
+}
