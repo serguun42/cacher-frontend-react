@@ -87,7 +87,7 @@ function PostBlockVideo({ block }) {
           title={`Youtube ${videoData.external_service.id}`}
         />
       ) : null}
-      {videoRequested ? null : (
+      {!videoRequested && (
         <div
           className="video__thumbnail default-pointer"
           style={{ backgroundImage: `url(${Media(videoData.thumbnail.data.uuid)})` }}

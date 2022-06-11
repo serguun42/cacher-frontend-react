@@ -103,43 +103,30 @@ export default function Search() {
        */
       const CheckDateFormat = (date) => /^\d{4}-\d{2}-\d{2}$/.test(date);
 
-      const PickDateEnd = () => {
-        /** @type {import("../components/DatePicker").DatePickerPayload} */
-        const dateEndSetterPayload = {
-          title: 'Конец диапазона дат',
-          acceptAction(date) {
-            if (!CheckDateFormat(date)) dispatcher.call('message', 'Неверный формат даты 🤷‍♂️');
-            else setDateEnd(date);
-          },
-          denyAction() {
-            setDateEnd('');
-          },
-        };
+      /** @type {import("../components/DatePicker").DatePickerPayload} */
+      const dateRangeSetterPayload = {
+        acceptAction(start, end) {
+          if (start) {
+            if (!CheckDateFormat(start)) {
+              dispatcher.call('message', 'Неверный формат даты 🤷‍♂️');
+              setDateStart('');
+            } else setDateStart(start);
+          } else setDateStart('');
 
-        dispatcher.call('datePicker', dateEndSetterPayload);
+          if (end) {
+            if (!CheckDateFormat(end)) {
+              dispatcher.call('message', 'Неверный формат даты 🤷‍♂️');
+              setDateEnd('');
+            } else setDateEnd(end);
+          } else setDateEnd('');
+        },
+        denyAction() {
+          setDateStart('');
+          setDateEnd('');
+        },
       };
 
-      const PickDateStart = () => {
-        /** @type {import("../components/DatePicker").DatePickerPayload} */
-        const dateStartSetterPayload = {
-          title: 'Начало диапазона дат',
-          acceptAction(date) {
-            if (!CheckDateFormat(date)) dispatcher.call('message', 'Неверный формат даты 🤷‍♂️');
-            else setDateStart(date);
-
-            setTimeout(() => PickDateEnd(), 450);
-          },
-          denyAction() {
-            setDateStart('');
-
-            setTimeout(() => PickDateEnd(), 450);
-          },
-        };
-
-        dispatcher.call('datePicker', dateStartSetterPayload);
-      };
-
-      PickDateStart();
+      dispatcher.call('datePicker', dateRangeSetterPayload);
     }
   };
 
@@ -243,6 +230,7 @@ export default function Search() {
           <InputArea
             preset={userInput}
             label="Поиск"
+            placeholder="Заголовок, автор, ссылка, т.д."
             setState={setUserInput}
             autofocus={!userInput}
             enterHandler={SearchWithParams}
@@ -269,8 +257,6 @@ export default function Search() {
               <Ripple />
             </div>
 
-            <Chip state={regex} setState={setRegex} label="Регулярные выражения" />
-            <Chip state={caseSensetive} setState={setCaseSensetive} label="Чувствительность к регистру" />
             <Chip
               state={!!dateStart || !!dateEnd}
               setState={SwitchDateRanges}
@@ -281,6 +267,8 @@ export default function Search() {
                   ? `Искать с ${DateForPost(dateStart, false, true).toLowerCase()}`
                   : !dateStart && dateEnd
                   ? `Искать до ${DateForPost(dateEnd, false, true).toLowerCase()}`
+                  : dateEnd === dateStart
+                  ? `Искать только ${DateForPost(dateStart, false, true).toLowerCase()}`
                   : `Искать с ${DateForPost(dateStart, false, true).toLowerCase()} до ${DateForPost(
                       dateEnd,
                       false,
@@ -288,6 +276,8 @@ export default function Search() {
                     ).toLowerCase()}`
               }
             />
+            <Chip state={regex} setState={setRegex} label="Регулярные выражения" />
+            <Chip state={caseSensetive} setState={setCaseSensetive} label="Чувствительность к регистру" />
           </div>
         </div>
       </div>
@@ -304,7 +294,7 @@ export default function Search() {
         />
       )}
 
-      {isLoading ? <Loading /> : null}
+      {isLoading && <Loading />}
 
       <DatePicker />
     </div>

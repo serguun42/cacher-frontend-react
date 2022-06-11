@@ -101,7 +101,7 @@ export default function Home() {
             </div>
           </div>
 
-          {countOfAllPosts ? (
+          {countOfAllPosts && (
             <HomeIndexCard
               todayDate={todayDate}
               blogPostsCount={todayBlogPostsCount}
@@ -110,7 +110,7 @@ export default function Home() {
               distinctAuthorsCount={todayDistinctAuthorsCount}
               todayPostsCount={todayPostsCount}
             />
-          ) : null}
+          )}
 
           <canvas id="home__feed-stats-canvas" ref={canvasRef} width={canvasSize} height={canvasSize / 2} />
         </div>

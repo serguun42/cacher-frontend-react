@@ -1,4 +1,34 @@
-const MONTHS_SHORT_GENETIVE = ['янв', 'фев', 'мар', 'апр', 'мая', 'июня', 'июля', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+export const MONTHS_FULL_INFINITIVE = [
+  'Январь',
+  'Февраль',
+  'Март',
+  'Апрель',
+  'Май',
+  'Июнь',
+  'Июль',
+  'Август',
+  'Сентябрь',
+  'Октябрь',
+  'Ноябрь',
+  'Декабрь',
+];
+
+export const MONTHS_SHORT_GENETIVE = [
+  'янв',
+  'фев',
+  'мар',
+  'апр',
+  'мая',
+  'июня',
+  'июля',
+  'авг',
+  'сен',
+  'окт',
+  'ноя',
+  'дек',
+];
+
+export const SHORT_DAY_OF_WEEK = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
 
 /**
  * @param {number | string | Date} date
@@ -15,6 +45,8 @@ export default function DateForPost(date, toISO = false, onlyDate = false) {
       : typeof date === 'string'
       ? new Date(date)
       : new Date(date < 1e7 ? date * 1e6 : date * 1e3);
+
+  if (!postDate.getTime()) return '…';
 
   if (toISO) {
     if (onlyDate) return postDate.toISOString().split('T')[0];

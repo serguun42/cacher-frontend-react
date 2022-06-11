@@ -7,16 +7,29 @@ import './InputArea.css';
 /**
  * @typedef {Object} InputAreaProps
  * @property {string} [preset]
+ * @property {"text" | "number" | "password" | "etc"} [type = "text"]
  * @property {string} label
+ * @property {string} [placeholder]
  * @property {import("react").SetStateAction<string>} setState
  * @property {() => {}} [enterHandler]
  * @property {boolean} [autofocus]
  * @property {boolean} [noMargin]
+ * @property {boolean} [noClean]
  */
 /**
  * @param {InputAreaProps} props
  */
-export default function InputArea({ preset, label, setState, enterHandler, autofocus, noMargin }) {
+export default function InputArea({
+  preset,
+  type,
+  label,
+  placeholder,
+  setState,
+  enterHandler,
+  autofocus,
+  noMargin,
+  noClean,
+}) {
   const [isDirty, setIsDirty] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [inputId] = useState(`${Math.floor(Math.random() * 1e8)}${Date.now()}`);
@@ -66,7 +79,7 @@ export default function InputArea({ preset, label, setState, enterHandler, autof
   useEffect(() => () => dispatcher.call('activateHotkeys'), []);
 
   return (
-    <div className={`field-area ${noMargin ? 'field-area--no-margin' : ''}`}>
+    <div className={`field-area ${noMargin ? 'field-area--no-margin' : ''} ${noClean ? 'field-area--no-clean' : ''}`}>
       <div
         className={`field-area__textfield ${isDirty ? 'field-area__textfield--is-dirty' : ''} ${
           isFocused ? 'field-area__textfield--is-focused' : ''
@@ -75,8 +88,9 @@ export default function InputArea({ preset, label, setState, enterHandler, autof
         <input
           className="field-area__textfield__input"
           id={`field-area__textfield__input-${inputId}`}
-          type="text"
-          inputMode="text"
+          type={type}
+          inputMode={type}
+          placeholder={(isFocused && placeholder) || ''}
           onInput={OnInput}
           onFocus={OnFocus}
           onBlur={OnBlur}
@@ -89,7 +103,7 @@ export default function InputArea({ preset, label, setState, enterHandler, autof
         <div className="field-area__textfield__input-border" />
         <div className="field-area__textfield__input-dashed-border" />
       </div>
-      {isDirty && (
+      {isDirty && !noClean && (
         <div className="field-area__icon default-pointer" onClick={ClearButtonHandler}>
           <span className="material-icons">clear</span>
           <Ripple />
@@ -101,16 +115,22 @@ export default function InputArea({ preset, label, setState, enterHandler, autof
 
 InputArea.propTypes = {
   preset: PropTypes.string,
+  type: PropTypes.string,
   label: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
   setState: PropTypes.func.isRequired,
   enterHandler: PropTypes.func,
   autofocus: PropTypes.bool,
   noMargin: PropTypes.bool,
+  noClean: PropTypes.bool,
 };
 
 InputArea.defaultProps = {
   preset: '',
+  type: 'text',
+  placeholder: '',
   enterHandler: () => {},
   autofocus: true,
   noMargin: false,
+  noClean: false,
 };
