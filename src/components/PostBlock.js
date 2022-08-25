@@ -8,6 +8,7 @@ import TelegramMediaToOsnovaMediaBlock from '../util/telegram-media-to-media-blo
 import TwitterMediaToOsnovaMediaBlock from '../util/tweet-entities-to-media-block';
 import Ripple from './Ripple';
 import './PostBlock.css';
+import ScrollToAnchor from '../util/scroll-to-anchor';
 
 const IS_SAFARI =
   navigator.userAgent.search('Safari') > -1 &&
@@ -353,19 +354,44 @@ PostBlockSingleMedia.propTypes = {
  * @param {{ block: import("../../types/post_version").PostBlock }} props
  */
 export default function PostBlock({ block }) {
-  if (block.type === 'text') return <p>{Refined(block.data.text)}</p>;
+  /** @type {import("react").MutableRefObject<HTMLElement>} */
+  const postBlockRef = useRef(null);
+  useEffect(() => {
+    if (window.location.hash.length < 1) return;
 
-  if (block.type === 'header') return <h4>{Refined(block.data.text)}</h4>;
+    const anchorFromHash = window.location.hash.slice(1);
+    const anchorElem = postBlockRef.current;
+
+    if (block.anchor === anchorFromHash && anchorElem) {
+      ScrollToAnchor({ anchorElem });
+    }
+  }, [postBlockRef]);
+
+  if (block.type === 'text')
+    return (
+      <p data-anchor={block.anchor || null} ref={postBlockRef}>
+        {Refined(block.data.text)}
+      </p>
+    );
+
+  if (block.type === 'header')
+    return (
+      <h4 data-anchor={block.anchor || null} ref={postBlockRef}>
+        {Refined(block.data.text)}
+      </h4>
+    );
 
   if (block.type === 'media' && block.data.items)
-    if (block.data.items.length === 1) return <PostBlockSingleMedia block={block} />;
-    else return <PostBlockGallery block={block} />;
+    if (block.data.items.length === 1)
+      return <PostBlockSingleMedia data-anchor={block.anchor || null} refs={postBlockRef} block={block} />;
+    else return <PostBlockGallery data-anchor={block.anchor || null} refs={postBlockRef} block={block} />;
 
-  if (block.type === 'video' && block.data?.video?.data) return <PostBlockVideo block={block} />;
+  if (block.type === 'video' && block.data?.video?.data)
+    return <PostBlockVideo data-anchor={block.anchor || null} refs={postBlockRef} block={block} />;
 
   if (block.type === 'incut')
     return (
-      <div className="incut">
+      <div className="incut" data-anchor={block.anchor || null} ref={postBlockRef}>
         <div className={block.data.text?.length < 300 ? 'incut__medium' : 'incut__text'}>
           {Refined(block.data.text)}
         </div>
@@ -374,7 +400,7 @@ export default function PostBlock({ block }) {
 
   if (block.type === 'number')
     return (
-      <div className="incut">
+      <div className="incut" data-anchor={block.anchor || null} ref={postBlockRef}>
         <div className="incut__bigger">{Refined(block.data.number)}</div>
         <div className="incut__text">{Refined(block.data.title)}</div>
       </div>
@@ -382,7 +408,7 @@ export default function PostBlock({ block }) {
 
   if (block.type === 'quote')
     return (
-      <div className="incut incut-quote">
+      <div className="incut incut-quote" data-anchor={block.anchor || null} ref={postBlockRef}>
         <div className="incut__text">{Refined(block.data.text)}</div>
         <div className="incut__flex-row">
           {block.data.image ? (
@@ -398,7 +424,7 @@ export default function PostBlock({ block }) {
 
   if (block.type === 'person')
     return (
-      <div className="incut incut-person">
+      <div className="incut incut-person" data-anchor={block.anchor || null} ref={postBlockRef}>
         {block.data.text ? <div className="incut__text">{Refined(block.data.text)}</div> : null}
         <div className="incut__flex-row">
           {block.data.image ? (
@@ -412,7 +438,12 @@ export default function PostBlock({ block }) {
       </div>
     );
 
-  if (block.type === 'delimiter') return <div className="delimiter default-no-select">***</div>;
+  if (block.type === 'delimiter')
+    return (
+      <div className="delimiter default-no-select" data-anchor={block.anchor || null} ref={postBlockRef}>
+        ***
+      </div>
+    );
 
   if (block.type === 'link' && block.data?.link?.data) {
     const fineLink = (block.data.link.data.url || '').replace(
@@ -420,17 +451,36 @@ export default function PostBlock({ block }) {
       ''
     );
 
+    const DESCRIPTION_LIMIT_CHARS = 100;
+    const trimmedDescription = (block.data.link.data.description || '').replace(
+      new RegExp(`^(.{${DESCRIPTION_LIMIT_CHARS}}\\S*).*`),
+      '$1'
+    );
+
     return (
-      <a href={fineLink} className="rich-link" target="_blank" rel="noopener noreferrer">
+      <a
+        href={fineLink}
+        className="rich-link"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-anchor={block.anchor || null}
+        ref={postBlockRef}
+      >
         <div className="rich-link__title">{Refined(block.data.link.data.title)}</div>
-        <div className="rich-link__fake-url">{Refined(fineLink)}</div>
+        <div className="rich-link__description">
+          {Refined(trimmedDescription)}
+          {block.data.link.data.description !== trimmedDescription ? '…' : null}
+        </div>
+        <div className="rich-link__fake-url">
+          <i className="material-icons">launch</i> {Refined(fineLink)}
+        </div>
       </a>
     );
   }
 
   if (block.type === 'list' && Array.isArray(block.data.items))
     return (
-      <ul>
+      <ul data-anchor={block.anchor || null} ref={postBlockRef}>
         {block.data.items.map((line) => (
           <li key={`ul-line-${line}`}>{Refined(line)}</li>
         ))}
@@ -439,7 +489,7 @@ export default function PostBlock({ block }) {
 
   if (block.type === 'quiz')
     return (
-      <div className="quiz">
+      <div className="quiz" data-anchor={block.anchor || null} ref={postBlockRef}>
         <div className="quiz__title">
           <div>{Refined(block.data.title)}</div>
           <div className="quiz__about default-pointer" onClick={PopupAboutQuiz}>
@@ -459,7 +509,7 @@ export default function PostBlock({ block }) {
 
   if (block.type === 'audio')
     return (
-      <div className="audio">
+      <div className="audio" data-anchor={block.anchor || null} ref={postBlockRef}>
         {block.data.image ? (
           <div
             className="audio__image"
@@ -483,7 +533,7 @@ export default function PostBlock({ block }) {
     if (!tweet) return null;
 
     return (
-      <div className="social">
+      <div className="social" data-anchor={block.anchor || null} ref={postBlockRef}>
         <svg viewBox="0 0 24 24" className="social__logo social__logo--tweet default-no-select">
           <g>
             <path
@@ -540,7 +590,7 @@ export default function PostBlock({ block }) {
     if (!telegram) return null;
 
     return (
-      <div className="social">
+      <div className="social" data-anchor={block.anchor || null} ref={postBlockRef}>
         <svg className="social__logo default-no-select" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
           <defs>
             <linearGradient id="linear-gradient" x1="120" y1="240" x2="120" gradientUnits="userSpaceOnUse">
@@ -591,7 +641,7 @@ export default function PostBlock({ block }) {
 
   if (block.type === 'instagram')
     return (
-      <div className="incut">
+      <div className="incut" data-anchor={block.anchor || null} ref={postBlockRef}>
         <a href={block.data?.instagram?.data?.box_data?.url} target="_blank" rel="noopener noreferrer">
           Пост в Instagram
         </a>
@@ -606,9 +656,19 @@ export default function PostBlock({ block }) {
       </div>
     );
 
-  if (block.type === 'code') return <pre>{Refined(block.data.text)}</pre>;
+  if (block.type === 'code')
+    return (
+      <pre data-anchor={block.anchor || null} ref={postBlockRef}>
+        {Refined(block.data.text)}
+      </pre>
+    );
 
-  if (block.data?.text) return <p>{Refined(block.data.text)}</p>;
+  if (block.data?.text)
+    return (
+      <p data-anchor={block.anchor || null} ref={postBlockRef}>
+        {Refined(block.data.text)}
+      </p>
+    );
 
   return null;
 }

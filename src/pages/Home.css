@@ -61,7 +61,7 @@
 
 @media (max-width: 800px) {
   .home__action-cards-container {
-    margin: 16px auto;
+    margin: 8px auto;
   }
 }
 
@@ -88,7 +88,7 @@
 
 @media (max-width: 800px) {
   .home__action-card {
-    width: calc(50% - 8px);
+    width: calc(50% - 4px);
     border-radius: 4px;
   }
 }

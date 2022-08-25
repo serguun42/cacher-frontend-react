@@ -5,9 +5,9 @@ import CommentContainer from './CommentContainer';
 import './CommentsList.css';
 
 /**
- * @param {{ comments: import("../../types/comment").Comment[] }} props
+ * @param {{ comments: import("../../types/comment").Comment[], entryId: number, authorId: number }} props
  */
-export default function CommentsList({ comments, entryId }) {
+export default function CommentsList({ comments, entryId, authorId }) {
   if (!comments?.length)
     return (
       <div className="comments">
@@ -34,6 +34,7 @@ export default function CommentsList({ comments, entryId }) {
           <CommentContainer
             comment={comment}
             entryId={entryId}
+            authorId={authorId}
             key={`comment-${comment.id}-${commentIndex.toString()}`}
           />
         ))
@@ -45,9 +46,11 @@ export default function CommentsList({ comments, entryId }) {
 CommentsList.propTypes = {
   comments: PropTypes.array,
   entryId: PropTypes.number,
+  authorId: PropTypes.number,
 };
 
 CommentsList.defaultProps = {
   comments: [],
   entryId: 0,
+  authorId: 0,
 };

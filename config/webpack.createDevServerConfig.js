@@ -86,6 +86,7 @@ function createDevServerConfig(proxy, allowedHost) {
           middleware: createProxyMiddleware({
             target: process.env.API_PROXY_TARGET,
             changeOrigin: true,
+            secure: /^https:/.test(process.env.API_PROXY_TARGET) && !/\blocalhost\b/.test(process.env.API_PROXY_TARGET),
             headers: {
               Cookie: `session_id=${process.env.API_PROXY_COOKIE}`,
             },

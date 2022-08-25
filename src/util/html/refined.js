@@ -1,5 +1,6 @@
 import HTMLReactParser from 'html-react-parser';
 import sanitize from 'sanitize-html';
+import SafeURL from '../safe-url';
 
 /**
  * @param {string} readyHtml
@@ -39,18 +40,38 @@ export default function Refined(raw) {
     .replace(/>/g, '&gt;')
     .replace(/\\#/g, '#')
     .replace(/\\_/g, '_')
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, b, c) => {
-      return `<a href="${c.replace(/#/g, '\u00ad\u00ad\u00ad#')}" target="_blank" rel="noopener noreferrer">${b.replace(
-        /#/g,
-        '\u00ad\u00ad\u00ad#'
-      )}</a>`;
-    })
-    .replace(/#([\p{L}\w]+)([^\p{L}\w]|$)/giu, (a, b, _, d, e) => {
-      if (!(e.slice(d - 3, d) === '\u00ad\u00ad\u00ad'))
+    .replace(
+      /\[([^\]]+)\]\(([^)]+)\)/g,
+      /**
+       * @param {string} _wholeMatch Whole string
+       * @param {string} linkTitle
+       * @param {string} linkUrl
+       * @returns {string}
+       */
+      (_wholeMatch, linkTitle, linkUrl) => {
+        const escapedTitle = linkTitle.replace(/#/g, '\u00ad\u00ad\u00ad#');
+        const escapedUrl = linkUrl.replace(/#/g, '\u00ad\u00ad\u00ad#');
+        const filteredUrl = new RegExp(`^https?://${process.env.REACT_APP_SITE_LINK}/redirect`, 'i').test(escapedUrl)
+          ? SafeURL(escapedUrl).searchParams.get('url') || escapedUrl
+          : escapedUrl;
+
+        if (/^\u00ad\u00ad\u00ad#/i.test(filteredUrl)) {
+          const anchorUrl = new URL(window.location);
+          anchorUrl.hash = filteredUrl.replace(/\u00ad\u00ad\u00ad#/i, '\u2028\u2028\u2028');
+          return `<a href="${anchorUrl.href}" target="_blank" rel="noopener noreferrer">${escapedTitle}</a>`;
+        }
+
+        return `<a href="${filteredUrl}" target="_blank" rel="noopener noreferrer">${escapedTitle}</a>`;
+      }
+    )
+    .replace(/#([\p{L}\w]+)([^\p{L}\w]|$)/giu, (wholeMatch, tag, _afterTag, tagStartIndex, entireString) => {
+      if (!(entireString.slice(tagStartIndex - 3, tagStartIndex) === '\u00ad\u00ad\u00ad'))
         // eslint-disable-next-line max-len
-        return `<a href="https://${process.env.REACT_APP_SITE_LINK}/tag/${b}" target="_blank" rel="noopener noreferrer">#${b}</a> `;
-      return a;
+        return `<a href="https://${process.env.REACT_APP_SITE_LINK}/tag/${tag}" target="_blank" rel="noopener noreferrer">#${tag}</a> `;
+
+      return wholeMatch;
     })
+    .replace(/%E2%80%A8%E2%80%A8%E2%80%A8/g, '')
     .replace(new RegExp(`\\\\(<a href="https://${process.env.REACT_APP_SITE_LINK}/tag/)`, 'g'), '$1')
     .replace(/\\\*/g, '✱')
     .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')

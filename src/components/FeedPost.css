@@ -23,7 +23,7 @@
 
 @media (max-width: 800px) {
   .feed-post {
-    margin: 0 auto 16px;
+    margin: 0 auto 12px;
     padding: 6px 16px 12px;
 
     border-radius: 4px;

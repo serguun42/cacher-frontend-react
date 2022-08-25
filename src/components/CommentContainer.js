@@ -8,9 +8,9 @@ import PostBlock from './PostBlock';
 import './CommentContainer.css';
 
 /**
- * @param {{ comment: import("../../types/comment").Comment, entryId: number }} props
+ * @param {{ comment: import("../../types/comment").Comment, entryId: number, authorId: number }} props
  */
-export default function CommentContainer({ comment, entryId }) {
+export default function CommentContainer({ comment, entryId, authorId }) {
   if (!comment) return null;
   if (!entryId) {
     const params = useParams();
@@ -36,7 +36,7 @@ export default function CommentContainer({ comment, entryId }) {
         <div className="comment-dots" key={`comment-${comment.id}-${comment.is_pinned}-level-${idx}`} />
       ))}
       <div className="comment">
-        <CommentInfoLine comment={comment} entryId={entryId} />
+        <CommentInfoLine comment={comment} entryId={entryId} authorId={authorId} />
         <div className="comment__text">
           {StraightRefined(
             comment.html
@@ -49,6 +49,12 @@ export default function CommentContainer({ comment, entryId }) {
               .join('\n') || ''
           )}
         </div>
+        {comment.donate ? (
+          <div className="comment__donate default-no-select">
+            {comment.donate.count}
+            {' '}₽
+          </div>
+        ) : null}
         {comment.attaches?.length ? (
           <>
             {comment.attaches.filter((attach) => attach.type === 'image').length ? (
@@ -89,8 +95,10 @@ export default function CommentContainer({ comment, entryId }) {
 CommentContainer.propTypes = {
   comment: PropTypes.object.isRequired,
   entryId: PropTypes.number,
+  authorId: PropTypes.number,
 };
 
 CommentContainer.defaultProps = {
   entryId: 0,
+  authorId: 0,
 };

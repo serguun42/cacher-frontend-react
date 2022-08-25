@@ -278,23 +278,30 @@
   width: fit-content;
 
   width: 100%;
-  max-width: 450px;
+  max-width: 600px;
 
-  padding: 12px 20px;
+  padding: 16px;
   margin: 16px auto;
 
   border-radius: 8px;
-  border: 1px solid var(--primary);
+  border: 2px solid var(--primary);
   text-decoration: none;
+}
+
+.rich-link:hover,
+.rich-link:focus {
+  background-color: var(--primary-faded);
+  color: var(--text);
+  outline: none;
 }
 
 .rich-link__title {
   display: block;
   position: relative;
 
-  font-size: 18px;
-  font-weight: 500;
-  line-height: 24px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 22px;
   margin-bottom: 2px;
 
   text-decoration: none;
@@ -303,18 +310,57 @@
   text-overflow: ellipsis;
 }
 
+.rich-link__description {
+  display: block;
+  position: relative;
+
+  max-height: 44px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  margin-bottom: 7px;
+
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .rich-link__fake-url {
   display: block;
   position: relative;
 
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 400;
   line-height: 16px;
 
-  text-decoration: underline;
+  text-decoration: none;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  color: #595959;
+}
+
+.is-dark .rich-link__fake-url {
+  color: #888;
+}
+
+.rich-link:hover .rich-link__fake-url,
+.rich-link:focus .rich-link__fake-url {
+  color: var(--text);
+}
+
+.rich-link__fake-url .material-icons {
+  display: inline-block;
+  position: relative;
+
+  width: 16px;
+  height: 16px;
+  margin-right: 2px;
+
+  font-size: 16px;
+  line-height: 16px;
+  vertical-align: -3px;
 }
 
 .video {

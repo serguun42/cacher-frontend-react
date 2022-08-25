@@ -96,7 +96,7 @@ export interface Comment {
   source_id: number;
   entry?: any;
   highlight: string;
-  donate?: any;
+  donate?: { count: number };
 }
 
 export default Comment;

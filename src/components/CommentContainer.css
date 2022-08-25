@@ -8,18 +8,44 @@
   width: 100%;
 }
 
-@keyframes container-animation {
+:root {
+  --comment-animation-color: var(--primary-faded);
+}
+
+:root .is-dark {
+  --comment-animation-color: #555;
+}
+
+/* @keyframes container-animation {
   0% {
     background-color: transparent;
   }
   25% {
-    background-color: var(--primary-faded);
+    background-color: var(--comment-animation-color);
   }
   50% {
     background-color: transparent;
   }
   75% {
-    background-color: var(--primary-faded);
+    background-color: var(--comment-animation-color);
+  }
+  100% {
+    background-color: transparent;
+  }
+} */
+
+@keyframes container-animation {
+  0% {
+    background-color: transparent;
+  }
+  15% {
+    background-color: var(--comment-animation-color);
+  }
+  50% {
+    background-color: var(--comment-animation-color);
+  }
+  85% {
+    background-color: var(--comment-animation-color);
   }
   100% {
     background-color: transparent;
@@ -92,8 +118,8 @@
   width: 100%;
   margin-bottom: 12px;
 
-	word-break: break-word;
-	word-wrap: break-word;
+  word-break: break-word;
+  word-wrap: break-word;
 }
 
 .comment__text:last-child {
@@ -111,9 +137,30 @@
 
 .comment a,
 .comment a:visited {
-	color: var(--primary);
+  color: var(--primary);
 }
 
 .comment a:hover {
-	color: var(--text);
+  color: var(--text);
+}
+
+.comment__donate {
+  display: block;
+  position: relative;
+
+  width: fit-content;
+  height: 28px;
+  margin-bottom: 8px;
+  padding: 0 12px;
+
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 28px;
+  white-space: nowrap;
+
+  border-radius: 5px;
+
+  background-color: #447;
+  color: #fff;
+  box-shadow: 0 1px 2px rgba(68, 68, 119, 0.28), inset 0 -1px 0 rgba(0, 0, 0, 0.12);
 }

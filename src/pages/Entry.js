@@ -152,6 +152,7 @@ export default function Entry() {
             <CommentsList
               comments={commentsVersion === 'last' ? entry.lastComments : entry.comments[commentsVersion]}
               entryId={entry.id}
+              authorId={entry[postVersion].author?.id}
               key={commentsVersion}
             />
           </div>
