@@ -70,7 +70,7 @@
 .comment-info-line__elem {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: flex-start;
   align-items: center;
   position: relative;
@@ -80,6 +80,10 @@
 
   font-size: inherit;
   text-decoration: none;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .comment-info-line__elem--before-area {
@@ -167,6 +171,8 @@
 }
 
 .comment-info-line__elem__verified {
+  flex-shrink: 0;
+
   width: 16px;
   height: 16px;
 

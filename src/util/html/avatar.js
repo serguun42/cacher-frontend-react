@@ -12,6 +12,8 @@ const IS_SAFARI =
  * @returns {string}
  */
 export default function Avatar(avatarUrl, bigger = false) {
+  if (!avatarUrl) avatarUrl = `https://${process.env.REACT_APP_CDN_DOMAIN}/2b1829fb-5f49-494f-b193-7a4257bde6f0/`;
+
   return `url("${avatarUrl}${
     avatarUrl.indexOf(process.env.REACT_APP_CDN_DOMAIN) > -1
       ? `-/scale_crop/${bigger ? '200x200' : '64x64'}/-/format/${IS_SAFARI ? 'jpg' : 'webp'}/`

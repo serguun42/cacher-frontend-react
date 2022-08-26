@@ -466,11 +466,15 @@ export default function PostBlock({ block }) {
         data-anchor={block.anchor || null}
         ref={postBlockRef}
       >
-        <div className="rich-link__title">{Refined(block.data.link.data.title)}</div>
-        <div className="rich-link__description">
-          {Refined(trimmedDescription)}
-          {block.data.link.data.description !== trimmedDescription ? '…' : null}
-        </div>
+        {block.data.link.data.title ? (
+          <div className="rich-link__title">{Refined(block.data.link.data.title)}</div>
+        ) : null}
+        {block.data.link.data.description ? (
+          <div className="rich-link__description">
+            {Refined(trimmedDescription)}
+            {block.data.link.data.description !== trimmedDescription ? '…' : null}
+          </div>
+        ) : null}
         <div className="rich-link__fake-url">
           <i className="material-icons">launch</i> {Refined(fineLink)}
         </div>

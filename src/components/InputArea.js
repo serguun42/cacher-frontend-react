@@ -44,9 +44,10 @@ export default function InputArea({
     setIsDirty(!!value);
     setState(value || '');
   };
-  /** @param {KeyboardEvent} */
+
+  /** @param {KeyboardEvent} e */
   const OnKeyUp = (e) => {
-    if (e.code === 'Enter' || e.key === 'Enter') if (typeof enterHandler === 'function') enterHandler(e);
+    if (e.key === 'Enter' && typeof enterHandler === 'function') enterHandler(e);
   };
 
   const OnFocus = () => {
@@ -89,7 +90,6 @@ export default function InputArea({
           className="field-area__textfield__input"
           id={`field-area__textfield__input-${inputId}`}
           type={type}
-          inputMode={type}
           placeholder={(isFocused && placeholder) || ''}
           onInput={OnInput}
           onFocus={OnFocus}

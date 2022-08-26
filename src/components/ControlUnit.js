@@ -20,8 +20,8 @@ export default function ControlUnitToHide() {
    * @param {KeyboardEvent} e
    */
   const onKeyDown = (e) => {
-    if (e.code === 'KeyS' && store.getState().hotkeys.hotkeysActive && searchButtonRef.current)
-      OpenSearch(searchButtonRef.current)
+    if (e.code === 'KeyS' && store.getState().hotkeys.hotkeysActive)
+      OpenSearch(document.getElementById('home__action-card--search') || searchButtonRef.current)
         .then(() => navigate('/search'))
         .catch(LogMessageOrError);
   };

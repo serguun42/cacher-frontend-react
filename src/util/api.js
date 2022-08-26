@@ -2,6 +2,7 @@ import dispatcher from './dispatcher';
 import LogMessageOrError from './log';
 import PopupNoLogin from './popups/no-login';
 import PopupNoPermission from './popups/no-permission';
+import stateSaver from './state-saver';
 
 const API_VERSION = 'v1';
 const API_ROOT = new URL(`/api/${API_VERSION}/${process.env.REACT_APP_SITE_CODE}/`, window.location.origin);
@@ -34,18 +35,29 @@ const BuildURL = (method, queries, root = API_ROOT) => {
  * @returns {Promise<import("../types").DefaultError>}
  */
 export const FetchMethod = (method, queries = {}, options = {}) => {
-  return fetch(BuildURL(method, queries), options).then((res) => {
-    if (res.status === 401) PopupNoLogin();
-    else if (res.status === 403) PopupNoPermission();
-    else if (res.status === 429) dispatcher.call('message', 'Слишком много запросов ⌛');
+  const builtURL = BuildURL(method, queries);
 
-    try {
-      return res.json().then((response) => (response?.error ? Promise.reject(response) : Promise.resolve(response)));
-    } catch (e) {
-      LogMessageOrError(e);
-      return Promise.reject(res.status);
+  if (stateSaver.get(builtURL)) return Promise.resolve(JSON.parse(stateSaver.get(builtURL)));
+
+  return fetch(builtURL, options).then(
+    /** @param {Response} res */ (res) => {
+      if (res.status === 401) PopupNoLogin();
+      else if (res.status === 403) PopupNoPermission();
+      else if (res.status === 429) dispatcher.call('message', 'Слишком много запросов ⌛');
+
+      try {
+        return res.json().then((response) => {
+          if (response?.error) return Promise.reject(response);
+
+          stateSaver.save(builtURL, JSON.stringify(response));
+          return Promise.resolve(response);
+        });
+      } catch (e) {
+        LogMessageOrError(e);
+        return Promise.reject(res.status);
+      }
     }
-  });
+  );
 };
 
 /**

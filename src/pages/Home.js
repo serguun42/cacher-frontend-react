@@ -81,6 +81,7 @@ export default function Home() {
           <div className="home__action-cards-container">
             <div
               className="home__action-card home__action-card--accent default-pointer default-no-select"
+              id="home__action-card--search"
               onClick={(e) =>
                 OpenSearch(e.currentTarget)
                   .then(() => navigate('/search'))
