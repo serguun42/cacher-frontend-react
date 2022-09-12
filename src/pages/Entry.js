@@ -9,13 +9,14 @@ import { GetEntry } from '../util/api';
 import DateForPost from '../util/date-for-post';
 import LogMessageOrError from '../util/log';
 import PopupAboutSchedule from '../util/popups/about-schedule';
+import { CustomTitle, ResetTitle } from '../util/title';
 import TransformEntryComments from '../util/transform-entry-comments';
 import './Entry.css';
 
-/** Second is not 1000 ms because it's Unix Timestamp */
+/** Second is not 1000 because it's Unix Timestamp with scale of 1 second, not 1000 milliseconds */
 const SECOND_FROM_API = 1;
-const MINUTE = SECOND_FROM_API * 60;
-const HOUR = MINUTE * 60;
+const MINUTE_FROM_API = SECOND_FROM_API * 60;
+const HOUR_FROM_API = MINUTE_FROM_API * 60;
 
 export default function Entry() {
   /** @type {{ entryId: string }} */
@@ -31,6 +32,7 @@ export default function Entry() {
   const [entryVersions, setEntryVersions] = useState([]);
   /** @type {[VersionEnum]} */
   const [postVersion, setPostVersion] = useState('initial');
+  const [preselectedPostVersionIndex, setPreselectedPostVersionIndex] = useState(0);
 
   /** @type {[{ title: string, key: string }[]]} */
   const [availableCommentsVersions, setAvailableCommentsVersions] = useState([]);
@@ -55,17 +57,35 @@ export default function Entry() {
           return;
         }
 
-        /** @type {{ title: string, key: VersionEnum }[]} */
-        const entryVersionsToSet = [];
-        if (entryFromAPI.initial)
-          entryVersionsToSet.push({ title: DateForPost(entryFromAPI.initial.date), key: 'initial' });
-        if (entryFromAPI.tenminutes)
-          entryVersionsToSet.push({
-            title: DateForPost(entryFromAPI.tenminutes.date + MINUTE * 10),
-            key: 'tenminutes',
-          });
-        if (entryFromAPI.onehour)
-          entryVersionsToSet.push({ title: DateForPost(entryFromAPI.onehour.date + HOUR), key: 'onehour' });
+        CustomTitle((entryFromAPI.onehour || entryFromAPI.tenminutes || entryFromAPI.initial)?.title);
+
+        const entryVersionsToSet = [
+          entryFromAPI.initial
+            ? {
+                title: DateForPost(entryFromAPI.initial.date),
+                key: 'initial',
+              }
+            : null,
+          entryFromAPI.tenminutes
+            ? {
+                title: DateForPost(entryFromAPI.tenminutes.date + MINUTE_FROM_API * 10),
+                key: 'tenminutes',
+              }
+            : null,
+          entryFromAPI.onehour
+            ? {
+                title: DateForPost(entryFromAPI.onehour.date + HOUR_FROM_API),
+                key: 'onehour',
+              }
+            : null,
+        ].filter(Boolean);
+
+        if (entryVersionsToSet.length > 1) {
+          const lastPostVersionIndex = entryVersionsToSet.length - 1;
+          setPostVersion(entryVersionsToSet[lastPostVersionIndex]?.key);
+          setPreselectedPostVersionIndex(lastPostVersionIndex);
+        }
+
         setEntryVersions(entryVersionsToSet);
 
         /** @type {{ title: string, key: string }[]} */
@@ -78,12 +98,13 @@ export default function Entry() {
           .map((value) => ({
             title: value === 'last' ? '«живые»' : DateForPost(parseInt(value) / 1000),
             key: value,
-          }));
+          }))
+          .sort((prev, next) => (next.key === 'last' ? 1 : prev.key - next.key));
 
         setAvailableCommentsVersions(availableCommentsVersionsToSet);
-        const lastIndex = availableCommentsVersionsToSet.length - 1;
-        setCommentsVersion(availableCommentsVersionsToSet[lastIndex]?.key);
-        setPreselectedCommentsIndex(lastIndex);
+        const lastCommentsVersionIndex = availableCommentsVersionsToSet.length - 1;
+        setCommentsVersion(availableCommentsVersionsToSet[lastCommentsVersionIndex]?.key);
+        setPreselectedCommentsIndex(lastCommentsVersionIndex);
       })
       .catch(LogMessageOrError)
       .finally(() => setEverFetched(true));
@@ -92,6 +113,8 @@ export default function Entry() {
   useEffect(() => {
     if (!everFetched) LoadEntryFromAPI();
   }, [everFetched]);
+
+  useEffect(() => () => ResetTitle(), []);
 
   /**
    * @param {VersionEnum} key
@@ -120,7 +143,12 @@ export default function Entry() {
         <div className="entry">
           {entryVersions.length > 1 ? (
             <div className="entry__upper-info">
-              <Switcher data={entryVersions} onOptionSelect={SwitcherOnPostSelect} prefix="Версия: " />
+              <Switcher
+                data={entryVersions}
+                onOptionSelect={SwitcherOnPostSelect}
+                prefix="Версия: "
+                preselectedIndex={preselectedPostVersionIndex}
+              />
 
               <div className="entry__about default-pointer" onClick={PopupAboutSchedule}>
                 <i className="material-icons">help_outline</i>

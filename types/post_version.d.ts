@@ -139,6 +139,34 @@ export type PostBlockTypeVideo = {
   hidden: boolean;
 };
 
+export type PostBlockTypeAudio = {
+  type: 'audio';
+  data: {
+    title: string;
+    hash: string;
+    image: PostMedia;
+    audio: {
+      type: 'audio';
+      data: {
+        uuid: string;
+        filename: string;
+        size: number;
+        audio_info: {
+          bitrate: number;
+          duration: number;
+          channel: string;
+          framesCount: number;
+          format: 'mp3';
+          listens_count: number;
+        };
+      };
+    };
+  };
+  anchor: string;
+  cover: boolean;
+  hidden: boolean;
+};
+
 export type PostBlockTypeIncut = {
   type: 'incut';
   data: {
@@ -268,6 +296,7 @@ export type PostBlock =
   | PostBlockTypeList
   | PostBlockTypeMedia
   | PostBlockTypeVideo
+  | PostBlockTypeAudio
   | PostBlockTypeIncut
   | PostBlockTypeNumber
   | PostBlockTypeQuote

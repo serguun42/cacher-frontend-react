@@ -8,9 +8,17 @@ import PostBlock from './PostBlock';
 import './CommentContainer.css';
 
 /**
- * @param {{ comment: import("../../types/comment").Comment, entryId: number, authorId: number }} props
+ * @typedef {object} CommentContainerProps
+ * @property {import("../../types/comment").Comment} comment
+ * @property {boolean} isLast
+ * @property {number[]} hiddenBranchDepths
+ * @property {number} entryId
+ * @property {number} authorId
  */
-export default function CommentContainer({ comment, entryId, authorId }) {
+/**
+ * @param {CommentContainerProps} props
+ */
+export default function CommentContainer({ comment, isLast, hiddenBranchDepths, entryId, authorId }) {
   if (!comment) return null;
   if (!entryId) {
     const params = useParams();
@@ -30,11 +38,20 @@ export default function CommentContainer({ comment, entryId, authorId }) {
     }
   }, [commentRef]);
 
+  const commentVisibleDepth = Math.min(comment.level, 5);
+
   return (
     <div className="comment-container" data-comment-id={comment.id} ref={commentRef}>
-      {Array.from({ length: Math.min(comment.level, 5) }, (_, idx) => (
-        <div className="comment-dots" key={`comment-${comment.id}-${comment.is_pinned}-level-${idx}`} />
-      ))}
+      <div className="comment-branches">
+        {Array.from({ length: commentVisibleDepth }, (_, idx) => (
+          <div
+            className={`comment-branch ${isLast && commentVisibleDepth === idx + 1 ? 'comment-branch--tail' : ''} ${
+              commentVisibleDepth < comment.level ? 'comment-branch--infinite-tail' : ''
+            } ${hiddenBranchDepths.includes(idx) ? 'comment-branch--hidden' : ''}`}
+            key={`comment-${comment.id}-${comment.is_pinned}-level-${idx}`}
+          />
+        ))}
+      </div>
       <div className="comment">
         <CommentInfoLine comment={comment} entryId={entryId} authorId={authorId} />
         <div className="comment__text">
@@ -94,11 +111,15 @@ export default function CommentContainer({ comment, entryId, authorId }) {
 
 CommentContainer.propTypes = {
   comment: PropTypes.object.isRequired,
+  isLast: PropTypes.bool,
+  hiddenBranchDepths: PropTypes.arrayOf(PropTypes.number),
   entryId: PropTypes.number,
   authorId: PropTypes.number,
 };
 
 CommentContainer.defaultProps = {
+  isLast: false,
+  hiddenBranchDepths: [],
   entryId: 0,
   authorId: 0,
 };
