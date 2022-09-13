@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import GetForm from '../util/get-form';
+import IS_MOBILE from '../util/is-mobile';
 import CommentContainer from './CommentContainer';
 import './CommentsList.css';
 
@@ -38,6 +39,8 @@ export default function CommentsList({ comments, entryId, authorId }) {
 
   /** @type {[Set<number>]} */
   const [hiddenBranchDepth] = useState(new Set());
+  /** @type {[number[]]} */
+  const [parentComments] = useState([]);
 
   return (
     <div className="comments">
@@ -56,11 +59,17 @@ export default function CommentsList({ comments, entryId, authorId }) {
           if (isLast && comment.level) hiddenBranchDepth.add(comment.level - 1);
           if (!comment.replyTo) while (hiddenBranchDepth.size) hiddenBranchDepth.clear();
 
+          if (!IS_MOBILE) {
+            if (!parentComments.includes(comment.replyTo) && comment.replyTo) parentComments.push(comment.replyTo);
+            while (parentComments.length > comment.level) parentComments.pop();
+          }
+
           return (
             <CommentContainer
               comment={comment}
               isLast={isLast}
               hiddenBranchDepths={[...hiddenBranchDepth]}
+              parentComments={[...parentComments]}
               entryId={entryId}
               authorId={authorId}
               key={`comment-${comment.id}-${commentIndex.toString()}`}
