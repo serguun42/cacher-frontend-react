@@ -4,7 +4,7 @@ import PopupNoLogin from './popups/no-login';
 import PopupNoPermission from './popups/no-permission';
 import stateSaver from './state-saver';
 
-const API_VERSION = 'v1';
+const API_VERSION = 'v1.1';
 const API_ROOT = new URL(`/api/${API_VERSION}/${process.env.REACT_APP_SITE_CODE}/`, window.location.origin);
 
 /**

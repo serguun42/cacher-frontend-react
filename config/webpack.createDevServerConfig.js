@@ -105,8 +105,8 @@ function createDevServerConfig(proxy, allowedHost) {
        * We do this in development to avoid hitting the production cache if
        * it used the same host and port.
        *
-       * TODO: Rewrite to decide whether using Service Worker IN APP CODE, NOT DEV WEBPACK SCRIPTS
-       * TODO: @see https://github.com/serguun42/Social-Picker-Vue/blob/master/src/util/cache.js#L34
+       * Not using anyway because we are not registering SW in development mode
+       * (src/util/cache.js)
        */
       middlewares.push({
         name: 'noop-service-worker',

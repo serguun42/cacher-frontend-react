@@ -5,6 +5,10 @@ const getPublicUrlOrPath = require('react-dev-utils/getPublicUrlOrPath');
 // Make sure any symlinks in the project folder are resolved:
 // https://github.com/facebook/create-react-app/issues/637
 const appDirectory = fs.realpathSync(process.cwd());
+/**
+ * @param {string} relativePath
+ * @returns {string}
+ */
 const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath);
 
 // We use `PUBLIC_URL` environment variable or "homepage" field to infer
@@ -35,9 +39,14 @@ const moduleFileExtensions = [
   'jsx',
 ];
 
-// Resolve file paths in the same order as webpack
+/**
+ * Resolve file paths in the same order as webpack
+ *
+ * @param {(relativePath: string) => string} resolveFn
+ * @param {string} filePath
+ * @returns {string}
+ */
 const resolveModule = (resolveFn, filePath) => {
-  // eslint-disable-next-line no-shadow
   const extension = moduleFileExtensions.find((extension) => fs.existsSync(resolveFn(`${filePath}.${extension}`)));
 
   if (extension) {
@@ -68,7 +77,8 @@ module.exports = {
   appNodeModules: resolveApp('node_modules'),
   appWebpackCache: resolveApp('node_modules/.cache'),
   appTsBuildInfoFile: resolveApp('node_modules/.cache/tsconfig.tsbuildinfo'),
-  swSrc: resolveModule(resolveApp, 'src/service-worker'),
+  serviceWorkerSource: resolveModule(resolveApp, 'src/service-worker'),
+  serviceWorkerDest: resolveApp(path.join(buildPath, 'service-worker.js')),
   publicUrlOrPath,
 };
 

@@ -68,7 +68,7 @@ checkBrowsers(paths.appPath, isInteractive)
     copyFaviconForSite();
     // Create manifest for site
     createManifest();
-    
+
     // Start the webpack build
     return build(previousFileSizes);
   })
@@ -220,25 +220,22 @@ function createManifest() {
     const builtPart = {};
 
     Object.keys(manifestPart).forEach((key) => {
-      if (typeof manifestPart[key] === "object") {
+      if (typeof manifestPart[key] === 'object') {
         if (manifestPart[key] instanceof Array)
           builtPart[key] = manifestPart[key].map((subValue) => ManifestTemplateHandler(subValue));
-        else
-          builtPart[key] = ManifestTemplateHandler(manifestPart[key]);
-      } else if (typeof manifestPart[key] === "string")
+        else builtPart[key] = ManifestTemplateHandler(manifestPart[key]);
+      } else if (typeof manifestPart[key] === 'string')
         builtPart[key] = manifestPart[key]
-          .replace(/%([\w\.]+)%/g, (_match, variable) =>
-            process.env[variable] || "–"
-          );
-      else
-        builtPart[key] = manifestPart[key];
+          .replace(/%([\w\.]+)%/g, (_match, variable) => process.env[variable] || '–')
+          .replace(/\/+/g, '/');
+      else builtPart[key] = manifestPart[key];
     });
 
     return builtPart;
   };
-  
+
   const templateManifest = JSON.parse(fs.readFileSync(paths.appTemplateManifest));
   const builtManifest = ManifestTemplateHandler(templateManifest);
 
-  fs.writeFileSync(paths.appBuildManifest, JSON.stringify(builtManifest, false, "\t"));
+  fs.writeFileSync(paths.appBuildManifest, JSON.stringify(builtManifest, false, '\t'));
 }

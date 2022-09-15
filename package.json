@@ -62,13 +62,13 @@
     "sanitize-html": "2.7.0",
     "sass-loader": "12.6.0",
     "semver": "7.3.7",
+    "serguun42-webpack-service-worker-plugin": "github:serguun42/serguun42-webpack-service-worker-plugin",
     "source-map-loader": "3.0.1",
     "style-loader": "3.3.1",
-    "swagger-ui-react": "4.11.1",
+    "swagger-ui-react": "4.14.0",
     "terser-webpack-plugin": "5.3.6",
     "webpack": "5.72.0",
-    "webpack-manifest-plugin": "4.1.1",
-    "workbox-webpack-plugin": "6.5.3"
+    "webpack-manifest-plugin": "4.1.1"
   },
   "scripts": {
     "start": "node scripts/start.js",

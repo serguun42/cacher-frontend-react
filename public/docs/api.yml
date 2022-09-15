@@ -2,7 +2,7 @@ openapi: 3.0.0
 
 info:
   description: API used in new Cacher on React
-  version: '1.0.0'
+  version: '1.1.0'
   contact:
     name: Cacher TJournal & DTF
     url: https://cacher.serguun42.ru
@@ -14,10 +14,10 @@ info:
     url: '/tj/img/tj/wide.png'
 
 servers:
-  - description: Cacher Production, API v1, site – TJournal
-    url: https://cacher.serguun42.ru/api/v1/tj/
-  - description: Cacher Production, API v1, site – DTF
-    url: https://cacher.serguun42.ru/api/v1/dtf/
+  - description: Cacher Production, API v1.1, site – TJournal
+    url: https://cacher.serguun42.ru/api/v1.1/tj/
+  - description: Cacher Production, API v1.1, site – DTF
+    url: https://cacher.serguun42.ru/api/v1.1/dtf/
 
 tags:
   - name: feed
@@ -349,9 +349,9 @@ paths:
         - in: query
           name: url
           schema:
-            type: number
+            type: string
           required: true
-          description: url
+          description: URL of anything to search by
         - in: query
           name: skip
           schema:
@@ -465,6 +465,18 @@ paths:
             example: '2022-05-15'
           required: false
           description: Limit by date, ending with this parameter (inclusively)
+        - in: query
+          name: additionalEntityId
+          schema:
+            type: number
+          required: false
+          description: Limits search query by entity's ID (like search 'cake' from user '/u/123456') – use in only times of desperation from plenty results
+        - in: query
+          name: additionalUrl
+          schema:
+            type: string
+          required: false
+          description: Limits search query by URL (like search 'cake' in subsite '/s/kitchen') – use in only times of desperation from plenty results
       responses:
         '200':
           description: OK

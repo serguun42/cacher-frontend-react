@@ -1,10 +1,11 @@
 /* eslint-disable no-empty */
 /**
- * @param {string} urlLike
+ * @param {string | URL} urlLike
  * @returns {URL}
  */
 export default function SafeURL(urlLike) {
-  if (!urlLike || typeof urlLike !== 'string') return new URL(`https://${process.env.REACT_APP_SITE_LINK}`);
+  if (urlLike instanceof URL) return urlLike;
+  if (!urlLike || typeof urlLike !== 'string') return new URL(window.location.origin);
 
   try {
     const url = new URL(urlLike);
@@ -13,10 +14,10 @@ export default function SafeURL(urlLike) {
   } catch (e) {}
 
   try {
-    const url = new URL(urlLike, `https://${process.env.REACT_APP_SITE_LINK}`);
+    const url = new URL(urlLike, window.location.origin);
     url.pathname = url.pathname.replace(/\/+/g, '/');
     return url;
   } catch (e) {}
 
-  return new URL(`https://${process.env.REACT_APP_SITE_LINK}`);
+  return new URL(window.location.origin);
 }
