@@ -22,20 +22,18 @@ export default function CommentInfoLine({ comment, entryId, authorId }) {
 
   return (
     <div className="comment-info-line">
-      {comment.author.avatar_url ? (
-        <Link
-          to={`/entity/${comment.author.id}`}
-          style={{
-            backgroundImage: Avatar(comment.author.avatar_url),
-          }}
-          className="comment-info-line__avatar default-no-select"
-        />
-      ) : null}
+      <Link
+        to={`/entity/${comment.author.id}`}
+        style={{
+          backgroundImage: Avatar(comment.author.avatar_url),
+        }}
+        className="comment-info-line__avatar default-no-select"
+      />
       <div className="comment-info-line__vertical">
         <div className="comment-info-line__top">
           <Link
             to={`/entity/${comment.author.id}`}
-            className="comment-info-line__elem comment-info-line--highlight comment-info-line__elem--before-area"
+            className="comment-info-line__elem comment-info-line--highlight comment-info-line__elem--name"
           >
             <div className="comment-info-line__text">{Esc(comment.author.name)}</div>
             {comment.author.is_verified ? (
@@ -51,8 +49,8 @@ export default function CommentInfoLine({ comment, entryId, authorId }) {
           </Link>
           {comment.replyTo > 0 ? (
             <div
-              className={`comment-info-line__elem comment-info-line__elem--with-area
-              comment-info-line--hover default-pointer`}
+              className="comment-info-line__elem comment-info-line__elem--with-area
+              comment-info-line--hover default-pointer"
               onClick={() => ScrollToComment({ commentId: comment.replyTo })}
             >
               <div className="material-icons comment-info-line__text comment-info-line--action">arrow_upward</div>
@@ -99,18 +97,16 @@ export default function CommentInfoLine({ comment, entryId, authorId }) {
           </div>
         </div>
       </div>
-      {comment.likes ? (
-        <div className="comment-info-line__elem comment-info-line__likes default-no-select">
-          <div
-            className={`comment-info-line__text comment-info-line__text--karma ${
-              comment.likes.summ > 0 ? 'karma--positive' : comment.likes.summ < 0 ? 'karma--negative' : ''
-            }`}
-          >
-            {comment.likes.summ > 0 ? '+' : ''}
-            {comment.likes.summ}
-          </div>
+      <div className="comment-info-line__elem comment-info-line__likes default-no-select">
+        <div
+          className={`comment-info-line__text comment-info-line__text--karma ${
+            comment.likes?.summ > 0 ? 'karma--positive' : comment.likes?.summ < 0 ? 'karma--negative' : ''
+          }`}
+        >
+          {comment.likes?.summ > 0 ? '+' : ''}
+          {comment.likes?.summ || 0}
         </div>
-      ) : null}
+      </div>
     </div>
   );
 }

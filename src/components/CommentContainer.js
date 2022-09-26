@@ -40,10 +40,23 @@ export default function CommentContainer({ comment, isLast, hiddenBranchDepths, 
     }
   }, [commentRef]);
 
+  const ScrollIfNecessary = () => {
+    const commentElem = commentRef.current;
+    if (!commentElem) return;
+
+    const { top, bottom } = commentElem.getBoundingClientRect();
+    const isInViewport = top >= 0 && bottom <= window.innerHeight;
+
+    if (!isInViewport) ScrollToComment({ commentElem });
+  };
+
   const commentVisibleDepth = Math.min(comment.level, 5);
 
   const [isHighlighted, setHighlighted] = useState(false);
   const [highlightDepth, setHighlightDepth] = useState(-1);
+
+  const [isHidden, setHidden] = useState(false);
+  const [isExpandable, setExpandable] = useState(false);
 
   /**
    * @param {number} branchDepth
@@ -57,8 +70,10 @@ export default function CommentContainer({ comment, isLast, hiddenBranchDepths, 
   };
 
   /**
+   * `parentCommentId` is missing for cases when UI got stuck
+   * all branches highlight should be turned off
+   *
    * @param {number} branchDepth
-   * @param {number} parentCommentId
    */
   const OnBranchLeave = (branchDepth) => {
     setHighlighted(false);
@@ -66,31 +81,67 @@ export default function CommentContainer({ comment, isLast, hiddenBranchDepths, 
   };
 
   /**
-   * @param {number} branchDepth
+   * @param {number} parentCommentId
    */
-  const OnMouseOver = (branchDepth) => {
-    dispatcher.call('branchOver', branchDepth, parentComments[branchDepth]);
+  const OnBranchHide = (parentCommentId) => {
+    if (parentComments.includes(parentCommentId)) setHidden(true);
+    else if (parentCommentId === comment.id) {
+      setExpandable(true);
+      ScrollIfNecessary();
+    }
+  };
+
+  /**
+   * @param {number} parentCommentId
+   */
+  const OnBranchShow = (parentCommentId) => {
+    if (parentComments.includes(parentCommentId)) {
+      setHidden(false);
+      setExpandable(false);
+    } else if (parentCommentId === comment.id) setExpandable(false);
   };
 
   /**
    * @param {number} branchDepth
    */
-  const OnMouseLeave = (branchDepth) => {
-    dispatcher.call('branchLeave', branchDepth, parentComments[branchDepth]);
-  };
+  const OnBranchLevelMouseOver = (branchDepth) =>
+    dispatcher.call('branchOver', branchDepth, parentComments[branchDepth]);
+
+  /**
+   * @param {number} branchDepth
+   */
+  const OnBranchLevelMouseLeave = (branchDepth) => dispatcher.call('branchLeave', branchDepth);
+
+  /**
+   * @param {number} branchDepth
+   */
+  const OnBranchLevelClick = (branchDepth) => dispatcher.call('branchHide', parentComments[branchDepth]);
+
+  /**
+   * @param {number} parentCommentId
+   */
+  const OnExpandClick = (parentCommentId) => dispatcher.call('branchShow', parentCommentId);
 
   useEffect(() => {
     dispatcher.link('branchOver', OnBranchOver);
     dispatcher.link('branchLeave', OnBranchLeave);
+    dispatcher.link('branchHide', OnBranchHide);
+    dispatcher.link('branchShow', OnBranchShow);
 
     return () => {
       dispatcher.unlink('branchOver', OnBranchOver);
       dispatcher.unlink('branchLeave', OnBranchLeave);
+      dispatcher.unlink('branchHide', OnBranchHide);
+      dispatcher.unlink('branchShow', OnBranchShow);
     };
   });
 
   return (
-    <div className="comment-container" data-comment-id={comment.id} ref={commentRef}>
+    <div
+      className={`comment-container ${isHidden ? 'comment-container--hidden' : ''}`}
+      data-comment-id={comment.id}
+      ref={commentRef}
+    >
       <div className="comment-branches">
         {Array.from({ length: commentVisibleDepth }, (_, idx) => (
           <div
@@ -100,14 +151,15 @@ export default function CommentContainer({ comment, isLast, hiddenBranchDepths, 
               isHighlighted && highlightDepth === idx ? 'comment-branch--is-highlighted' : ''
             }`}
             key={`comment-${comment.id}-${comment.is_pinned}-level-${idx}`}
-            onMouseOver={() => OnMouseOver(idx)}
-            onMouseLeave={() => OnMouseLeave(idx)}
-            onFocus={() => OnMouseOver(idx)}
-            onBlur={() => OnMouseLeave(idx)}
+            onMouseOver={() => OnBranchLevelMouseOver(idx)}
+            onMouseLeave={() => OnBranchLevelMouseLeave(idx)}
+            onFocus={() => OnBranchLevelMouseOver(idx)}
+            onBlur={() => OnBranchLevelMouseLeave(idx)}
+            onClick={() => OnBranchLevelClick(idx)}
           />
         ))}
       </div>
-      <div className="comment">
+      <div className={`comment comment--spacing-${commentVisibleDepth}`}>
         <CommentInfoLine comment={comment} entryId={entryId} authorId={authorId} />
         <div className="comment__text">
           {StraightRefined(
@@ -158,6 +210,15 @@ export default function CommentContainer({ comment, isLast, hiddenBranchDepths, 
                 />
               ))}
           </>
+        ) : null}
+        {isExpandable ? (
+          <div
+            className="comment__expand-button default-pointer default-no-select"
+            onClick={() => OnExpandClick(comment.id)}
+          >
+            <span>Развернуть ветку</span>
+            <i className="material-icons">unfold_more</i>
+          </div>
         ) : null}
       </div>
     </div>

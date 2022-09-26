@@ -1,7 +1,7 @@
 .comment-info-line {
   display: flex;
   flex-direction: row;
-  flex-wrap: no-wrap;
+  flex-wrap: nowrap;
   justify-content: flex-start;
   align-items: center;
   position: relative;
@@ -34,7 +34,7 @@
   align-items: flex-start;
   position: relative;
 
-  max-width: calc(100% - 50px);
+  max-width: calc(100% - 70px);
   height: 100%;
   flex: 1 1 auto;
 
@@ -86,7 +86,7 @@
   text-overflow: ellipsis;
 }
 
-.comment-info-line__elem--before-area {
+.comment-info-line__elem--name {
   margin-right: 0;
 }
 
@@ -101,11 +101,7 @@
 }
 
 .comment-info-line__text {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: center;
+  display: block;
   position: relative;
 
   max-width: 100%;
@@ -118,6 +114,14 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+.comment-info-line__elem--name .comment-info-line__text:only-child {
+  max-width: 100%;
+}
+
+.comment-info-line__elem--name .comment-info-line__text:not(:only-child) {
+  max-width: calc(100% - 20px);
 }
 
 .comment-info-line--highlight,
