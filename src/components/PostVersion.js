@@ -4,6 +4,31 @@ import PostInfoLine from './PostInfoLine';
 import './PostVersion.css';
 
 /**
+ * @param {{ title: string }} props
+ */
+function EditorialTitle({ title }) {
+  if (!title) return null;
+  if (typeof title !== 'string') return null;
+
+  const wordsWithDelimiters = title.trim().split(/(\s)/g);
+  const lastWord = wordsWithDelimiters.pop();
+
+  return (
+    <>
+      {wordsWithDelimiters.join('')}
+      <div className="post-version__title__editorial">
+        {lastWord}
+        <i className="post-version__title__editorial-icon material-icons">done</i>
+      </div>
+    </>
+  );
+}
+
+EditorialTitle.propTypes = {
+  title: PropTypes.string.isRequired,
+};
+
+/**
  * @param {{ postVersion: import("../../types/post_version").PostVersion, showAbout: boolean }} props
  */
 export default function PostVersion({ postVersion, showAbout }) {
@@ -13,8 +38,7 @@ export default function PostVersion({ postVersion, showAbout }) {
 
       {postVersion.title ? (
         <h3 className="post-version__title default-title-font">
-          {postVersion.title}
-          {postVersion.isEditorial ? <i className="post-version__title__is-editorial material-icons">done</i> : null}
+          {postVersion.isEditorial ? EditorialTitle({ title: postVersion.title || '' }) : postVersion.title}
         </h3>
       ) : null}
 

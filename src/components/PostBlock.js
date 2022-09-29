@@ -7,8 +7,8 @@ import PopupAboutQuiz from '../util/popups/about-quiz';
 import TelegramMediaToOsnovaMediaBlock from '../util/telegram-media-to-media-block';
 import TwitterMediaToOsnovaMediaBlock from '../util/tweet-entities-to-media-block';
 import Ripple from './Ripple';
-import './PostBlock.css';
 import ScrollToAnchor from '../util/scroll-to-anchor';
+import './PostBlock.css';
 
 const IS_SAFARI =
   navigator.userAgent.search('Safari') > -1 &&
@@ -338,8 +338,9 @@ function PostBlockSingleMedia({ block }) {
       </div>
       {media.title || media.author ? (
         <div className="media-single__desc">
-          {media.title ? <span>{Refined(media.title)}</span> : null}
-          {media.author ? <span>{Refined(media.author)}</span> : null}
+          {media.title}
+          {media.title && media.author && ' – '}
+          {media.author}
         </div>
       ) : null}
     </div>

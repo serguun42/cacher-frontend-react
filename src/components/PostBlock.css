@@ -89,10 +89,6 @@
   color: #888;
 }
 
-.media-single__desc *:first-of-type {
-  margin: 0 16px 0 0;
-}
-
 .media-gallery {
   display: block;
   position: relative;

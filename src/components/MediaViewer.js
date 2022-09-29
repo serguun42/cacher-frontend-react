@@ -1,8 +1,9 @@
 import { createRef, useEffect, useState } from 'react';
 import { FadeIn, FadeOut } from '../util/animations';
 import dispatcher from '../util/dispatcher';
-import './MediaViewer.css';
+import LogMessageOrError from '../util/log';
 import Ripple from './Ripple';
+import './MediaViewer.css';
 
 /**
  * @typedef {Object} MediaPayload
@@ -161,7 +162,14 @@ export default function MediaViewer() {
   useEffect(() => {
     if (!('shown' in containerState)) return;
 
-    if (containerState.shown) FadeIn(containerRef.current, 400);
+    if (containerState.shown)
+      FadeIn(containerRef.current, 400).then(() => {
+        const mediaElem = mediaRef.current;
+        if (mediaElem instanceof HTMLVideoElement && mediaState.type === 'video') {
+          mediaElem.volume = 0.3;
+          mediaElem.play().catch(LogMessageOrError);
+        }
+      });
     else
       FadeOut(containerRef.current, 400).then(() => {
         setMediaState({ ...DEFAULT_MEDIA_STATE });
@@ -216,10 +224,10 @@ export default function MediaViewer() {
           height: containerState.height,
         }}
       >
-        {mediaState.type === 'photo' ? <img src={mediaState.url} className="media-body__media" ref={mediaRef} /> : null}
-        {mediaState.type === 'video' ? (
+        {mediaState.type === 'photo' && <img src={mediaState.url} className="media-body__media" ref={mediaRef} />}
+        {mediaState.type === 'video' && (
           <video src={mediaState.url} className="media-body__media" controls ref={mediaRef} />
-        ) : null}
+        )}
         <div className="media-body__lower-bar">
           <div className="media-body__description">{mediaState.description || ''}</div>
           {galleryState.media?.length ? (

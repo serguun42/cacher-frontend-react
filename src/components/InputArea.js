@@ -130,7 +130,7 @@ InputArea.defaultProps = {
   type: 'text',
   placeholder: '',
   enterHandler: () => {},
-  autofocus: true,
+  autofocus: false,
   noMargin: false,
   noClean: false,
 };

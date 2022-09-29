@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { createRef, useEffect, useState } from 'react';
 import { createSearchParams, useLocation, useSearchParams } from 'react-router-dom';
 import Chip from '../components/Chip';
 import DatePicker from '../components/DatePicker';
@@ -6,6 +6,7 @@ import Feed from '../components/Feed';
 import InputArea from '../components/InputArea';
 import Loading from '../components/Loading';
 import Ripple from '../components/Ripple';
+import { FadeIn, FadeOut } from '../util/animations';
 import { SearchByPostId, SearchByText, SearchByUrl } from '../util/api';
 import DateForPost from '../util/date-for-post';
 import dispatcher from '../util/dispatcher';
@@ -36,21 +37,93 @@ export default function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [isLoading, setIsLoading] = useState(false);
+
   const [userInput, setUserInput] = useState(searchParams.get('q'));
   const [entryId, setEntryId] = useState(0);
   const [entityId, setEntityId] = useState(0);
   const [url, setUrl] = useState('');
   const [text, setText] = useState('');
-  const [regex, setRegex] = useState(false);
-  const [caseSensetive, setCaseSensetive] = useState(false);
-  const [dateStart, setDateStart] = useState('');
-  const [dateEnd, setDateEnd] = useState('');
+
+  const [regexFilter, setRegexFilter] = useState(false);
+  const [caseSensetiveFilter, setCaseSensetiveFilter] = useState(false);
+  const [dateStartFilter, setDateStartFilter] = useState('');
+  const [dateEndFilter, setDateEndFilter] = useState('');
+  const [dateFilterLabel, setDateFilterLabel] = useState('');
+
+  useEffect(() => {
+    setDateFilterLabel(
+      !dateStartFilter && !dateEndFilter
+        ? 'Указать даты'
+        : dateStartFilter && !dateEndFilter
+        ? `Искать с ${DateForPost(dateStartFilter, false, true).toLowerCase()}`
+        : !dateStartFilter && dateEndFilter
+        ? `Искать до ${DateForPost(dateEndFilter, false, true).toLowerCase()}`
+        : dateEndFilter === dateStartFilter
+        ? `Искать только ${DateForPost(dateStartFilter, false, true).toLowerCase()}`
+        : `Искать с ${DateForPost(dateStartFilter, false, true).toLowerCase()} до ${DateForPost(
+            dateEndFilter,
+            false,
+            true
+          ).toLowerCase()}`
+    );
+  }, [dateStartFilter, dateEndFilter]);
+
   const [notFound, setNotFound] = useState(false);
   const [noAdding, setNoAdding] = useState(true);
   const [loadCounter, setLoadCounter] = useState(0);
   /** @type {[import("../../types/feed_post").FeedPost[]]} */
   const [feedPosts, setFeedPosts] = useState([]);
   const [commentId, setCommentId] = useState(0);
+
+  const [isSmallScreen, setSmallScreen] = useState(window.innerWidth < 500);
+  /** @type {import("react").RefObject<HTMLElement>} */
+  const allFiltersRef = createRef();
+  const [additionalEntityIdFilter, setAdditionalEntityIdFilter] = useState(0);
+  const [additionalUrlFilter, setAdditionalUrlFilter] = useState('');
+
+  /**
+   * @param {string} newValue
+   */
+  const SetAdditionalEntityIdFilterWrapper = (newValue) => {
+    if (!newValue || typeof newValue !== 'string') {
+      setAdditionalEntityIdFilter(0);
+      return;
+    }
+
+    if (TestUrl(newValue)) {
+      const parsedUrl = SafeURL(newValue);
+      const match = parsedUrl.pathname.match(/^\/[us]\/(?<userId>\d+)/);
+      const additionalEntityIdRaw = match?.groups?.userId || 0;
+      if (parseInt(additionalEntityIdRaw)) setAdditionalEntityIdFilter(parseInt(additionalEntityIdRaw));
+    } else if (!parseInt(newValue)) setAdditionalEntityIdFilter(parseInt(newValue));
+  };
+
+  /**
+   * @param {string} newValue
+   */
+  const SetAdditionalUrlFilterWrapper = (newValue) => {
+    if (!newValue || typeof newValue !== 'string' || !TestUrl(newValue)) setAdditionalUrlFilter('');
+    else setAdditionalUrlFilter(newValue);
+  };
+
+  const ShowAllFilters = () => FadeIn(allFiltersRef.current, 400, { display: 'block' });
+  const HideAllFilters = () => FadeOut(allFiltersRef.current, 400);
+
+  useEffect(() => {
+    /** @param {KeyboardEvent} e */
+    const OnKeyDown = (e) => {
+      if (e.key === 'Escape' || e.code === 'Escape') HideAllFilters();
+    };
+    const OnResizeChange = () => setSmallScreen(window.innerWidth < 500);
+
+    window.addEventListener('keydown', OnKeyDown);
+    window.addEventListener('resize', OnResizeChange);
+
+    return () => {
+      window.removeEventListener('keydown', OnKeyDown);
+      window.removeEventListener('resize', OnResizeChange);
+    };
+  });
 
   useEffect(() => {
     const searchQuery = searchParams.get('q');
@@ -59,15 +132,17 @@ export default function Search() {
     setEntityId(0);
     setUrl('');
     setText('');
-    setRegex(searchParams.has('regex'));
-    setCaseSensetive(searchParams.has('case-sensetive'));
-    setDateStart(searchParams.get('date-start'));
-    setDateEnd(searchParams.get('date-end'));
+    setRegexFilter(searchParams.has('regex'));
+    setCaseSensetiveFilter(searchParams.has('case-sensetive'));
+    setDateStartFilter(searchParams.get('date-start'));
+    setDateEndFilter(searchParams.get('date-end'));
     setNotFound(false);
     setNoAdding(true);
     setLoadCounter(loadCounter + 1);
     setFeedPosts([]);
     setCommentId(0);
+    setAdditionalEntityIdFilter(searchParams.get('additionalEntityId') || 0);
+    setAdditionalUrlFilter(searchParams.get('additionalUrl') || '');
 
     const isNumber = /^\d+$/.test(searchQuery);
     const isUrl = TestUrl(searchQuery);
@@ -94,8 +169,8 @@ export default function Search() {
    */
   const SwitchDateRanges = (dateRangesEnabled) => {
     if (!dateRangesEnabled) {
-      setDateStart('');
-      setDateEnd('');
+      setDateStartFilter('');
+      setDateEndFilter('');
     } else {
       /**
        * @param {string} date
@@ -109,20 +184,20 @@ export default function Search() {
           if (start) {
             if (!CheckDateFormat(start)) {
               dispatcher.call('message', 'Неверный формат даты 🤷‍♂️');
-              setDateStart('');
-            } else setDateStart(start);
-          } else setDateStart('');
+              setDateStartFilter('');
+            } else setDateStartFilter(start);
+          } else setDateStartFilter('');
 
           if (end) {
             if (!CheckDateFormat(end)) {
               dispatcher.call('message', 'Неверный формат даты 🤷‍♂️');
-              setDateEnd('');
-            } else setDateEnd(end);
-          } else setDateEnd('');
+              setDateEndFilter('');
+            } else setDateEndFilter(end);
+          } else setDateEndFilter('');
         },
         denyAction() {
-          setDateStart('');
-          setDateEnd('');
+          setDateStartFilter('');
+          setDateEndFilter('');
         },
       };
 
@@ -135,10 +210,12 @@ export default function Search() {
 
     const paramsToApply = {
       q: userInput,
-      regex,
-      'case-sensetive': caseSensetive,
-      'date-start': dateStart,
-      'date-end': dateEnd,
+      regex: regexFilter,
+      'case-sensetive': caseSensetiveFilter,
+      'date-start': dateStartFilter,
+      'date-end': dateEndFilter,
+      additionalEntityId: additionalEntityIdFilter,
+      additionalUrl: additionalUrlFilter,
     };
 
     const newSearchParams = createSearchParams();
@@ -183,7 +260,7 @@ export default function Search() {
           setNoAdding(true);
         });
     else if (url)
-      SearchByUrl({ url, skip: feedPosts.length, 'date-start': dateStart, 'date-end': dateEnd })
+      SearchByUrl({ url, skip: feedPosts.length, 'date-start': dateStartFilter, 'date-end': dateEndFilter })
         .then(responseHandler)
         .catch((e) => {
           if (e?.code === 406) dispatcher.call('message', 'Неправильный формат ссылки 🔗');
@@ -198,10 +275,12 @@ export default function Search() {
       SearchByText({
         text,
         skip: feedPosts.length,
-        regex,
-        'case-sensetive': caseSensetive,
-        'date-start': dateStart,
-        'date-end': dateEnd,
+        regex: regexFilter,
+        'case-sensetive': caseSensetiveFilter,
+        'date-start': dateStartFilter,
+        'date-end': dateEndFilter,
+        additionalEntityId: additionalEntityIdFilter || null,
+        additionalUrl: additionalUrlFilter || null,
       })
         .then(responseHandler)
         .catch((e) => {
@@ -224,79 +303,121 @@ export default function Search() {
   }, [loadCounter]);
 
   return (
-    <div className="search">
-      <div className="search__entry-card">
-        <div className="search__input-line">
-          <InputArea
-            preset={userInput}
-            label="Поиск"
-            placeholder="Заголовок, автор, ссылка, т.д."
-            setState={setUserInput}
-            autofocus={!userInput}
-            enterHandler={SearchWithParams}
-            key={location}
-            noMargin
-          />
-          <button
-            type="button"
-            className={`search__button ${
-              userInput ? 'search__button--active default-pointer' : 'search__button--inactive disabled'
-            } default-no-select`}
-            onClick={SearchWithParams}
-          >
-            <div className="search__button__text">Искать</div>
-            <div className="material-icons">search</div>
-            {userInput && <Ripple inheritTextColor />}
-          </button>
-        </div>
-        <div className="search__switch-line default-scroll-transparent">
-          <div className="search__switch-line__wrapper">
-            <div className="search__about default-pointer default-no-select" onClick={PopupAboutSearch}>
-              <i className="material-icons">help_outline</i>
-              <div className="search__about__label">О поиске</div>
-              <Ripple />
-            </div>
-
-            <Chip
-              state={!!dateStart || !!dateEnd}
-              setState={SwitchDateRanges}
-              label={
-                !dateStart && !dateEnd
-                  ? 'Выбрать даты'
-                  : dateStart && !dateEnd
-                  ? `Искать с ${DateForPost(dateStart, false, true).toLowerCase()}`
-                  : !dateStart && dateEnd
-                  ? `Искать до ${DateForPost(dateEnd, false, true).toLowerCase()}`
-                  : dateEnd === dateStart
-                  ? `Искать только ${DateForPost(dateStart, false, true).toLowerCase()}`
-                  : `Искать с ${DateForPost(dateStart, false, true).toLowerCase()} до ${DateForPost(
-                      dateEnd,
-                      false,
-                      true
-                    ).toLowerCase()}`
-              }
+    <>
+      <div className="search">
+        <div className="search__card">
+          <div className="search__input-line">
+            <InputArea
+              preset={userInput}
+              label="Поиск"
+              placeholder="Заголовок, автор, ссылка, т.д."
+              setState={setUserInput}
+              autofocus={!userInput}
+              enterHandler={SearchWithParams}
+              key={location.search}
+              noMargin
             />
-            <Chip state={regex} setState={setRegex} label="Регулярные выражения" />
-            <Chip state={caseSensetive} setState={setCaseSensetive} label="Чувствительность к регистру" />
+            <button
+              type="button"
+              className={`search__button ${
+                userInput ? 'search__button--active default-pointer' : 'search__button--inactive disabled'
+              } default-no-select`}
+              onClick={SearchWithParams}
+            >
+              <div className="search__button__text">Искать</div>
+              <div className="material-icons">search</div>
+              {userInput && <Ripple inheritTextColor />}
+            </button>
+          </div>
+
+          <div className="search__switch-line default-scroll-transparent">
+            <div className="search__switch-line__wrapper">
+              <div className="search__transparent-chip default-pointer default-no-select" onClick={PopupAboutSearch}>
+                <i className="material-icons">help_outline</i>
+                <div className="search__transparent-chip__label">О поиске</div>
+                <Ripple />
+              </div>
+
+              {!isSmallScreen && <Chip state={regexFilter} setState={setRegexFilter} label="Регулярные выражения" />}
+              {!isSmallScreen && (
+                <Chip
+                  state={!!dateStartFilter || !!dateEndFilter}
+                  setState={SwitchDateRanges}
+                  label={dateFilterLabel}
+                />
+              )}
+
+              <div className="search__transparent-chip default-pointer default-no-select" onClick={ShowAllFilters}>
+                <i className="material-icons">filter_alt</i>
+                <div className="search__transparent-chip__label">{isSmallScreen ? 'Фильтры' : 'Все фильтры'}</div>
+                <Ripple />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {entityId ? (
+          <Entity
+            entityId={entityId}
+            dateStart={dateStartFilter}
+            dateEnd={dateEndFilter}
+            key={`${entityId}-${loadCounter}`}
+          />
+        ) : (
+          <Feed
+            feedPosts={feedPosts}
+            callback={() => LoadMorePosts()}
+            noAdding={noAdding}
+            notFound={notFound}
+            commentId={commentId}
+          />
+        )}
+
+        {isLoading && <Loading />}
+
+        <DatePicker />
+      </div>
+
+      <div className="search__all-filters" ref={allFiltersRef}>
+        <div className="search__all-filters-obfuscator" onClick={HideAllFilters} />
+        <div className="search__all-filters-body">
+          <h4 className="default-title-font default-no-select">Все фильтры</h4>
+
+          <div className="search__all-filters__chips">
+            <Chip state={regexFilter} setState={setRegexFilter} label="Регулярные выражения" />
+            <Chip state={!!dateStartFilter || !!dateEndFilter} setState={SwitchDateRanges} label={dateFilterLabel} />
+            <Chip state={caseSensetiveFilter} setState={setCaseSensetiveFilter} label="Чувствительность к регистру" />
+          </div>
+
+          <div className="search__all-filters__input">
+            <InputArea
+              preset={(additionalEntityIdFilter && additionalEntityIdFilter.toString()) || ''}
+              label="Ограничить по ID (напр. юзер)"
+              placeholder="Не знаешь – оставь пустым"
+              setState={SetAdditionalEntityIdFilterWrapper}
+              key={location.search}
+              noMargin
+            />
+          </div>
+
+          <div className="search__all-filters__input">
+            <InputArea
+              preset={additionalUrlFilter}
+              label="Ограничить по ссылке (подсайт)"
+              placeholder="Не знаешь – оставь пустым"
+              setState={SetAdditionalUrlFilterWrapper}
+              key={location.search}
+              noMargin
+            />
+          </div>
+
+          <div className="search__transparent-chip default-pointer default-no-select" onClick={HideAllFilters}>
+            <i className="material-icons">done</i>
+            <div className="search__transparent-chip__label">Применить фильтры</div>
+            <Ripple />
           </div>
         </div>
       </div>
-
-      {entityId ? (
-        <Entity entityId={entityId} dateStart={dateStart} dateEnd={dateEnd} key={`${entityId}-${loadCounter}`} />
-      ) : (
-        <Feed
-          feedPosts={feedPosts}
-          callback={() => LoadMorePosts()}
-          noAdding={noAdding}
-          notFound={notFound}
-          commentId={commentId}
-        />
-      )}
-
-      {isLoading && <Loading />}
-
-      <DatePicker />
-    </div>
+    </>
   );
 }

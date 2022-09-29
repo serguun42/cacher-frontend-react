@@ -20,12 +20,19 @@
   text-align: left;
 }
 
-.post-version__title__is-editorial {
+.post-version__title__editorial {
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.post-version__title__editorial-icon {
   display: inline-block;
   position: relative;
 
   margin-left: 6px;
-  vertical-align: -8px;
+  top: 2px;
 
   font-size: 36px;
   color: var(--primary);
