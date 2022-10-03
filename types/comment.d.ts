@@ -56,7 +56,7 @@ export type CommentAttachTypeLink = {
     url: string;
     title: string;
     description: string;
-    image?: PostMedia;
+    image?: import('./post_version').PostMedia;
     v: 1;
   };
 };

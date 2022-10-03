@@ -67,7 +67,7 @@ export interface PostMediaData {
   width: number;
   height: number;
   size: number;
-  type: string;
+  type: 'jpg' | 'jpeg' | 'png' | 'webp' | 'gif';
   color: string;
   hash: string;
   external_service: PostExternalService;

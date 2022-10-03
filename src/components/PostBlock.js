@@ -575,7 +575,7 @@ export default function PostBlock({ block }) {
           </a>
         </div>
         <div className="social__text">
-          {Refined((tweet.full_text || '').replace(/https:\/\/t\.\w+\/\w+$/i, '').trim())}
+          {Refined((tweet.full_text || tweet.text || '').replace(/https:\/\/t\.\w+\/\w+$/i, '').trim())}
         </div>
         {tweet.extended_entities?.media?.length ? (
           <div className="social__media">

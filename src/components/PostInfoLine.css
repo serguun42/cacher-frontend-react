@@ -52,15 +52,15 @@
   color: var(--primary);
 }
 
-.post-info-line__elem__text--date {
+.post-info-line__link-to-original {
   color: #595959;
 }
 
-.is-dark .post-info-line__elem__text--date {
+.is-dark .post-info-line__link-to-original {
   color: #888;
 }
 
-.post-info-line__elem__text--date.material-icons {
+.post-info-line__link-to-original.material-icons {
   margin-left: 4px;
 }
 
