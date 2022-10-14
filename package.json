@@ -1,6 +1,6 @@
 {
   "name": "cacher-frontend-react",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "keywords": [
     "cacher",
     "react",
@@ -23,6 +23,7 @@
     "@babel/preset-react": "7.18.6",
     "@pmmmwh/react-refresh-webpack-plugin": "0.5.7",
     "@reduxjs/toolkit": "1.8.1",
+    "@serguun42/webpack-service-worker-plugin": "1.1.3",
     "@svgr/webpack": "5.5.0",
     "babel-loader": "8.2.5",
     "babel-plugin-named-asset-import": "0.3.8",
@@ -62,7 +63,6 @@
     "sanitize-html": "2.7.0",
     "sass-loader": "12.6.0",
     "semver": "7.3.7",
-    "serguun42-webpack-service-worker-plugin": "github:serguun42/serguun42-webpack-service-worker-plugin",
     "source-map-loader": "3.0.1",
     "style-loader": "3.3.1",
     "swagger-ui-react": "4.14.0",

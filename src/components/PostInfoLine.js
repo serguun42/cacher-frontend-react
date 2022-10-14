@@ -6,7 +6,6 @@ import Ripple from './Ripple';
 import './PostInfoLine.css';
 import Esc from '../util/html/escape';
 import Avatar from '../util/html/avatar';
-import SafeURL from '../util/safe-url';
 
 /**
  * @param {{ postVersion: import("../../types/post_version").PostVersion, showAbout: boolean }} props
@@ -56,25 +55,21 @@ export default function PostInfoLine({ postVersion, showAbout }) {
           ) : null}
         </Link>
       ) : null}
-      <a className="post-info-line__elem" target="_blank" rel="noopener noreferrer" href={postVersion.url}>
+      <a
+        className="post-info-line__elem"
+        target="_blank"
+        rel="noopener noreferrer"
+        href={
+          process.env.REACT_APP_SITE_IS_ARCHIVED === 'true'
+            ? `https://${process.env.REACT_APP_SITE_LINK}/post/${postVersion.id}`
+            : postVersion.url
+        }
+      >
         <div className="post-info-line__elem__text post-info-line__link-to-original">
           {DateForPost(postVersion.date)}
         </div>
         <i className="material-icons post-info-line__elem__text post-info-line__link-to-original">open_in_new</i>
       </a>
-      {process.env.REACT_APP_CUSTOM_FRONTEND_URL ? (
-        <a
-          className="post-info-line__elem"
-          target="_blank"
-          rel="noopener noreferrer"
-          href={new URL(postVersion.id, SafeURL(process.env.REACT_APP_CUSTOM_FRONTEND_URL))}
-        >
-          <div className="post-info-line__elem__text post-info-line__link-to-original">
-            {process.env.REACT_APP_CUSTOM_FRONTEND_NAME}
-          </div>
-          <i className="material-icons post-info-line__elem__text post-info-line__link-to-original">open_in_new</i>
-        </a>
-      ) : null}
       {showAbout ? (
         <div className="post-info-line__elem post-info-line__about default-pointer" onClick={PopupAboutSchedule}>
           <i className="material-icons">help_outline</i>

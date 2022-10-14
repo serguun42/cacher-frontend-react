@@ -46,7 +46,7 @@
 
 .home-info-card__subsite-chart__row {
   display: grid;
-  grid-template-columns: 22px 3fr 6fr 42px;
+  grid-template-columns: 22px 3fr 6fr 45px;
   column-gap: 8px;
   position: relative;
 

@@ -95,7 +95,7 @@ export default function Search() {
       const match = parsedUrl.pathname.match(/^\/[us]\/(?<userId>\d+)/);
       const additionalEntityIdRaw = match?.groups?.userId || 0;
       if (parseInt(additionalEntityIdRaw)) setAdditionalEntityIdFilter(parseInt(additionalEntityIdRaw));
-    } else if (!parseInt(newValue)) setAdditionalEntityIdFilter(parseInt(newValue));
+    } else if (parseInt(newValue)) setAdditionalEntityIdFilter(parseInt(newValue));
   };
 
   /**

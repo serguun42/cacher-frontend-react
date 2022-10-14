@@ -89,7 +89,8 @@ export default function HomeIndexCard({
   return (
     <div className="home-info-card">
       <div className="home-info-card__title default-title-font">
-        Сегодня – {todayDate.getDate()}&nbsp;{MONTHS_FULL[todayDate.getMonth()]}
+        {process.env.REACT_APP_SITE_IS_ARCHIVED === 'true' ? 'Последний день' : 'Сегодня'} – {todayDate.getDate()}&nbsp;
+        {MONTHS_FULL[todayDate.getMonth()]}
       </div>
 
       <div className="home-info-card__subsite-chart" title="Логарифмическая шкала">

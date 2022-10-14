@@ -244,7 +244,9 @@ function PostBlockGallery({ block }) {
                 height: mediaPayload.height,
                 description: Refined(
                   mediaPayload.title || mediaPayload.author
-                    ? `${mediaPayload.title}${mediaPayload.title && mediaPayload.author && ' – '}${mediaPayload.author}`
+                    ? `${mediaPayload.title || ''}${(mediaPayload.title && mediaPayload.author && ' – ') || ''}${
+                        mediaPayload.author || ''
+                      }`
                     : ''
                 ),
               })),
@@ -290,7 +292,9 @@ function PostBlockSingleMedia({ block }) {
       width: media.image.data.width,
       height: media.image.data.height,
       description: Refined(
-        media.title || media.author ? `${media.title}${media.title && media.author && ' – '}${media.author}` : ''
+        media.title || media.author
+          ? `${media.title || ''}${(media.title && media.author && ' – ') || ''}${media.author || ''}`
+          : ''
       ),
     };
 
@@ -338,9 +342,11 @@ function PostBlockSingleMedia({ block }) {
       </div>
       {media.title || media.author ? (
         <div className="media-single__desc">
-          {media.title}
-          {media.title && media.author && ' – '}
-          {media.author}
+          {Refined(
+            media.title || media.author
+              ? `${media.title || ''}${(media.title && media.author && ' – ') || ''}${media.author || ''}`
+              : ''
+          )}
         </div>
       ) : null}
     </div>
