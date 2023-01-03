@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /**
  * @param {string} uuid
  * @returns {boolean}

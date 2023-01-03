@@ -214,6 +214,8 @@ function configFactory(webpackEnv) {
         tsconfig: [paths.appTsConfig, paths.appJsConfig].filter((f) => fs.existsSync(f)),
       },
     },
+    /** Ignore new warnings from missing source maps in `autolinker` */
+    ignoreWarnings: [/Failed to parse source map/],
     infrastructureLogging: {
       level: 'none',
     },

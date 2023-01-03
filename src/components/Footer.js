@@ -82,6 +82,11 @@ export default function Footer() {
           <i className="material-icons">keyboard</i>
           <span>Горячие клавиши</span>
         </div>
+
+        <div className="footer__section__item default-no-select">
+          <i className="material-icons">code</i>
+          <span>Версия {process.env.REACT_APP_VERSION}</span>
+        </div>
       </section>
 
       <section className="footer__section">

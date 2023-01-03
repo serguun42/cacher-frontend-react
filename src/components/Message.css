@@ -29,6 +29,13 @@
   transition: top 400ms ease-in-out 0s;
 }
 
+@media print {
+  .message {
+    display: none;
+    visibility: hidden;
+  }
+}
+
 .message--is-shown {
   top: 0;
 }
