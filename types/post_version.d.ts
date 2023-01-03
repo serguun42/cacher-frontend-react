@@ -348,6 +348,7 @@ export interface PostVersion {
     enabled: boolean;
   };
   summarize: string;
+  co_author?: PostEntity;
 }
 
 export default PostVersion;

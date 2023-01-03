@@ -531,7 +531,13 @@ export default function PostBlock({ block }) {
           <div className="audio__flex__title">{Refined(block.data.title)}</div>
           <audio
             className="audio__flex__actual-audio"
-            src={`https://leonardo.osnova.io/audio/${block.data.audio.data.uuid}/${block.data.audio.data.filename}`}
+            src={[
+              'https:/',
+              process.env.REACT_APP_CDN_DOMAIN,
+              'audio',
+              block.data.audio.data.uuid,
+              block.data.audio.data.filename,
+            ].join('/')}
             controls
           />
         </div>

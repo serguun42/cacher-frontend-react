@@ -160,12 +160,12 @@
   border-radius: 6px;
 }
 
-.comment-info-line__text--karma:not(.karma--positive):not(.karma--negative) {
+.comment-info-line__text--karma.karma--neutral {
   color: #595959;
   background-color: rgba(201, 201, 201, 0.15);
 }
 
-.is-dark .comment-info-line__text--karma:not(.karma--positive):not(.karma--negative) {
+.is-dark .comment-info-line__text--karma.karma--neutral {
   color: #aaa;
   background-color: rgba(20, 20, 20, 0.15);
 }

@@ -24,9 +24,7 @@ export default function CommentInfoLine({ comment, entryId, authorId }) {
     <div className="comment-info-line">
       <Link
         to={`/entity/${comment.author.id}`}
-        style={{
-          backgroundImage: Avatar(comment.author.avatar_url),
-        }}
+        style={{ backgroundImage: Avatar(comment.author.avatar_url) }}
         className="comment-info-line__avatar default-no-select"
       />
       <div className="comment-info-line__vertical">
@@ -100,7 +98,7 @@ export default function CommentInfoLine({ comment, entryId, authorId }) {
       <div className="comment-info-line__elem comment-info-line__likes default-no-select">
         <div
           className={`comment-info-line__text comment-info-line__text--karma ${
-            comment.likes?.summ > 0 ? 'karma--positive' : comment.likes?.summ < 0 ? 'karma--negative' : ''
+            comment.likes?.summ > 0 ? 'karma--positive' : comment.likes?.summ < 0 ? 'karma--negative' : 'karma--neutral'
           }`}
         >
           {comment.likes?.summ > 0 ? '+' : ''}
