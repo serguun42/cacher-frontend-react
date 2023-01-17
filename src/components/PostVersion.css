@@ -73,7 +73,7 @@
 .is-dark .post-version__stats__pos.karma--neutral,
 .is-dark .post-version__stats__pos.post-version__stats__pos--bookmark,
 .is-dark .post-version__stats__pos.post-version__stats__pos--coauhor {
-  background-color: rgba(20, 20, 20, 0.15);
+  background-color: rgba(42, 42, 42, 0.5);
 }
 
 .post-version__stats__pos.karma--neutral {

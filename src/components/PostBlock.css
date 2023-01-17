@@ -86,7 +86,7 @@
 }
 
 .is-dark .media-single__desc {
-  color: #888;
+  color: #777;
 }
 
 .media-gallery {
@@ -125,7 +125,7 @@
   left: 0;
 
   color: #fff;
-  background-color: rgba(20, 20, 20, 0.5);
+  background-color: rgba(42, 42, 42, 0.5);
 
   font-size: 24px;
   font-weight: 500;
@@ -147,7 +147,7 @@
   padding: 16px;
 
   color: #fff;
-  background-color: rgba(20, 20, 20, 0.5);
+  background-color: rgba(42, 42, 42, 0.5);
   border-radius: 32px;
 }
 
@@ -338,7 +338,7 @@
 }
 
 .is-dark .rich-link__fake-url {
-  color: #888;
+  color: #777;
 }
 
 .rich-link:hover .rich-link__fake-url,
@@ -541,16 +541,22 @@
 
   margin-bottom: 12px;
   padding-right: 28px;
+
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 22px;
 }
 
 .social__avatar {
   display: block;
   position: relative;
 
-  width: 36px;
-  height: 36px;
+  width: 22px;
+  height: 22px;
 
-  border-radius: 18px;
+  border-radius: 11px;
+
+  margin-right: 8px;
 
   background-size: cover;
   background-position: center center;
@@ -561,6 +567,8 @@
 .social__username {
   display: block;
   position: relative;
+
+  margin-right: 12px;
 }
 
 .social__fullname {
@@ -575,12 +583,14 @@
   align-items: center;
   position: relative;
 
+  margin-right: 12px;
+
   color: #595959;
   text-decoration: none;
 }
 
 .is-dark .social__date {
-  color: #888;
+  color: #777;
 }
 
 .social__date:hover {
@@ -590,13 +600,6 @@
 .social__date .material-icons {
   margin-left: 4px;
   font-size: 16px;
-}
-
-.social__avatar,
-.social__fullname,
-.social__username,
-.social__date {
-  margin-right: 12px;
 }
 
 .social__avatar:last-child,

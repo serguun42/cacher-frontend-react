@@ -74,12 +74,12 @@
 }
 
 .search__button--inactive {
-  color: #888;
+  color: #818181;
   background-color: #ddd;
 }
 
 .is-dark .search__button--inactive {
-  background-color: #242424;
+  background-color: #333;
 }
 
 .search__button--active {

@@ -24,12 +24,12 @@
 }
 
 .chip--inactive {
-  color: #888;
+  color: #818181;
   background-color: #ddd;
 }
 
 .is-dark .chip--inactive {
-  background-color: #242424;
+  background-color: #333;
 }
 
 .chip__label {

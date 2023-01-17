@@ -96,10 +96,6 @@
   padding: 0 0.75em;
 }
 
-.is-dark .comment-info-line__elem--small {
-  color: #888;
-}
-
 .comment-info-line__text {
   display: block;
   position: relative;
@@ -142,7 +138,7 @@
 .is-dark .comment-info-line--action,
 .is-dark .comment a.comment-info-line--action,
 .is-dark .comment a.comment-info-line--action:visited {
-  color: #888;
+  color: #777;
 }
 
 .comment-info-line--action:hover,
@@ -167,7 +163,7 @@
 
 .is-dark .comment-info-line__text--karma.karma--neutral {
   color: #aaa;
-  background-color: rgba(20, 20, 20, 0.15);
+  background-color: rgba(42, 42, 42, 0.5);
 }
 
 .comment-info-line__elem:last-child {
